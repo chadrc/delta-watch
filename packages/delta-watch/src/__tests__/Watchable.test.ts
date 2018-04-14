@@ -168,7 +168,7 @@ describe(`Watchable`, () => {
 
     watchable.Mutator.obj.one = "1";
 
-    expect(Watchable.valueOf(watchable.Watcher.obj)).to.deep.equal({one: "1"});
+    expect(watchable.Accessor.obj).to.deep.equal({one: "1"});
 
     assertWatcherCalled(watcherCalled);
   });
@@ -188,7 +188,7 @@ describe(`Watchable`, () => {
 
     watchable.Mutator.obj.one = "1";
 
-    expect(Watchable.valueOf(watchable.Watcher)).to.deep.equal({obj: {one: "1"}});
+    expect(watchable.Accessor).to.deep.equal({obj: {one: "1"}});
 
     assertWatcherCalled(watcherCalled);
   });
@@ -353,7 +353,7 @@ describe(`Watchable`, () => {
   it(`dynamic property value is initialized to undefined`, () => {
     let watchable = new Watchable({});
 
-    expect(Watchable.valueOf(watchable.Watcher.dynamicProp)).to.be.undefined;
+    expect(watchable.Accessor.dynamicProp).to.be.undefined;
   });
 
   it(`can watch dynamic second tier property`, () => {

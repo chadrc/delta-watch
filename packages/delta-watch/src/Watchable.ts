@@ -100,10 +100,6 @@ export class Watchable implements Subscribable {
     }
   }
 
-  static valueOf(watchable: ObjectWatcher) {
-    return watchable._data;
-  }
-
   private readonly _watcher: ObjectWatcher;
   private readonly _mutator: ObjectMutator;
   private readonly _accessor: any;

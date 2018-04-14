@@ -28,7 +28,7 @@ describe(`Array Mutator v2`, () => {
     let length = itemMutator.push("three", "four");
 
     expect(length).to.equal(4);
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["one", "two", "three", "four"]);
+    expect(watchable.Accessor.items).to.deep.equal(["one", "two", "three", "four"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -56,7 +56,7 @@ describe(`Array Mutator v2`, () => {
     let length = itemMutator.unshift("zero");
 
     expect(length).to.equal(3);
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["zero", "one", "two"]);
+    expect(watchable.Accessor.items).to.deep.equal(["zero", "one", "two"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -77,7 +77,7 @@ describe(`Array Mutator v2`, () => {
 
     watchable.Mutator.items.push("three");
 
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["one", "two", "three"]);
+    expect(watchable.Accessor.items).to.deep.equal(["one", "two", "three"]);
     assertWatcherCalled(watcherCalled);
   });
 
@@ -104,7 +104,7 @@ describe(`Array Mutator v2`, () => {
     let removed = watchable.Mutator.items.pop();
 
     expect(removed).to.equal("three");
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["one", "two"]);
+    expect(watchable.Accessor.items).to.deep.equal(["one", "two"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -132,7 +132,7 @@ describe(`Array Mutator v2`, () => {
     let removed = watchable.Mutator.items.shift();
 
     expect(removed).to.equal("one");
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["two", "three"]);
+    expect(watchable.Accessor.items).to.deep.equal(["two", "three"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -157,7 +157,7 @@ describe(`Array Mutator v2`, () => {
     let removed = watchable.Mutator.items.shift();
 
     expect(removed).to.equal("one");
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["two", "three"]);
+    expect(watchable.Accessor.items).to.deep.equal(["two", "three"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -185,7 +185,7 @@ describe(`Array Mutator v2`, () => {
     let removed = watchable.Mutator.items.splice(1, 0, "one and one third", "one and two thirds");
 
     expect(removed).to.deep.equal([]);
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["one", "one and one third", "one and two thirds", "two", "three"]);
+    expect(watchable.Accessor.items).to.deep.equal(["one", "one and one third", "one and two thirds", "two", "three"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -213,7 +213,7 @@ describe(`Array Mutator v2`, () => {
     let removed = watchable.Mutator.items.splice(0, 2);
 
     expect(removed).to.deep.equal(["one", "two"]);
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["three"]);
+    expect(watchable.Accessor.items).to.deep.equal(["three"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -238,7 +238,7 @@ describe(`Array Mutator v2`, () => {
     let removed = watchable.Mutator.items.splice(0, 2, "1", "2", "3");
 
     expect(removed).to.deep.equal(["one", "two"]);
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["1", "2", "3", "three"]);
+    expect(watchable.Accessor.items).to.deep.equal(["1", "2", "3", "three"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -264,7 +264,7 @@ describe(`Array Mutator v2`, () => {
     let filled = watchable.Mutator.items.fill(0);
 
     expect(filled).to.deep.equal([0, 0, 0, 0]);
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal([0, 0, 0, 0]);
+    expect(watchable.Accessor.items).to.deep.equal([0, 0, 0, 0]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -290,7 +290,7 @@ describe(`Array Mutator v2`, () => {
     let sorted = watchable.Mutator.items.sort();
 
     expect(sorted).to.deep.equal(["four", "one", "three", "two"]);
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["four", "one", "three", "two"]);
+    expect(watchable.Accessor.items).to.deep.equal(["four", "one", "three", "two"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -317,7 +317,7 @@ describe(`Array Mutator v2`, () => {
     let copied = watchable.Mutator.items.copyWithin(1, 2, 3);
 
     expect(copied).to.deep.equal(["one", "three", "three", "four"]);
-    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["one", "three", "three", "four"]);
+    expect(watchable.Accessor.items).to.deep.equal(["one", "three", "three", "four"]);
 
     assertWatcherCalled(watcherCalled);
   });
