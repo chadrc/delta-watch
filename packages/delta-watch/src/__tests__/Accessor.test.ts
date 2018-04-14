@@ -35,15 +35,76 @@ describe(`Accessors`, () => {
     expect(func).to.throw();
   });
 
-  it(`Accessing an array's mutator methods throw errors`, () => {
+  it(`Calling push on array Accessor throws error`, () => {
     let watchable = new Watchable({
       list: ['one', 'two', 'three']
     });
 
-    for (let m of arrayMutatorMethods) {
-      let func = () => watchable.Accessor.list[m]();
-      expect(func).to.throw();
-    }
+    let func = () => watchable.Accessor.list.push("four");
+    expect(func).to.throw();
+  });
+
+  it(`Calling unshift on array Accessor throws error`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+
+    let func = () => watchable.Accessor.list.unsift("zero");
+    expect(func).to.throw();
+  });
+
+  it(`Calling pop on array Accessor throws error`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+
+    let func = () => watchable.Accessor.list.pop();
+    expect(func).to.throw();
+  });
+
+  it(`Calling shift on array Accessor throws error`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+
+    let func = () => watchable.Accessor.list.shift();
+    expect(func).to.throw();
+  });
+
+  it(`Calling splice on array Accessor throws error`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+
+    let func = () => watchable.Accessor.list.splice(1, 1, "2", "3");
+    expect(func).to.throw();
+  });
+
+  it(`Calling fill on array Accessor throws error`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+
+    let func = () => watchable.Accessor.list.fill("NaN");
+    expect(func).to.throw();
+  });
+
+  it(`Calling sort on array Accessor throws error`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+
+    let func = () => watchable.Accessor.list.sort();
+    expect(func).to.throw();
+  });
+
+  it(`Calling copyWithin on array Accessor throws error`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+
+    let func = () => watchable.Accessor.list.copyWithin(0, 1, 2);
+    expect(func).to.throw();
   });
 
   it(`Assigning a new value to an array item throws an error`, () => {
