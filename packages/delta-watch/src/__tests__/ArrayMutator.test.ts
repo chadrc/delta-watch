@@ -1,67 +1,10 @@
 import {expect} from 'chai';
 import 'jest';
-import {ArrayWatcher, Watchable} from "../Watchable";
+import {Watchable} from "../Watchable";
 import {assertWatcherCalled} from "./utils";
-import {AddInfo, RemoveInfo} from "../ArrayMutator";
 
 describe(`Array Mutator`, () => {
-  it('calls add callback when pushing to array', () => {
-    let watchable = new Watchable({
-      items: [
-        "one",
-        "two"
-      ]
-    });
-
-    let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      add: (value: string, addInfo: AddInfo, ary: Array<string>) => {
-        expect(value).to.deep.equal(["three", "four"]);
-        expect(addInfo.start).to.equal(2);
-        expect(addInfo.count).to.equal(2);
-        expect(ary).to.deep.equal(["one", "two", "three", "four"]);
-        watcherCalled = true;
-      }
-    }));
-
-    let itemMutator = watchable.Mutator.items;
-    let length = itemMutator.push("three", "four");
-
-    expect(length).to.equal(4);
-    expect(watchable.Accessor.items).to.deep.equal(["one", "two", "three", "four"]);
-
-    assertWatcherCalled(watcherCalled);
-  });
-
-  it('calls add callback when unshifting to array', () => {
-    let watchable = new Watchable({
-      items: [
-        "one",
-        "two"
-      ]
-    });
-
-    let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      add: (value: string, addInfo: AddInfo, ary: string[]) => {
-        expect(value).to.deep.equal(["zero"]);
-        expect(addInfo.start).to.equal(0);
-        expect(addInfo.count).to.equal(1);
-        expect(ary).to.deep.equal(["zero", "one", "two"]);
-        watcherCalled = true;
-      }
-    }));
-
-    let itemMutator = watchable.Mutator.items;
-    let length = itemMutator.unshift("zero");
-
-    expect(length).to.equal(3);
-    expect(watchable.Accessor.items).to.deep.equal(["zero", "one", "two"]);
-
-    assertWatcherCalled(watcherCalled);
-  });
-
-  it('calls array callback when add to array', () => {
+  it('calls array callback when push to array', () => {
     let watchable = new Watchable({
       items: [
         "one",
@@ -81,7 +24,27 @@ describe(`Array Mutator`, () => {
     assertWatcherCalled(watcherCalled);
   });
 
-  it('calls remove callback when pop from array', () => {
+  it('calls array callback when unshift to array', () => {
+    let watchable = new Watchable({
+      items: [
+        "one",
+        "two"
+      ]
+    });
+
+    let watcherCalled = false;
+    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+      expect(value).to.deep.equal(["zero", "one", "two"]);
+      watcherCalled = true;
+    });
+
+    watchable.Mutator.items.unshift("zero");
+
+    expect(watchable.Accessor.items).to.deep.equal(["zero", "one", "two"]);
+    assertWatcherCalled(watcherCalled);
+  });
+
+  it('calls array change callback when popping from array', () => {
     let watchable = new Watchable({
       items: [
         "one",
@@ -91,15 +54,10 @@ describe(`Array Mutator`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      remove: (removed: string[], removeInfo: RemoveInfo, ary: string[]) => {
-        expect(removed).to.deep.equal(["three"]);
-        expect(removeInfo.start).to.equal(2);
-        expect(removeInfo.count).to.equal(1);
-        expect(ary).to.deep.equal(["one", "two"]);
-        watcherCalled = true;
-      }
-    }));
+    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+      expect(value).to.deep.equal(["one", "two"]);
+      watcherCalled = true;
+    });
 
     let removed = watchable.Mutator.items.pop();
 
@@ -109,7 +67,7 @@ describe(`Array Mutator`, () => {
     assertWatcherCalled(watcherCalled);
   });
 
-  it('calls remove callback when shift from array', () => {
+  it('calls array change callback when shifting from array', () => {
     let watchable = new Watchable({
       items: [
         "one",
@@ -119,101 +77,15 @@ describe(`Array Mutator`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      remove: (removed: string[], removeInfo: RemoveInfo, ary: string[]) => {
-        expect(removed).to.deep.equal(["one"]);
-        expect(removeInfo.start).to.equal(0);
-        expect(removeInfo.count).to.equal(1);
-        expect(ary).to.deep.equal(["two", "three"]);
-        watcherCalled = true;
-      }
-    }));
+    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+      expect(value).to.deep.equal(["two", "three"]);
+      watcherCalled = true;
+    });
 
     let removed = watchable.Mutator.items.shift();
 
     expect(removed).to.equal("one");
     expect(watchable.Accessor.items).to.deep.equal(["two", "three"]);
-
-    assertWatcherCalled(watcherCalled);
-  });
-
-  it('calls array change callback when removing from array', () => {
-    let watchable = new Watchable({
-      items: [
-        "one",
-        "two",
-        "three"
-      ]
-    });
-
-    let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      change: (value: string[]) => {
-        expect(value).to.deep.equal(["two", "three"]);
-        watcherCalled = true;
-      }
-    }));
-
-    let removed = watchable.Mutator.items.shift();
-
-    expect(removed).to.equal("one");
-    expect(watchable.Accessor.items).to.deep.equal(["two", "three"]);
-
-    assertWatcherCalled(watcherCalled);
-  });
-
-  it('calls add callback when splice with no deleteCount argument', () => {
-    let watchable = new Watchable({
-      items: [
-        "one",
-        "two",
-        "three"
-      ]
-    });
-
-    let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      add: (added: string, addInfo: AddInfo, ary: string[]) => {
-        expect(added).to.deep.equal(["one and one third", "one and two thirds"]);
-        expect(addInfo.start).to.equal(1);
-        expect(addInfo.count).to.equal(2);
-        expect(ary).to.deep.equal(["one", "one and one third", "one and two thirds", "two", "three"]);
-        watcherCalled = true;
-      }
-    }));
-
-    let removed = watchable.Mutator.items.splice(1, 0, "one and one third", "one and two thirds");
-
-    expect(removed).to.deep.equal([]);
-    expect(watchable.Accessor.items).to.deep.equal(["one", "one and one third", "one and two thirds", "two", "three"]);
-
-    assertWatcherCalled(watcherCalled);
-  });
-
-  it('calls remove callback when splice with no items argument', () => {
-    let watchable = new Watchable({
-      items: [
-        "one",
-        "two",
-        "three"
-      ]
-    });
-
-    let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      remove: (removed: string[], removeInfo: RemoveInfo, ary: string[]) => {
-        expect(removed).to.deep.equal(["one", "two"]);
-        expect(removeInfo.start).to.equal(0);
-        expect(removeInfo.count).to.equal(2);
-        expect(ary).to.deep.equal(["three"]);
-        watcherCalled = true;
-      }
-    }));
-
-    let removed = watchable.Mutator.items.splice(0, 2);
-
-    expect(removed).to.deep.equal(["one", "two"]);
-    expect(watchable.Accessor.items).to.deep.equal(["three"]);
 
     assertWatcherCalled(watcherCalled);
   });
@@ -228,12 +100,10 @@ describe(`Array Mutator`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      change: (value: string[]) => {
-        expect(value).to.deep.equal(["1", "2", "3", "three"]);
-        watcherCalled = true;
-      }
-    }));
+    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+      expect(value).to.deep.equal(["1", "2", "3", "three"]);
+      watcherCalled = true;
+    });
 
     let removed = watchable.Mutator.items.splice(0, 2, "1", "2", "3");
 
@@ -254,12 +124,10 @@ describe(`Array Mutator`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      change: (value: string[]) => {
-        expect(value).to.deep.equal([0, 0, 0, 0]);
-        watcherCalled = true;
-      }
-    }));
+    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+      expect(value).to.deep.equal([0, 0, 0, 0]);
+      watcherCalled = true;
+    });
 
     let filled = watchable.Mutator.items.fill(0);
 
@@ -280,12 +148,10 @@ describe(`Array Mutator`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      change: (value: string[]) => {
-        expect(value).to.deep.equal(["four", "one", "three", "two"]);
-        watcherCalled = true;
-      }
-    }));
+    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+      expect(value).to.deep.equal(["four", "one", "three", "two"]);
+      watcherCalled = true;
+    });
 
     let sorted = watchable.Mutator.items.sort();
 
@@ -307,12 +173,10 @@ describe(`Array Mutator`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      change: (value: string[]) => {
-        expect(value).to.deep.equal(["one", "three", "three", "four"]);
-        watcherCalled = true;
-      }
-    }));
+    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+      expect(value).to.deep.equal(["one", "three", "three", "four"]);
+      watcherCalled = true;
+    });
 
     let copied = watchable.Mutator.items.copyWithin(1, 2, 3);
 
@@ -420,32 +284,19 @@ describe(`Array Mutator`, () => {
     let watchable = new Watchable({});
 
     let changeWatcherCalled = false;
-    let addWatcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
-      change: (value: any) => {
-        // First set is an empty array, then this gets called again after push
-        if (changeWatcherCalled === false) {
-          expect(value).to.deep.equal([]);
-          changeWatcherCalled = true;
-        } else {
-          expect(value).to.deep.equal(["Value"]);
-        }
-      },
-      add: (values: string[], addInfo: AddInfo, ary: string[]) => {
-        expect(values).to.deep.equal(["Value"]);
-        expect(addInfo.start).to.equal(0);
-        expect(addInfo.count).to.equal(1);
-        expect(ary).to.deep.equal(["Value"]);
-        addWatcherCalled = true;
+    Watchable.watch(watchable.Watcher.items, (value: any) => {
+      // First set is an empty array, then this gets called again after push
+      if (changeWatcherCalled === false) {
+        expect(value).to.deep.equal([]);
+        changeWatcherCalled = true;
+      } else {
+        expect(value).to.deep.equal(["Value"]);
       }
-    }));
-
+    });
     watchable.Mutator.items = [];
-
     watchable.Mutator.items.push("Value");
 
     assertWatcherCalled(changeWatcherCalled);
-    assertWatcherCalled(addWatcherCalled);
   });
 
   /**

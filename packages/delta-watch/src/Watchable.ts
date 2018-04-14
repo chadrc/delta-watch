@@ -30,28 +30,6 @@ export class WatcherOptions {
   }
 }
 
-/**
- * Extension container for add and remove functions that get called when arrays are added or removed to
- */
-export class ArrayWatcherOptions extends WatcherOptions {
-  private readonly _add: Function;
-  private readonly _remove: Function;
-
-  constructor(change: Function, add: Function, remove: Function) {
-    super(change);
-    this._add = add;
-    this._remove = remove;
-  }
-
-  get add() {
-    return this._add;
-  }
-
-  get remove() {
-    return this._remove;
-  }
-}
-
 export interface WatcherArgs {
   change: Function
 }
@@ -62,41 +40,13 @@ export interface ArrayWatcherArgs {
   remove?: Function
 }
 
-/**
- * Creates a an options instance for listening to watchables
- * @param {WatcherArgs} options
- * @returns {WatcherOptions}
- * @constructor
- */
-export function Watcher(options: WatcherArgs): WatcherOptions {
-  return new WatcherOptions(options.change);
-}
-
-/**
- * Creates an options instance for array type watchables
- * @param {ArrayWatcherArgs} options
- * @returns {ArrayWatcherOptions}
- * @constructor
- */
-export function ArrayWatcher(options: ArrayWatcherArgs): ArrayWatcherOptions {
-  return new ArrayWatcherOptions(options.change, options.add, options.remove);
-}
-
 export class Watchable implements Subscribable {
-  static watch(watchable: Subscribable, cb: Function | WatcherOptions) {
-    if (cb instanceof WatcherOptions) {
-      watchable._subscribe(cb);
-    } else {
-      watchable._subscribe(new WatcherOptions(cb));
-    }
+  static watch(watchable: Subscribable, cb: Function) {
+    watchable._subscribe(new WatcherOptions(cb));
   }
 
-  static unwatch(watchable: Subscribable, cb: Function | WatcherOptions) {
-    if (cb instanceof WatcherOptions) {
-      watchable._unsubscribe(cb);
-    } else {
-      watchable._unsubscribe(new WatcherOptions(cb));
-    }
+  static unwatch(watchable: Subscribable, cb: Function) {
+    watchable._unsubscribe(new WatcherOptions(cb));
   }
 
   private readonly _watcher: ObjectWatcher;
@@ -133,12 +83,12 @@ export class Watchable implements Subscribable {
     this._watcher._notifySubscribers(false, true);
   }
 
-  _subscribe(cb: Function | WatcherOptions): void {
-    Watchable.watch(this._watcher, cb);
+  _subscribe(cb: WatcherOptions): void {
+    this._watcher._subscribe(cb);
   }
 
-  _unsubscribe(cb: Function | WatcherOptions): void {
-    Watchable.unwatch(this._watcher, cb);
+  _unsubscribe(cb: WatcherOptions): void {
+    this._watcher._unsubscribe(cb);
   }
 
   get _data() {
