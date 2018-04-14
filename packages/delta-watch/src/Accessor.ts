@@ -29,7 +29,7 @@ const getOnlyProxyHandler = {
 const getOnlyArrayProxyHandler = {
   get: function (obj: any[], prop: PropertyKey) {
     if (prop in obj) {
-      if (typeof prop === 'string' && arrayMutatorMethods.indexOf(prop) !== -1) {
+      if (arrayMutatorMethods.indexOf(prop as string) !== -1) {
         throw Error("Cannot access a mutator method on a the Accessor object.");
       }
       return (obj as any)[prop];
