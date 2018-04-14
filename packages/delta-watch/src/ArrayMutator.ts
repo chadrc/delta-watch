@@ -1,5 +1,6 @@
 import {ArrayWatcherOptions, DynamicProperties, Mutator, WatcherOptions} from "./Watchable";
 import {ObjectWatcher} from "./ObjectWatcher";
+import {makeHandler} from "./DateMutator";
 
 export const arrayNonMutatorMethods = [
   'concat',
@@ -54,7 +55,13 @@ export function makeGetOnlyArrayProxy(ary: any[]): any {
 }
 
 export function makeArrayMutator(watcher: ObjectWatcher): Mutator {
-  return new ArrayMutator(watcher);
+  let internals = {
+    watcher: watcher,
+    type: "Array"
+  };
+
+  return new Proxy(watcher._data, makeHandler<Date>(internals, arrayMutatorMethods));
+  // return new ArrayMutator(watcher);
 }
 
 export interface AddInfo {

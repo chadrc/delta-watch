@@ -1,6 +1,6 @@
 import {ObjectWatcher} from "./ObjectWatcher";
 
-function makeHandler<T extends object>(internals: any, mutatorMethods: string[]): ProxyHandler<T> {
+export function makeHandler<T extends object>(internals: any, mutatorMethods: string[]): ProxyHandler<T> {
   return {
     get: function (target: T, prop: PropertyKey) {
       if (prop === "__DeltaWatchInternals") {
@@ -17,6 +17,11 @@ function makeHandler<T extends object>(internals: any, mutatorMethods: string[])
               internals.watcher._notifySubscribers(true, true, true);
               return result;
             }
+          }
+        } else {
+          let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
+          if (fieldMutator !== null && typeof fieldMutator !== 'undefined') {
+            return fieldMutator;
           }
         }
         return field;

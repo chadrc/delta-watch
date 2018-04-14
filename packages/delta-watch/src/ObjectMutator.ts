@@ -57,7 +57,9 @@ export class ObjectMutator implements DynamicProperties, Mutator {
         // to make Object or Array mutator
         self._watcher._data[field] = value;
         let fieldMutator = ObjectWatcher.getMutator(self._watcher, field);
-        if (Array.isArray(value) && !(fieldMutator instanceof ArrayMutator)) {
+        if (Array.isArray(value) &&
+          (fieldMutator === null || typeof fieldMutator === 'undefined'
+            || (fieldMutator as any).__DeltaWatchInternals.type !== "Array")) {
           // setting this field to an array but doesn't have an array mutator associated with it
           self._watcher._makeMutator(field);
         }

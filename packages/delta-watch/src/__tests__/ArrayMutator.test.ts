@@ -4,7 +4,7 @@ import {ArrayWatcher, Watchable} from "../Watchable";
 import {assertWatcherCalled} from "./utils";
 import {AddInfo, RemoveInfo} from "../ArrayMutator";
 
-describe(`Array Mutator v2`, () => {
+describe(`Array Mutator`, () => {
   it('calls add callback when pushing to array', () => {
     let watchable = new Watchable({
       items: [
@@ -337,7 +337,7 @@ describe(`Array Mutator v2`, () => {
       watcherCalled = true;
     });
 
-    watchable.Mutator.items.at(0).headline = "New Headline";
+    watchable.Mutator.items[0].headline = "New Headline";
 
     assertWatcherCalled(watcherCalled);
   });
@@ -411,7 +411,7 @@ describe(`Array Mutator v2`, () => {
       watcherCalled = true;
     });
 
-    watchable.Mutator.items.at(0).value = "Value";
+    watchable.Mutator.items[0].value = "Value";
 
     assertWatcherCalled(watcherCalled);
   });
