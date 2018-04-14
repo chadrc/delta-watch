@@ -4,6 +4,7 @@ import {ObjectWatcher} from "./ObjectWatcher";
 export const arrayNonMutatorMethods = [
   'concat',
   'entries',
+  'every',
   'filter',
   'find',
   'findIndex',
@@ -16,12 +17,10 @@ export const arrayNonMutatorMethods = [
   'map',
   'reduce',
   'reduceRight',
-  'reverse',
   'slice',
   'some',
   'toLocaleString',
-  'toSource',
-  'values'
+  'values' // not in nodejs, but should be in browsers
 ];
 
 export const arrayMutatorMethods = [
@@ -32,7 +31,8 @@ export const arrayMutatorMethods = [
   'splice',
   'fill',
   'sort',
-  'copyWithin'
+  'copyWithin',
+  'reverse'
 ];
 
 export interface AddInfo {
