@@ -42,4 +42,13 @@ describe(`Dates`, () => {
     expect(watchable.Accessor.date.getTime()).to.equal(expectedDate.getTime());
     assertWatcherCalled(watcherCalled);
   });
+
+  it(`Calling setDate on Date accessor throws error`, () => {
+    let watchable = new Watchable({
+      date: new Date('January 1, 2018 00:00:00')
+    });
+
+    let func = () => watchable.Accessor.date.setDate(25);
+    expect(func).to.throw();
+  });
 });

@@ -1,4 +1,5 @@
 import {arrayMutatorMethods} from "./ArrayMutator";
+import {dateMutatorMethods} from "./DateMutator";
 
 function getProxyForValue(value: any): any {
   if (typeof value === "object") {
@@ -30,7 +31,7 @@ const getOnlyArrayProxyHandler = {
   get: function (obj: any[], prop: PropertyKey) {
     if (prop in obj) {
       if (arrayMutatorMethods.indexOf(prop as string) !== -1) {
-        throw Error("Cannot access a mutator method on a the Accessor object.");
+        throw Error("Cannot access a mutator method on an Accessor object.");
       }
       return (obj as any)[prop];
     }
@@ -45,6 +46,9 @@ const getOnlyDateProxyHandler: ProxyHandler<Date> = {
     if (prop in obj) {
       let field = (obj as any)[prop];
       if (typeof field === 'function') {
+        if (dateMutatorMethods.indexOf(prop as string) !== -1) {
+          throw Error("Cannot access a mutator method on an Accessor object.");
+        }
         field = field.bind(obj);
       }
       return field;

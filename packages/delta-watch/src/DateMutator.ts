@@ -28,7 +28,7 @@ function makeHandler<T extends object>(internals: any, mutatorMethods: string[])
   };
 }
 
-const dateMutatorMethods = [
+export const dateMutatorMethods = [
   'setDate'
 ];
 
