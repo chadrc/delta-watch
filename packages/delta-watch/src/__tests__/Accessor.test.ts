@@ -29,6 +29,12 @@ describe(`Accessors`, () => {
     expect(watchable.Accessor.data.obj.value).to.equal("Value");
   });
 
+  it(`Assigning to a value on the Accessor throws an error`, () => {
+    let watchable = new Watchable({value: "Value"});
+    let func = () => watchable.Accessor.value = "New Value";
+    expect(func).to.throw();
+  });
+
   it(`Accessing an array's mutator methods throw errors`, () => {
     let watchable = new Watchable({
       list: ['one', 'two', 'three']
@@ -38,5 +44,13 @@ describe(`Accessors`, () => {
       let func = () => watchable.Accessor.list[m]();
       expect(func).to.throw();
     }
-  })
+  });
+
+  it(`Assigning a new value to an array item throws an error`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+    let func = () => watchable.Accessor.list[0] = "1";
+    expect(func).to.throw();
+  });
 });

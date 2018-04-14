@@ -11,6 +11,9 @@ const getOnlyProxyHandler = {
         return val;
       }
     }
+  },
+  set: function () {
+    throw Error("Cannot set a value on the Accessor object.");
   }
 };
 
@@ -22,6 +25,9 @@ const getOnlyArrayProxyHandler = {
       }
       return (obj as any)[prop];
     }
+  },
+  set: function () {
+    throw Error("Cannot set a value on the Accessor object.");
   }
 };
 
