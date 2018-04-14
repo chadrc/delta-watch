@@ -29,7 +29,8 @@ function makeHandler<T extends object>(internals: any, mutatorMethods: string[])
 }
 
 export const dateMutatorMethods = [
-  'setDate'
+  'setDate',
+  'setFullYear'
 ];
 
 export function makeDateMutator(watcher: ObjectWatcher) {
