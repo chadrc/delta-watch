@@ -1,6 +1,5 @@
 import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
-import {ObjectMutator} from "./ObjectMutator";
-import {makeGetOnlyProxy} from "./Accessor";
+import {ObjectMutator, makeGetOnlyProxy} from "./ObjectMutator";
 
 export interface Subscribable {
   _subscribe(cb: WatcherOptions): void;
