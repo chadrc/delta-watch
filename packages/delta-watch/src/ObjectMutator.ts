@@ -53,7 +53,8 @@ export class ObjectMutator implements DynamicProperties, Mutator {
         return fieldMutator == null ? self._watcher._properties[field]._data : fieldMutator;
       },
       set(value: any) {
-        // Need to mutate before array check, because watcher's make mutator uses current value to determine
+        // Need to mutate before array check,
+        // because watcher's make mutator uses current value to determine
         // to make Object or Array mutator
         self._watcher._data[field] = value;
         let fieldMutator = ObjectWatcher.getMutator(self._watcher, field);
