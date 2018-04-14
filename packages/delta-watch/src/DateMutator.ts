@@ -37,6 +37,14 @@ export const dateMutatorMethods = [
   'setMonth',
   'setSeconds',
   'setTime',
+  'setUTCDate',
+  'setUTCFullYear',
+  'setUTCHours',
+  'setUTCMilliseconds',
+  'setUTCMinutes',
+  'setUTCMonth',
+  'setUTCSeconds',
+  'setUTCTime',
 ];
 
 export function makeDateMutator(watcher: ObjectWatcher) {
