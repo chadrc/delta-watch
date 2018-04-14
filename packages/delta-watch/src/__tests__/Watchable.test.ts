@@ -40,6 +40,18 @@ describe(`Watchable`, () => {
     expect(Watchable.watch).to.exist;
   });
 
+  it(`Watchable has static 'unwatch' method`, () => {
+    expect(Watchable.unwatch).to.exist;
+  });
+
+  it(`Accessor value is comparable`, () => {
+    let watchable = new Watchable({
+      value: "Value"
+    });
+
+    expect(watchable.Accessor.value).to.equal("Value");
+  });
+
   it(`Calls callback on root object`, () => {
     let watchable = new Watchable({value: "Watchable"});
 
