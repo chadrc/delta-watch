@@ -34,6 +34,10 @@ describe(`Accessors`, () => {
     expect(func).to.throw();
   });
 
+  /**
+   * Array mutation not possible through accessor tests
+   */
+
   it(`Calling push on array Accessor throws error`, () => {
     let watchable = new Watchable({
       list: ['one', 'two', 'three']
@@ -122,7 +126,11 @@ describe(`Accessors`, () => {
     let func = () => watchable.Accessor.list[0] = '1';
     expect(func).to.throw();
   });
-  
+
+  /**
+   * Non Mutator method testing
+   */
+
   it(`Calling concat works normally leaves array value unmodified`, () => {
     let watchable = new Watchable({
       list: ['one', 'two', 'three']

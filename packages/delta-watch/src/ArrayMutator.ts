@@ -60,7 +60,7 @@ export class ArrayMutator implements DynamicProperties, Mutator {
     let self = this;
     for (let method of arrayNonMutatorMethods) {
       (this as any)[method] = function (...args: any[]) {
-        self._watcher._data[method](...args);
+        return self._watcher._data[method](...args);
       }
     }
   }
