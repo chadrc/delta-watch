@@ -31,7 +31,8 @@ function makeHandler<T extends object>(internals: any, mutatorMethods: string[])
 export const dateMutatorMethods = [
   'setDate',
   'setFullYear',
-  'setHours'
+  'setHours',
+  'setMilliseconds'
 ];
 
 export function makeDateMutator(watcher: ObjectWatcher) {
