@@ -5,7 +5,7 @@ const getOnlyProxyHandler = {
     if (prop in obj) {
       let val = (obj as any)[prop];
       if (typeof val === "object") {
-        return makeGetOnlyProxyHandler(val);
+        return makeGetOnlyProxy(val);
       } else {
         return val;
       }
@@ -13,6 +13,6 @@ const getOnlyProxyHandler = {
   }
 };
 
-export function makeGetOnlyProxyHandler(obj: any): any {
+export function makeGetOnlyProxy(obj: any): any {
   return new Proxy(obj, getOnlyProxyHandler);
 }

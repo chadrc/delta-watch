@@ -1,6 +1,6 @@
 import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
 import {ObjectMutator} from "./ObjectMutator";
-import {makeGetOnlyProxyHandler} from "./Accessor";
+import {makeGetOnlyProxy} from "./Accessor";
 
 export interface Subscribable {
   _subscribe(cb: WatcherOptions): void;
@@ -117,7 +117,7 @@ export class Watchable implements Subscribable {
     this._dataValue = data;
     this._watcher = MakeObjectWatcher(this);
     this._mutator = new ObjectMutator(this._watcher);
-    this._accessor = makeGetOnlyProxyHandler(data);
+    this._accessor = makeGetOnlyProxy(data);
   }
 
   get Watcher(): ObjectWatcher & DynamicProperties {
