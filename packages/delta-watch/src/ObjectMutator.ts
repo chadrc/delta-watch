@@ -1,6 +1,6 @@
 import {DynamicProperties, Mutator} from "./Watchable";
 import {ObjectWatcher} from "./ObjectWatcher";
-import {ArrayMutator, makeGetOnlyArrayProxy} from "./ArrayMutator";
+import {makeGetOnlyArrayProxy} from "./ArrayMutator";
 import {makeGetOnlyDateProxy} from "./DateMutator";
 
 function getProxyForValue(value: any): any {
