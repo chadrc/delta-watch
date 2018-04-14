@@ -34,6 +34,7 @@ export const dateMutatorMethods = [
   'setHours',
   'setMilliseconds',
   'setMinutes',
+  'setMonth',
 ];
 
 export function makeDateMutator(watcher: ObjectWatcher) {
