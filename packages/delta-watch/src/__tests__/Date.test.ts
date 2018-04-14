@@ -594,4 +594,114 @@ describe(`Dates`, () => {
     expect(watchable.Accessor.date.getUTCSeconds()).to.equal(59);
     expect(watchable.Mutator.date.getUTCSeconds()).to.equal(59);
   });
+
+  it(`Calling toDateString on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toDateString();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toDateString()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toDateString()).to.equal(expectedString);
+  });
+
+  it(`Calling toISOString on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toISOString();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toISOString()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toISOString()).to.equal(expectedString);
+  });
+
+  it(`Calling toJSON on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toJSON();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toJSON()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toJSON()).to.equal(expectedString);
+  });
+
+  it(`Calling toLocaleDateString on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toLocaleDateString();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toLocaleDateString()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toLocaleDateString()).to.equal(expectedString);
+  });
+
+  it(`Calling toLocaleString on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toLocaleString();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toLocaleString()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toLocaleString()).to.equal(expectedString);
+  });
+
+  it(`Calling toLocaleTimeString on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toLocaleTimeString();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toLocaleTimeString()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toLocaleTimeString()).to.equal(expectedString);
+  });
+
+  it(`Calling toString on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toString();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toString()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toString()).to.equal(expectedString);
+  });
+
+  it(`Calling toTimeString on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toTimeString();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toTimeString()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toTimeString()).to.equal(expectedString);
+  });
+
+  it(`Calling toUTCString on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedString = date.toUTCString();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.toUTCString()).to.equal(expectedString);
+    expect(watchable.Mutator.date.toUTCString()).to.equal(expectedString);
+  });
+
+  it(`Calling valueOf on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let expectedValue = date.valueOf();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.valueOf()).to.equal(expectedValue);
+    expect(watchable.Mutator.date.valueOf()).to.equal(expectedValue);
+  });
 });
