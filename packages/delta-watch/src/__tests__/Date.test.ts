@@ -209,4 +209,30 @@ describe(`Dates`, () => {
     let func = () => watchable.Accessor.date.setSeconds(34);
     expect(func).to.throw();
   });
+
+  it(`Calling setTime on Date mutator calls callback`, () => {
+    let watchable = new Watchable({
+      date: new Date('January 1, 2018 00:00:00')
+    });
+
+    let expectedDate = new Date('June 13, 2018 04:39:27');
+    let watcherCalled = false;
+    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+      expect(value.getTime()).to.equal(expectedDate.getTime());
+      watcherCalled = true;
+    });
+
+    watchable.Mutator.date.setTime(expectedDate.getTime());
+    expect(watchable.Accessor.date.getTime()).to.equal(expectedDate.getTime());
+    assertWatcherCalled(watcherCalled);
+  });
+
+  it(`Calling setTime on Date accessor throws error`, () => {
+    let watchable = new Watchable({
+      date: new Date('January 1, 2018 00:00:00')
+    });
+
+    let func = () => watchable.Accessor.date.setTime(new Date('June 13, 2018 04:39:27').getTime());
+    expect(func).to.throw();
+  });
 });
