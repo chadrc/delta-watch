@@ -1,5 +1,5 @@
 import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
-import {ObjectMutator, makeGetOnlyProxy} from "./ObjectMutator";
+import {makeGetOnlyProxy, makeObjectMutator} from "./ObjectMutator";
 
 export interface Subscribable {
   _subscribe(cb: WatcherOptions): void;
@@ -50,7 +50,7 @@ export class Watchable implements Subscribable {
   }
 
   private readonly _watcher: ObjectWatcher;
-  private readonly _mutator: ObjectMutator;
+  private readonly _mutator: any;
   private readonly _accessor: any;
   private _dataValue: { [key: string]: any };
 
@@ -61,7 +61,7 @@ export class Watchable implements Subscribable {
 
     this._dataValue = data;
     this._watcher = MakeObjectWatcher(this);
-    this._mutator = new ObjectMutator(this._watcher);
+    this._mutator = makeObjectMutator(this._watcher);
     this._accessor = makeGetOnlyProxy(data);
   }
 

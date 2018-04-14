@@ -226,6 +226,7 @@ describe(`Watchable`, () => {
       }
     };
 
+    let mutator = watchable.Mutator.obj.item;
     expect(watchable.Mutator.obj.item.title).to.equal("New Title");
 
     assertWatcherCalled(watcherCalled);

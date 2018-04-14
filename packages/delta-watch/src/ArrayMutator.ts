@@ -1,4 +1,3 @@
-import {Mutator} from "./Watchable";
 import {ObjectWatcher} from "./ObjectWatcher";
 import {makeHandler} from "./DateMutator";
 
@@ -32,11 +31,11 @@ export function makeGetOnlyArrayProxy(ary: any[]): any {
   return new Proxy(ary, getOnlyArrayProxyHandler);
 }
 
-export function makeArrayMutator(watcher: ObjectWatcher): Mutator {
+export function makeArrayMutator(watcher: ObjectWatcher): any {
   let internals = {
     watcher: watcher,
     type: "Array"
   };
 
-  return new Proxy(watcher._data, makeHandler<Date>(internals, arrayMutatorMethods));
+  return new Proxy({}, makeHandler(internals, arrayMutatorMethods));
 }

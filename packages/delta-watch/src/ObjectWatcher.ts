@@ -82,9 +82,9 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
   }
 
   _makeProperty(field: PropertyKey, dynamic: boolean = false) {
-    if (dynamic && this.__myMutator) {
-      this.__myMutator._makeProperty(field);
-    }
+    // if (dynamic && this.__myMutator) {
+    //   this.__myMutator._makeProperty(field);
+    // }
 
     let self = this;
     let dataType = typeof this._data[field];

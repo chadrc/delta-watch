@@ -1,16 +1,18 @@
 import {ObjectWatcher} from "./ObjectWatcher";
 
-export function makeHandler<T extends object>(internals: any, mutatorMethods: string[]): ProxyHandler<T> {
+export function makeHandler<T extends object>(internals: any,
+                                              mutatorMethods: string[],
+                                              settableProps: string[] | string = null): ProxyHandler<T> {
   return {
-    get: function (target: T, prop: PropertyKey) {
+    get: function (_: T, prop: PropertyKey) {
       if (prop === "__DeltaWatchInternals") {
         return internals;
       }
 
-      if (prop in target) {
-        let field = (target as any)[prop];
+      if (prop in internals.watcher._data) {
+        let field = (internals.watcher._data as any)[prop];
         if (typeof field === 'function') {
-          field = field.bind(target);
+          field = field.bind(internals.watcher._data);
           if (mutatorMethods.indexOf(prop as string) !== -1) {
             return function (...args: any[]) {
               let result = field(...args);
@@ -19,6 +21,8 @@ export function makeHandler<T extends object>(internals: any, mutatorMethods: st
             }
           }
         } else {
+          // let fieldMutator = ObjectWatcher.getMutator(self._watcher, field);
+          // return fieldMutator == null ? self._watcher._properties[field]._data : fieldMutator;
           let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
           if (fieldMutator !== null && typeof fieldMutator !== 'undefined') {
             return fieldMutator;
@@ -27,8 +31,35 @@ export function makeHandler<T extends object>(internals: any, mutatorMethods: st
         return field;
       }
     },
-    set: function (): boolean {
-      throw Error("Date has no settable values");
+    set: function (_: T, prop: PropertyKey, value: any): boolean {
+      if (prop === "__DeltaWatchInternals") {
+        throw Error("Cannot set value of __DeltaWatchInternals");
+      }
+
+      // If any prop should be accepted as settable
+      // or settableProps contains the given prop
+      if (settableProps === "*" ||
+        (settableProps !== null && settableProps.indexOf(prop as string) !== -1)) {
+        // Need to mutate before array check,
+        // because watcher's make mutator uses current value to determine
+        // to make Object or Array mutator
+        internals.watcher._data[prop] = value;
+        let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
+        if (Array.isArray(value) &&
+          (fieldMutator === null || typeof fieldMutator === 'undefined'
+            || (fieldMutator as any).__DeltaWatchInternals.type !== "Array")) {
+          // setting this field to an array but doesn't have an array mutator associated with it
+          internals.watcher._makeMutator(prop);
+        }
+
+        let watcherProperties = internals.watcher._properties[prop];
+        if (watcherProperties) {
+          watcherProperties._notifySubscribers(true, true);
+        }
+        return true;
+      }
+
+      throw Error(`${prop} not settable on Mutator of type ${internals.type}`)
     }
   };
 }
@@ -54,10 +85,11 @@ const dateMutatorMethods = [
 
 export function makeDateMutator(watcher: ObjectWatcher) {
   let internals = {
-    watcher: watcher
+    watcher: watcher,
+    type: "Date"
   };
 
-  return new Proxy(watcher._data, makeHandler<Date>(internals, dateMutatorMethods));
+  return new Proxy({}, makeHandler<Date>(internals, dateMutatorMethods));
 }
 
 const getOnlyDateProxyHandler: ProxyHandler<Date> = {
