@@ -1,5 +1,6 @@
 import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
 import {ObjectMutator} from "./ObjectMutator";
+import {makeGetOnlyProxyHandler} from "./Accessor";
 
 export interface Subscribable {
   _subscribe(cb: WatcherOptions): void;
@@ -80,23 +81,6 @@ export function Watcher(options: WatcherArgs): WatcherOptions {
  */
 export function ArrayWatcher(options: ArrayWatcherArgs): ArrayWatcherOptions {
   return new ArrayWatcherOptions(options.change, options.add, options.remove);
-}
-
-const getOnlyProxyHandler = {
-  get: function (obj: ObjectWatcher, prop: PropertyKey) {
-    if (prop in obj) {
-      let val = (obj as any)[prop];
-      if (typeof val === "object") {
-        return makeGetOnlyProxyHandler(val);
-      } else {
-        return val;
-      }
-    }
-  }
-};
-
-function makeGetOnlyProxyHandler(obj: any): any {
-  return new Proxy(obj, getOnlyProxyHandler);
 }
 
 export class Watchable implements Subscribable {
