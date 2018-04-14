@@ -1,5 +1,5 @@
 import {DynamicProperties, Mutator, Subscribable, Watchable, WatcherOptions} from "./Watchable";
-import {ArrayMutator} from "./ArrayMutator";
+import {ArrayMutator, makeArrayMutator} from "./ArrayMutator";
 import {ObjectMutator} from "./ObjectMutator";
 import {makeDateMutator} from "./DateMutator";
 
@@ -73,7 +73,7 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
   _makeMutator(field: PropertyKey) {
     let watcher = this._properties[field];
     if (Array.isArray(this._data[field])) {
-      this._mutators[field] = new ArrayMutator(watcher);
+      this._mutators[field] = makeArrayMutator(watcher);
     } else if (this._data[field] instanceof Date) {
       this._mutators[field] = makeDateMutator(watcher);
     } else {

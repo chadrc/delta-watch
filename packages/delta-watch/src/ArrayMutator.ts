@@ -53,6 +53,10 @@ export function makeGetOnlyArrayProxy(ary: any[]): any {
   return new Proxy(ary, getOnlyArrayProxyHandler);
 }
 
+export function makeArrayMutator(watcher: ObjectWatcher): Mutator {
+  return new ArrayMutator(watcher);
+}
+
 export interface AddInfo {
   start: number
   count: number
