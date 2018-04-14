@@ -1,7 +1,7 @@
 import {Watchable} from "../Watchable";
 import {expect} from 'chai';
 import 'jest';
-import {assertWatcherCalled, assertWatcherNotCalled} from "./utils";
+import {assertWatcherCalled} from "./utils";
 
 describe(`Dates`, () => {
   it(`Can watch, mutate, and access Date objects`, () => {
