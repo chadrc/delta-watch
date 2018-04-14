@@ -416,4 +416,17 @@ describe(`Dates`, () => {
     let func = () => watchable.Accessor.date.setUTCSeconds(34);
     expect(func).to.throw();
   });
+
+  /**
+   * Mutator and Accessor usage of non mutating methods
+   */
+
+  it(`Calling getDate on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59 GMT-0000')
+    });
+
+    expect(watchable.Accessor.date.getDate()).to.equal(27);
+    expect(watchable.Mutator.date.getDate()).to.equal(27);
+  });
 });
