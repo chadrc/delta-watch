@@ -1,37 +1,36 @@
-import {Watchable} from "../Watchable";
+import {Watchable} from '../Watchable';
 import {expect} from 'chai';
 import 'jest';
-import {arrayMutatorMethods} from "../ArrayMutator";
 
 describe(`Accessors`, () => {
   it(`First tier property is accessible`, () => {
-    let watchable = new Watchable({value: "Value"});
-    expect(watchable.Accessor.value).to.equal("Value");
+    let watchable = new Watchable({value: 'Value'});
+    expect(watchable.Accessor.value).to.equal('Value');
   });
 
   it(`Second tier property is accessible`, () => {
     let watchable = new Watchable({
       data: {
-        value: "Value"
+        value: 'Value'
       }
     });
-    expect(watchable.Accessor.data.value).to.equal("Value");
+    expect(watchable.Accessor.data.value).to.equal('Value');
   });
 
   it(`Third tier property is accessible`, () => {
     let watchable = new Watchable({
       data: {
         obj: {
-          value: "Value"
+          value: 'Value'
         }
       }
     });
-    expect(watchable.Accessor.data.obj.value).to.equal("Value");
+    expect(watchable.Accessor.data.obj.value).to.equal('Value');
   });
 
   it(`Assigning to a value on the Accessor throws an error`, () => {
-    let watchable = new Watchable({value: "Value"});
-    let func = () => watchable.Accessor.value = "New Value";
+    let watchable = new Watchable({value: 'Value'});
+    let func = () => watchable.Accessor.value = 'New Value';
     expect(func).to.throw();
   });
 
@@ -40,7 +39,7 @@ describe(`Accessors`, () => {
       list: ['one', 'two', 'three']
     });
 
-    let func = () => watchable.Accessor.list.push("four");
+    let func = () => watchable.Accessor.list.push('four');
     expect(func).to.throw();
   });
 
@@ -49,7 +48,7 @@ describe(`Accessors`, () => {
       list: ['one', 'two', 'three']
     });
 
-    let func = () => watchable.Accessor.list.unsift("zero");
+    let func = () => watchable.Accessor.list.unsift('zero');
     expect(func).to.throw();
   });
 
@@ -76,7 +75,7 @@ describe(`Accessors`, () => {
       list: ['one', 'two', 'three']
     });
 
-    let func = () => watchable.Accessor.list.splice(1, 1, "2", "3");
+    let func = () => watchable.Accessor.list.splice(1, 1, '2', '3');
     expect(func).to.throw();
   });
 
@@ -85,7 +84,7 @@ describe(`Accessors`, () => {
       list: ['one', 'two', 'three']
     });
 
-    let func = () => watchable.Accessor.list.fill("NaN");
+    let func = () => watchable.Accessor.list.fill('NaN');
     expect(func).to.throw();
   });
 
@@ -111,7 +110,18 @@ describe(`Accessors`, () => {
     let watchable = new Watchable({
       list: ['one', 'two', 'three']
     });
-    let func = () => watchable.Accessor.list[0] = "1";
+    let func = () => watchable.Accessor.list[0] = '1';
     expect(func).to.throw();
+  });
+  
+  it(`Calling concat works normally leaves array value unmodified`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+    
+    let concatenated = watchable.Accessor.list.concat('four', 'five', 'six');
+    
+    expect(concatenated).to.deep.equal(['one', 'two', 'three', 'four', 'five', 'six']);
+    expect(watchable.Accessor.list).to.deep.equal(['one', 'two', 'three']);
   });
 });
