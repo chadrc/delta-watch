@@ -26,6 +26,16 @@ describe(`Dates`, () => {
     assertWatcherCalled(watcherCalled);
   });
 
+  it(`Setting a value on a Date object throws error`, () => {
+    let now = new Date();
+    let watchable = new Watchable({
+      date: now
+    });
+
+    let func = () => watchable.Mutator.date.fakeValue = "0";
+    expect(func).to.throw();
+  });
+
   /**
    * Mutation and access tests for mutation methods
    */
