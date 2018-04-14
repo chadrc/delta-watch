@@ -1,6 +1,7 @@
 import {Watchable} from "../Watchable";
 import {expect} from 'chai';
 import 'jest';
+import {arrayMutatorMethods} from "../ArrayMutator";
 
 describe(`Accessors`, () => {
   it(`First tier property is accessible`, () => {
@@ -27,4 +28,15 @@ describe(`Accessors`, () => {
     });
     expect(watchable.Accessor.data.obj.value).to.equal("Value");
   });
+
+  it(`Accessing an array's mutator methods throw errors`, () => {
+    let watchable = new Watchable({
+      list: ['one', 'two', 'three']
+    });
+
+    for (let m of arrayMutatorMethods) {
+      let func = () => watchable.Accessor.list[m]();
+      expect(func).to.throw();
+    }
+  })
 });

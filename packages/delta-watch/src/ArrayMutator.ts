@@ -1,7 +1,7 @@
 import {ArrayWatcherOptions, DynamicProperties, Mutator, WatcherOptions} from "./Watchable";
 import {ObjectWatcher} from "./ObjectWatcher";
 
-const methods = [
+export const arrayNonMutatorMethods = [
   'concat',
   'copyWithin',
   'entries',
@@ -23,6 +23,16 @@ const methods = [
   'toLocaleString',
   'toSource',
   'values'
+];
+
+export const arrayMutatorMethods = [
+  'push',
+  'unshift',
+  'pop',
+  'shift',
+  'splice',
+  'fill',
+  'sort'
 ];
 
 export interface AddInfo {
@@ -48,7 +58,7 @@ export class ArrayMutator implements DynamicProperties, Mutator {
     this._watcher._mutator = this;
 
     let self = this;
-    for (let method of methods) {
+    for (let method of arrayNonMutatorMethods) {
       (this as any)[method] = function (...args: any[]) {
         self._watcher._data[method](...args);
       }
