@@ -1,5 +1,5 @@
 import {ObjectWatcher} from "./ObjectWatcher";
-import {makeHandler} from "./DateMutator";
+import {makeMutationHandler} from "./utils";
 
 export const arrayMutatorMethods = [
   'push',
@@ -37,5 +37,5 @@ export function makeArrayMutator(watcher: ObjectWatcher): any {
     type: "Array"
   };
 
-  return new Proxy({}, makeHandler(internals, arrayMutatorMethods));
+  return new Proxy({}, makeMutationHandler(internals, arrayMutatorMethods));
 }

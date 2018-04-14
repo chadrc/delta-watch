@@ -1,6 +1,7 @@
 import {ObjectWatcher} from "./ObjectWatcher";
 import {makeGetOnlyArrayProxy} from "./ArrayMutator";
-import {makeGetOnlyDateProxy, makeHandler} from "./DateMutator";
+import {makeGetOnlyDateProxy} from "./DateMutator";
+import {makeMutationHandler} from "./utils";
 
 function getProxyForValue(value: any): any {
   if (typeof value === "object") {
@@ -37,7 +38,7 @@ function makeObjectMutatorProxy(watcher: ObjectWatcher): any {
     watcher: watcher,
     type: "Object"
   };
-  return new Proxy({}, makeHandler(internals, [], "*"));
+  return new Proxy({}, makeMutationHandler(internals, [], "*"));
 }
 
 export function makeObjectMutator(watcher: ObjectWatcher): any {

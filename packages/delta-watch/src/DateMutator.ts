@@ -1,68 +1,5 @@
 import {ObjectWatcher} from "./ObjectWatcher";
-
-export function makeHandler<T extends object>(internals: any,
-                                              mutatorMethods: string[],
-                                              settableProps: string[] | string = null): ProxyHandler<T> {
-  return {
-    get: function (_: T, prop: PropertyKey) {
-      if (prop === "__DeltaWatchInternals") {
-        return internals;
-      }
-
-      if (prop in internals.watcher._data) {
-        let field = (internals.watcher._data as any)[prop];
-        if (typeof field === 'function') {
-          field = field.bind(internals.watcher._data);
-          if (mutatorMethods.indexOf(prop as string) !== -1) {
-            return function (...args: any[]) {
-              let result = field(...args);
-              internals.watcher._notifySubscribers(true, true, true);
-              return result;
-            }
-          }
-        } else {
-          // let fieldMutator = ObjectWatcher.getMutator(self._watcher, field);
-          // return fieldMutator == null ? self._watcher._properties[field]._data : fieldMutator;
-          let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
-          if (fieldMutator !== null && typeof fieldMutator !== 'undefined') {
-            return fieldMutator;
-          }
-        }
-        return field;
-      }
-    },
-    set: function (_: T, prop: PropertyKey, value: any): boolean {
-      if (prop === "__DeltaWatchInternals") {
-        throw Error("Cannot set value of __DeltaWatchInternals");
-      }
-
-      // If any prop should be accepted as settable
-      // or settableProps contains the given prop
-      if (settableProps === "*" ||
-        (settableProps !== null && settableProps.indexOf(prop as string) !== -1)) {
-        // Need to mutate before array check,
-        // because watcher's make mutator uses current value to determine
-        // to make Object or Array mutator
-        internals.watcher._data[prop] = value;
-        let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
-        if (Array.isArray(value) &&
-          (fieldMutator === null || typeof fieldMutator === 'undefined'
-            || (fieldMutator as any).__DeltaWatchInternals.type !== "Array")) {
-          // setting this field to an array but doesn't have an array mutator associated with it
-          internals.watcher._makeMutator(prop);
-        }
-
-        let watcherProperties = internals.watcher._properties[prop];
-        if (watcherProperties) {
-          watcherProperties._notifySubscribers(true, true);
-        }
-        return true;
-      }
-
-      throw Error(`${prop} not settable on Mutator of type ${internals.type}`)
-    }
-  };
-}
+import {makeMutationHandler} from "./utils";
 
 const dateMutatorMethods = [
   'setDate',
@@ -83,13 +20,13 @@ const dateMutatorMethods = [
   'setUTCTime',
 ];
 
-export function makeDateMutator(watcher: ObjectWatcher) {
+export function makeDateMutator(watcher: ObjectWatcher): any {
   let internals = {
     watcher: watcher,
     type: "Date"
   };
 
-  return new Proxy({}, makeHandler<Date>(internals, dateMutatorMethods));
+  return new Proxy({}, makeMutationHandler<Date>(internals, dateMutatorMethods));
 }
 
 const getOnlyDateProxyHandler: ProxyHandler<Date> = {
