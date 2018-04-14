@@ -1,6 +1,6 @@
 import {DynamicProperties, Mutator, Subscribable, Watchable, WatcherOptions} from "./Watchable";
 import {makeArrayMutator} from "./ArrayMutator";
-import {ObjectMutator} from "./ObjectMutator";
+import {makeObjectMutator} from "./ObjectMutator";
 import {makeDateMutator} from "./DateMutator";
 
 const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
@@ -77,7 +77,7 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
     } else if (this._data[field] instanceof Date) {
       this._mutators[field] = makeDateMutator(watcher);
     } else {
-      this._mutators[field] = new ObjectMutator(watcher);
+      this._mutators[field] = makeObjectMutator(watcher);
     }
   }
 

@@ -33,6 +33,10 @@ export function makeGetOnlyProxy(obj: any): any {
   return new Proxy(obj, getOnlyProxyHandler);
 }
 
+export function makeObjectMutator(watcher: ObjectWatcher): ObjectMutator {
+  return new ObjectMutator(watcher);
+}
+
 export class ObjectMutator implements DynamicProperties, Mutator {
   private readonly _watcher: ObjectWatcher;
 
