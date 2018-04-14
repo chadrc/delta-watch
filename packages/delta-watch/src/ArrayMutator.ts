@@ -1,5 +1,5 @@
 import {ObjectWatcher} from "./ObjectWatcher";
-import {makeMutationHandler} from "./utils";
+import {makeAccessorHandler, makeMutationHandler} from "./utils";
 
 export const arrayMutatorMethods = [
   'push',
@@ -13,22 +13,8 @@ export const arrayMutatorMethods = [
   'reverse'
 ];
 
-const getOnlyArrayProxyHandler = {
-  get: function (obj: any[], prop: PropertyKey) {
-    if (prop in obj) {
-      if (arrayMutatorMethods.indexOf(prop as string) !== -1) {
-        throw Error("Cannot access a mutator method on an Accessor object.");
-      }
-      return (obj as any)[prop];
-    }
-  },
-  set: function () {
-    throw Error("Cannot set a value on the Accessor object.");
-  }
-};
-
-export function makeGetOnlyArrayProxy(ary: any[]): any {
-  return new Proxy(ary, getOnlyArrayProxyHandler);
+export function makeGetOnlyArrayProxy(ary: any): any {
+  return new Proxy(ary, makeAccessorHandler(arrayMutatorMethods));
 }
 
 export function makeArrayMutator(watcher: ObjectWatcher): any {

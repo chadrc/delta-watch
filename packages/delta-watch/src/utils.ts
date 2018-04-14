@@ -1,5 +1,25 @@
 import {ObjectWatcher} from "./ObjectWatcher";
 
+export function makeAccessorHandler(mutatorMethods: string[]) {
+  return {
+    get: function (obj: Date, prop: PropertyKey) {
+      if (prop in obj) {
+        let field = (obj as any)[prop];
+        if (typeof field === 'function') {
+          if (mutatorMethods.indexOf(prop as string) !== -1) {
+            throw Error("Cannot access a mutator method on an Accessor object.");
+          }
+          field = field.bind(obj);
+        }
+        return field;
+      }
+    },
+    set: function () {
+      throw Error("Cannot set a value on the Accessor object.");
+    }
+  };
+}
+
 export function makeMutationHandler<T extends object>(internals: any,
                                                       mutatorMethods: string[],
                                                       settableProps: string[] | string = null): ProxyHandler<T> {
