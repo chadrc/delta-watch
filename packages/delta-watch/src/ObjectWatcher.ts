@@ -1,4 +1,3 @@
-import {isFunction, isNullOrUndefined, isUndefined} from "util";
 import {DynamicProperties, Mutator, Subscribable, Watchable, WatcherOptions} from "./Watchable";
 import {ArrayMutator} from "./ArrayMutator";
 import {ObjectMutator} from "./ObjectMutator";
@@ -10,7 +9,7 @@ const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
 
       // Trying to access a field on an undefined data
       // Make data an object and create a dynamic property on it
-      if (isUndefined(obj._data)) {
+      if (typeof obj._data === 'undefined') {
         obj._parent._data[obj._parentKey] = {};
         if (obj._parent instanceof ObjectWatcher) {
           obj._parent._makeMutator(obj._parentKey);
@@ -52,7 +51,7 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
 
     // Don't make any properties
     // Proxy will handle their dynamic creation if it happens
-    if (!isNullOrUndefined(this._data) && !skipChildren) {
+    if (this._data !== null && typeof this._data !== 'undefined' && !skipChildren) {
       for (let field of Object.keys(this._data)) {
         this._makeProperty(field);
       }
@@ -131,7 +130,7 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
 
     if (changed) {
       for (let subscriber of this._subscriberOptions) {
-        if (isFunction(subscriber.change)) {
+        if (typeof subscriber.change === 'function') {
           subscriber.change(this._data);
         }
       }
@@ -154,10 +153,10 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
   }
 
   get _data(): any {
-    if (isNullOrUndefined(this._parent._data)) {
+    if (this._parent._data === null || typeof this._parent._data === 'undefined') {
       return;
     }
-    return isNullOrUndefined(this._parentKey) ? this._parent._data : this._parent._data[this._parentKey];
+    return this._parentKey === null || typeof this._parentKey === 'undefined' ? this._parent._data : this._parent._data[this._parentKey];
   }
 
   get _subscribers(): WatcherOptions[] {
