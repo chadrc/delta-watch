@@ -1,5 +1,5 @@
 import {DynamicProperties, Mutator, Subscribable, Watchable, WatcherOptions} from "./Watchable";
-import {ArrayMutator, makeArrayMutator} from "./ArrayMutator";
+import {makeArrayMutator} from "./ArrayMutator";
 import {ObjectMutator} from "./ObjectMutator";
 import {makeDateMutator} from "./DateMutator";
 
