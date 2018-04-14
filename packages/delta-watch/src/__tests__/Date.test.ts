@@ -423,10 +423,175 @@ describe(`Dates`, () => {
 
   it(`Calling getDate on Accessor and Mutator Date object return normal value`, () => {
     let watchable = new Watchable({
-      date: new Date('April 27, 2018 19:34:59 GMT-0000')
+      date: new Date('April 27, 2018 19:34:59')
     });
 
     expect(watchable.Accessor.date.getDate()).to.equal(27);
     expect(watchable.Mutator.date.getDate()).to.equal(27);
+  });
+
+  it(`Calling getDay on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59');
+    let theDay = date.getDay();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.getDay()).to.equal(theDay);
+    expect(watchable.Mutator.date.getDay()).to.equal(theDay);
+  });
+
+  it(`Calling getFullYear on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59')
+    });
+
+    expect(watchable.Accessor.date.getFullYear()).to.equal(2018);
+    expect(watchable.Mutator.date.getFullYear()).to.equal(2018);
+  });
+
+  it(`Calling getHours on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59')
+    });
+
+    expect(watchable.Accessor.date.getHours()).to.equal(19);
+    expect(watchable.Mutator.date.getHours()).to.equal(19);
+  });
+
+  it(`Calling getMilliseconds on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59');
+    let ms = date.getMilliseconds();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.getMilliseconds()).to.equal(ms);
+    expect(watchable.Mutator.date.getMilliseconds()).to.equal(ms);
+  });
+
+  it(`Calling getMinutes on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59')
+    });
+
+    expect(watchable.Accessor.date.getMinutes()).to.equal(34);
+    expect(watchable.Mutator.date.getMinutes()).to.equal(34);
+  });
+
+  it(`Calling getMonth on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59')
+    });
+
+    expect(watchable.Accessor.date.getMonth()).to.equal(3);
+    expect(watchable.Mutator.date.getMonth()).to.equal(3);
+  });
+
+  it(`Calling getSeconds on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59')
+    });
+
+    expect(watchable.Accessor.date.getSeconds()).to.equal(59);
+    expect(watchable.Mutator.date.getSeconds()).to.equal(59);
+  });
+
+  it(`Calling getTime on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59');
+    let sec = date.getTime();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.getTime()).to.equal(sec);
+    expect(watchable.Mutator.date.getTime()).to.equal(sec);
+  });
+
+  it(`Calling getTimezoneOffset on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59');
+    let timeZone = date.getTimezoneOffset();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.getTimezoneOffset()).to.equal(timeZone);
+    expect(watchable.Mutator.date.getTimezoneOffset()).to.equal(timeZone);
+  });
+
+  it(`Calling getUTCDate on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59 GMT-0300')
+    });
+
+    expect(watchable.Accessor.date.getUTCDate()).to.equal(27);
+    expect(watchable.Mutator.date.getUTCDate()).to.equal(27);
+  });
+
+  it(`Calling getUTCDay on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let theDay = date.getUTCDay();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.getUTCDay()).to.equal(theDay);
+    expect(watchable.Mutator.date.getUTCDay()).to.equal(theDay);
+  });
+
+  it(`Calling getUTCFullYear on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59 GMT-0300')
+    });
+
+    expect(watchable.Accessor.date.getUTCFullYear()).to.equal(2018);
+    expect(watchable.Mutator.date.getUTCFullYear()).to.equal(2018);
+  });
+
+  it(`Calling getUTCHours on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59 GMT-0300')
+    });
+
+    expect(watchable.Accessor.date.getUTCHours()).to.equal(22);
+    expect(watchable.Mutator.date.getUTCHours()).to.equal(22);
+  });
+
+  it(`Calling getUTCMilliseconds on Accessor and Mutator Date object return normal value`, () => {
+    let date = new Date('April 27, 2018 19:34:59 GMT-0300');
+    let ms = date.getUTCMilliseconds();
+    let watchable = new Watchable({
+      date: date
+    });
+
+    expect(watchable.Accessor.date.getUTCMilliseconds()).to.equal(ms);
+    expect(watchable.Mutator.date.getUTCMilliseconds()).to.equal(ms);
+  });
+
+  it(`Calling getUTCMinutes on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59 GMT-0300')
+    });
+
+    expect(watchable.Accessor.date.getUTCMinutes()).to.equal(34);
+    expect(watchable.Mutator.date.getUTCMinutes()).to.equal(34);
+  });
+
+  it(`Calling getUTCMonth on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59 GMT-0300')
+    });
+
+    expect(watchable.Accessor.date.getUTCMonth()).to.equal(3);
+    expect(watchable.Mutator.date.getUTCMonth()).to.equal(3);
+  });
+
+  it(`Calling getUTCSeconds on Accessor and Mutator Date object return normal value`, () => {
+    let watchable = new Watchable({
+      date: new Date('April 27, 2018 19:34:59 GMT-0300')
+    });
+
+    expect(watchable.Accessor.date.getUTCSeconds()).to.equal(59);
+    expect(watchable.Mutator.date.getUTCSeconds()).to.equal(59);
   });
 });
