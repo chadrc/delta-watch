@@ -25,4 +25,21 @@ describe(`Dates`, () => {
     expect(watchable.Accessor.date.getTime()).to.equal(newNow.getTime());
     assertWatcherCalled(watcherCalled);
   });
+
+  it(`Calling setDate on Date mutator calls callback`, () => {
+    let watchable = new Watchable({
+      date: new Date('January 1, 2018 00:00:00')
+    });
+
+    let expectedDate = new Date('January 25, 2018 00:00:00');
+    let watcherCalled = false;
+    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+      expect(value.getTime()).to.equal(expectedDate.getTime());
+      watcherCalled = true;
+    });
+
+    watchable.Mutator.date.setDate(25);
+    expect(watchable.Accessor.date.getTime()).to.equal(expectedDate.getTime());
+    assertWatcherCalled(watcherCalled);
+  });
 });
