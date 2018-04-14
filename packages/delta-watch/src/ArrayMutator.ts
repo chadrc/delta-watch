@@ -3,7 +3,6 @@ import {ObjectWatcher} from "./ObjectWatcher";
 
 export const arrayNonMutatorMethods = [
   'concat',
-  'copyWithin',
   'entries',
   'filter',
   'find',
@@ -32,7 +31,8 @@ export const arrayMutatorMethods = [
   'shift',
   'splice',
   'fill',
-  'sort'
+  'sort',
+  'copyWithin'
 ];
 
 export interface AddInfo {
@@ -196,6 +196,12 @@ export class ArrayMutator implements DynamicProperties, Mutator {
     let sorted = this.data.sort(compareFunction);
     this.callChange();
     return sorted;
+  }
+
+  copyWithin(target: number, start: number, end: number): any[] {
+    let modified = this.data.copyWithin(target, start, end);
+    this.callChange();
+    return modified;
   }
 
   /**

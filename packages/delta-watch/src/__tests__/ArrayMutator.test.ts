@@ -2,7 +2,7 @@ import {assert, expect} from 'chai';
 import 'jest';
 import {ArrayWatcher, Watchable} from "../Watchable";
 import {assertWatcherCalled} from "./utils";
-import {AddInfo, RemoveInfo} from "../ArrayMutator";
+import {AddInfo, arrayNonMutatorMethods, RemoveInfo} from "../ArrayMutator";
 
 describe(`Array Mutator v2`, () => {
   it('calls add callback when pushing to array', () => {
@@ -295,30 +295,35 @@ describe(`Array Mutator v2`, () => {
     assertWatcherCalled(watcherCalled);
   });
 
+  it(`calls array callback when copyWithin is called`, () => {
+
+    let watchable = new Watchable({
+      items: [
+        "one",
+        "two",
+        "three",
+        "four"
+      ]
+    });
+
+    let watcherCalled = false;
+    Watchable.watch(watchable.Watcher.items, ArrayWatcher({
+      change: (value: string[]) => {
+        expect(value).to.deep.equal(["one", "three", "three", "four"]);
+        watcherCalled = true;
+      }
+    }));
+
+    let copied = watchable.Mutator.items.copyWithin(1, 2, 3);
+
+    expect(copied).to.deep.equal(["one", "three", "three", "four"]);
+    expect(Watchable.valueOf(watchable.Watcher.items)).to.deep.equal(["one", "three", "three", "four"]);
+
+    assertWatcherCalled(watcherCalled);
+  });
+
   it('remaining array methods exist as pass through', () => {
-    let methods = [
-      'concat',
-      'copyWithin',
-      'entries',
-      'filter',
-      'find',
-      'findIndex',
-      'forEach',
-      'includes',
-      'indexOf',
-      'join',
-      'keys',
-      'lastIndexOf',
-      'map',
-      'reduce',
-      'reduceRight',
-      'reverse',
-      'slice',
-      'some',
-      'toLocaleString',
-      'toSource',
-      'values'
-    ];
+    let methods = arrayNonMutatorMethods;
 
     let watchable = new Watchable({
       items: [

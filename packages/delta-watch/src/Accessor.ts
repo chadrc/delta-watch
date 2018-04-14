@@ -1,8 +1,7 @@
-import {ObjectWatcher} from "./ObjectWatcher";
 import {arrayMutatorMethods} from "./ArrayMutator";
 
 const getOnlyProxyHandler = {
-  get: function (obj: ObjectWatcher, prop: PropertyKey) {
+  get: function (obj: any, prop: PropertyKey) {
     if (prop in obj) {
       let val = (obj as any)[prop];
       if (typeof val === "object") {
