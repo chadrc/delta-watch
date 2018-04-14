@@ -22,7 +22,7 @@ function makeHandler<T extends object>(internals: any, mutatorMethods: string[])
         return field;
       }
     },
-    set: function (target: T, prop: PropertyKey, value: any): boolean {
+    set: function (): boolean {
       throw Error("Date has no settable values");
     }
   };
