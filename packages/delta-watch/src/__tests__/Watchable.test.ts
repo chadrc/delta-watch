@@ -31,31 +31,6 @@ describe(`Watchable`, () => {
     expect(func).to.throw();
   });
 
-  it(`First tier property is accessible`, () => {
-    let watchable = new Watchable({value: "Value"});
-    expect(watchable.Accessor.value).to.equal("Value");
-  });
-
-  it(`Second tier property is accessible`, () => {
-    let watchable = new Watchable({
-      data: {
-        value: "Value"
-      }
-    });
-    expect(watchable.Accessor.data.value).to.equal("Value");
-  });
-
-  it(`Third tier property is accessible`, () => {
-    let watchable = new Watchable({
-      data: {
-        obj: {
-          value: "Value"
-        }
-      }
-    });
-    expect(watchable.Accessor.data.obj.value).to.equal("Value");
-  });
-
   it(`Watchable has Mutator property`, () => {
     let watchable = new Watchable({value: "Value"});
     expect(watchable.Mutator).to.exist;
