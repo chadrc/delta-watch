@@ -17,7 +17,7 @@ const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
         }
       }
 
-      obj._makeProperty(prop, true);
+      obj._makeProperty(prop);
       return (obj as any)._childProperties[prop];
     }
 
@@ -81,7 +81,7 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
     }
   }
 
-  _makeProperty(field: PropertyKey, dynamic: boolean = false) {
+  _makeProperty(field: PropertyKey) {
     let self = this;
     let dataType = typeof this._data[field];
     if (this._data[field] !== null && dataType === "object") {
