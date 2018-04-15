@@ -1,7 +1,4 @@
 import {DynamicProperties, Mutator, Subscribable, TypeInfo, TypeRegister, Watchable, WatcherOptions} from "./Watchable";
-import {makeArrayMutator} from "./ArrayMutator";
-import {makeObjectMutator} from "./ObjectMutator";
-import {makeDateMutator} from "./DateMutator";
 
 const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
   get: function (obj: ObjectWatcher, prop: PropertyKey) {
