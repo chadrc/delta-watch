@@ -26,7 +26,10 @@ const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
 export function MakeObjectWatcher(parent: DeltaWatch | ObjectWatcher,
                                   parentKey?: PropertyKey,
                                   skipChildren: boolean = false): ObjectWatcher {
-  return new Proxy<ObjectWatcher>(new ObjectWatcher(parent, parentKey, skipChildren), ObjectWatcherHandler);
+  return new Proxy<ObjectWatcher>(
+    new ObjectWatcher(parent, parentKey, skipChildren),
+    ObjectWatcherHandler
+  );
 }
 
 export class ObjectWatcher implements Watchable {
@@ -97,7 +100,9 @@ export class ObjectWatcher implements Watchable {
     });
   }
 
-  _notifySubscribers(notifyParent: boolean = false, notifyChildren: boolean = false, fromChangedChild: boolean = false): boolean {
+  _notifySubscribers(notifyParent: boolean = false,
+                     notifyChildren: boolean = false,
+                     fromChangedChild: boolean = false): boolean {
 
     let hasChildren = Object.keys(this._childProperties).length !== 0;
     let childrenChanged = false;
@@ -105,7 +110,8 @@ export class ObjectWatcher implements Watchable {
     if (notifyChildren) {
       for (let childKey of Object.keys(this._childProperties)) {
         // Continue notification downstream
-        let changed = this._childProperties[childKey]._notifySubscribers(false, true);
+        let childProps = this._childProperties[childKey];
+        let changed = childProps._notifySubscribers(false, true);
         if (changed) {
           childrenChanged = true;
         }
@@ -121,7 +127,8 @@ export class ObjectWatcher implements Watchable {
       changed = childrenChanged;
     }
 
-    // If the call was from a changed child, force a change (this being the parent of the changed child)
+    // If the call was from a changed child
+    // force a change (this being the parent of the changed child)
     changed = changed || fromChangedChild;
 
     if (changed) {
@@ -148,7 +155,8 @@ export class ObjectWatcher implements Watchable {
     if (this._parent._data === null || typeof this._parent._data === 'undefined') {
       return;
     }
-    return this._parentKey === null || typeof this._parentKey === 'undefined' ? this._parent._data : this._parent._data[this._parentKey];
+    return this._parentKey === null || typeof this._parentKey === 'undefined' ?
+      this._parent._data : this._parent._data[this._parentKey];
   }
 
   get _subscribers(): WatcherOptions[] {
