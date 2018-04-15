@@ -32,3 +32,11 @@ export function makeDateMutator(watcher: ObjectWatcher): any {
 export function makeGetOnlyDateProxy(date: Date): any {
   return new Proxy(date, makeAccessorHandler(dateMutatorMethods));
 }
+
+export const DateTypeInfo = {
+  makeMutator: makeDateMutator,
+  makeAccessor: makeGetOnlyDateProxy,
+  handlesValue: (value: any) => {
+    return value instanceof Date;
+  }
+};

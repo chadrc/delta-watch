@@ -25,3 +25,11 @@ export function makeArrayMutator(watcher: ObjectWatcher): any {
 
   return new Proxy({}, makeMutationHandler(internals, arrayMutatorMethods));
 }
+
+export const ArrayTypeInfo = {
+  makeMutator: makeArrayMutator,
+  makeAccessor: makeGetOnlyArrayProxy,
+  handlesValue: (value: any) => {
+    return Array.isArray(value);
+  }
+};

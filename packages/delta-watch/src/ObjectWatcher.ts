@@ -1,4 +1,4 @@
-import {DynamicProperties, Mutator, Subscribable, Watchable, WatcherOptions} from "./Watchable";
+import {DynamicProperties, Mutator, Subscribable, TypeInfo, TypeRegister, Watchable, WatcherOptions} from "./Watchable";
 import {makeArrayMutator} from "./ArrayMutator";
 import {makeObjectMutator} from "./ObjectMutator";
 import {makeDateMutator} from "./DateMutator";
@@ -26,11 +26,12 @@ const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
 };
 
 export function MakeObjectWatcher(parent: Watchable | ObjectWatcher,
-                                  parentKey?: PropertyKey, skipChildren: boolean = false): ObjectWatcher {
+                                  parentKey?: PropertyKey,
+                                  skipChildren: boolean = false): ObjectWatcher {
   return new Proxy<ObjectWatcher>(new ObjectWatcher(parent, parentKey, skipChildren), ObjectWatcherHandler);
 }
 
-export class ObjectWatcher implements Subscribable, DynamicProperties {
+export class ObjectWatcher implements Subscribable, DynamicProperties, TypeRegister {
   static getMutator(watcher: ObjectWatcher, field: PropertyKey): Mutator {
     return watcher._mutators[field] || null;
   }
@@ -39,11 +40,12 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
   readonly _parentKey: PropertyKey;
   protected _subscriberOptions: WatcherOptions[] = [];
   protected _lastValue: any;
-  private __myMutator: Mutator;
   private readonly _childProperties: { [key: string]: ObjectWatcher };
   private readonly _mutators: { [key: string]: Mutator };
 
-  constructor(parent: Watchable | ObjectWatcher, parentKey?: PropertyKey, skipChildren: boolean = false) {
+  constructor(parent: Watchable | ObjectWatcher,
+              parentKey?: PropertyKey,
+              skipChildren: boolean = false) {
     this._parent = parent;
     this._parentKey = parentKey;
     this._lastValue = this._data;
@@ -147,10 +149,6 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
     return changed;
   }
 
-  set _mutator(mutator: Mutator) {
-    this.__myMutator = mutator;
-  }
-
   get _data(): any {
     if (this._parent._data === null || typeof this._parent._data === 'undefined') {
       return;
@@ -164,5 +162,17 @@ export class ObjectWatcher implements Subscribable, DynamicProperties {
 
   get _properties() {
     return this._childProperties;
+  }
+
+  get _typeRegistry(): TypeInfo[] {
+    return this._parent._typeRegistry;
+  }
+
+  getAccessorForValue(value: any): any {
+    return this._parent.getAccessorForValue(value);
+  }
+
+  getMutatorForValue(value: any): any {
+    return this._parent.getAccessorForValue(value);
   }
 }
