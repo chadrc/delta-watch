@@ -89,16 +89,9 @@ window.addEventListener('load', () => {
 
     // Also need to set up a Mutation based on clicking available download button
     availableDownloadBtn.addEventListener('click', () => {
-      // Take download from available
-      // and replace it with undefined
-      let download = Mutator.available[index];
-      Mutator.available[index] = undefined;
-
-      // the element was created when the watch was made
-      // so we to find first undefined element
-      // then insert the selected download
-      let insertIndex = Accessor.active.findIndex((item: any) => typeof item === 'undefined' || Object.keys(item).length === 0);
-      Mutator.active[insertIndex] = download;
+      // Take download from available and put it into active
+      let download = Mutator.available.splice(index, 1)[0];
+      Mutator.active.push(download);
     });
   }
 

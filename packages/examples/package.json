@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/chadrc/delta-watch#readme",
   "dependencies": {
-    "delta-watch": "0.0.3",
+    "delta-watch": "0.0.4",
     "materialize-css": "^1.0.0-beta"
   },
   "devDependencies": {
