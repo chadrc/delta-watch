@@ -66,7 +66,7 @@ export function makeMutationHandler<T extends object>(internals: DeltaWatchInter
         // to make Object or Array mutator
         internals.watcher._data[prop] = value;
         let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
-        let type = internals.watcher.getTypeForValue(value);
+        let type = internals.watcher.typeRegistry.getTypeForValue(value);
 
         if (Array.isArray(value) &&
           (fieldMutator === null || typeof fieldMutator === 'undefined'

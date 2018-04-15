@@ -1,4 +1,5 @@
-import {DynamicProperties, Mutator, Watchable, TypeInfo, TypeRegister, DeltaWatch, WatcherOptions} from "./DeltaWatch";
+import {DynamicProperties, Mutator, Watchable, DeltaWatch, WatcherOptions} from "./DeltaWatch";
+import {TypeRegistry} from "./types/TypeRegistry";
 
 const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
   get: function (obj: ObjectWatcher, prop: PropertyKey) {
@@ -28,7 +29,7 @@ export function MakeObjectWatcher(parent: DeltaWatch | ObjectWatcher,
   return new Proxy<ObjectWatcher>(new ObjectWatcher(parent, parentKey, skipChildren), ObjectWatcherHandler);
 }
 
-export class ObjectWatcher implements Watchable, DynamicProperties, TypeRegister {
+export class ObjectWatcher implements Watchable, DynamicProperties {
   static getMutator(watcher: ObjectWatcher, field: PropertyKey): Mutator {
     return watcher._mutators[field] || null;
   }
@@ -71,8 +72,10 @@ export class ObjectWatcher implements Watchable, DynamicProperties, TypeRegister
 
   _makeMutator(field: PropertyKey) {
     let watcher = this._properties[field];
-    let value = this._data[field];
-    this._mutators[field] = this.getMutatorForValue(value, watcher);
+    let makeMutator = this.typeRegistry.getMakeMutatorForValue(this._data[field]);
+    if (makeMutator) {
+      this._mutators[field] = makeMutator(watcher);
+    }
   }
 
   _makeProperty(field: PropertyKey) {
@@ -156,19 +159,7 @@ export class ObjectWatcher implements Watchable, DynamicProperties, TypeRegister
     return this._childProperties;
   }
 
-  get _typeRegistry(): TypeInfo[] {
-    return this._parent._typeRegistry;
-  }
-
-  getAccessorForValue(value: any): any {
-    return this._parent.getAccessorForValue(value);
-  }
-
-  getMutatorForValue(value: any, watcher: ObjectWatcher): any {
-    return this._parent.getMutatorForValue(value, watcher);
-  }
-
-  getTypeForValue(value: any): string {
-    return this._parent.getTypeForValue(value);
+  get typeRegistry(): TypeRegistry {
+    return this._parent.typeRegistry;
   }
 }

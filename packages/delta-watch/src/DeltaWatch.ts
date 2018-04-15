@@ -2,18 +2,12 @@ import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
 import {makeObjectAccessor, makeObjectMutator} from "./ObjectMutator";
 import {DateTypeInfo} from "./types/DateType";
 import {ArrayTypeInfo} from "./types/ArrayType";
+import {TypeRegistry} from "./types/TypeRegistry";
 
 export interface Watchable {
   _addWatcher(cb: WatcherOptions): void;
   _removeWatcher(cb: WatcherOptions): void;
-}
-
-export interface TypeRegister {
-  _typeRegistry: TypeInfo[];
-
-  getMutatorForValue(value: any, watcher: ObjectWatcher): any
-  getAccessorForValue(value: any): any
-  getTypeForValue(value: any): string
+  typeRegistry: TypeRegistry;
 }
 
 export interface DynamicProperties {
@@ -22,13 +16,6 @@ export interface DynamicProperties {
 
 export interface Mutator {
   _makeProperty(field: PropertyKey): void;
-}
-
-export interface TypeInfo {
-  makeMutator: (watcher: ObjectWatcher) => any
-  makeAccessor: (obj: any, typeRegister: TypeRegister) => any
-  handlesValue: (value: any) => boolean
-  type: string
 }
 
 export interface DeltaWatchInternals {
@@ -51,7 +38,7 @@ export class WatcherOptions {
   }
 }
 
-export class DeltaWatch implements Watchable, TypeRegister {
+export class DeltaWatch implements Watchable {
   static watch(watchable: Watchable, cb: Function) {
     watchable._addWatcher(new WatcherOptions(cb));
   }
@@ -64,21 +51,18 @@ export class DeltaWatch implements Watchable, TypeRegister {
   private readonly _mutator: any;
   private readonly _accessor: any;
   private _dataValue: { [key: string]: any };
-  private readonly _types: TypeInfo[];
+  private readonly _typeRegistry: TypeRegistry;
 
   constructor(data: object) {
     if (data === null || typeof data === 'undefined') {
       throw new TypeError("data must be an object or array");
     }
 
-    this._types = [
-      DateTypeInfo,
-      ArrayTypeInfo
-    ];
+    this._typeRegistry = TypeRegistry.defaultTypeRegistry;
     this._dataValue = data;
     this._watcher = MakeObjectWatcher(this);
     this._mutator = makeObjectMutator(this._watcher);
-    this._accessor = makeObjectAccessor(data, this);
+    this._accessor = makeObjectAccessor(data, this.typeRegistry);
   }
 
   get Watcher(): ObjectWatcher & DynamicProperties {
@@ -107,52 +91,8 @@ export class DeltaWatch implements Watchable, TypeRegister {
     this._watcher._removeWatcher(cb);
   }
 
-  getAccessorForValue(value: any): any {
-    let accessor = null;
-    for (let info of this._types) {
-      if (info.handlesValue(value)) {
-        accessor = info.makeAccessor(value, this);
-        break;
-      }
-    }
-
-    if (accessor === null && typeof value === "object") {
-      return makeObjectAccessor(value, this);
-    }
-
-    return accessor;
-  }
-
-  getMutatorForValue(value: any, watcher: ObjectWatcher): any {
-    let mutator = null;
-    for (let info of this._types) {
-      if (info.handlesValue(value)) {
-        mutator = info.makeMutator(watcher);
-      }
-    }
-
-    if (mutator === null && typeof value === 'object') {
-      mutator = makeObjectMutator(watcher);
-    }
-
-    return mutator;
-  }
-
-  getTypeForValue(value: any): string {
-    let type = "";
-    for (let info of this._types) {
-      if (info.handlesValue(value)) {
-        type = info.type
-      }
-    }
-    if (type === "" && typeof value === "object") {
-      type = "Object";
-    }
-    return type;
-  }
-
-  get _typeRegistry(): TypeInfo[] {
-    return this._types;
+  get typeRegistry(): TypeRegistry {
+    return this._typeRegistry;
   }
 
   get _data() {

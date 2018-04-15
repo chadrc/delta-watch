@@ -1,13 +1,14 @@
 import {ObjectWatcher} from "./ObjectWatcher";
 import {makeMutationHandler} from "./types/utils";
-import {TypeRegister} from "./DeltaWatch";
+import {TypeRegistry} from "./types/TypeRegistry";
 
-function makeObjectAccessorHandler(register: TypeRegister) {
+function makeObjectAccessorHandler(typeRegistry: TypeRegistry) {
   return {
     get: function (obj: any, prop: PropertyKey) {
       if (prop in obj) {
         let val = (obj as any)[prop];
-        let proxy = register.getAccessorForValue(val);
+        let makeAccessor = typeRegistry.getMakeAccessorForValue(val);
+        let proxy = makeAccessor ? makeAccessor(val, typeRegistry) : null;
         return proxy === null ? val : proxy;
       }
     },
@@ -17,8 +18,8 @@ function makeObjectAccessorHandler(register: TypeRegister) {
   };
 }
 
-export function makeObjectAccessor(obj: any, typeRegister: TypeRegister): any {
-  return new Proxy(obj, makeObjectAccessorHandler(typeRegister));
+export function makeObjectAccessor(obj: any, typeRegistry: TypeRegistry): any {
+  return new Proxy(obj, makeObjectAccessorHandler(typeRegistry));
 }
 
 export function makeObjectMutator(watcher: ObjectWatcher): any {
