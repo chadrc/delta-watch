@@ -1,13 +1,25 @@
 {
   "name": "delta-watch",
-  "version": "1.0.0-alpha",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Utility for watching objects and separating mutating, watching, and accessing.",
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chadrc/delta-watch.git"
+  },
+  "keywords": [
+    "watch",
+    "utility"
+  ],
+  "author": "Chad Collins",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chadrc/delta-watch/issues"
+  },
+  "homepage": "https://github.com/chadrc/delta-watch#readme",
   "devDependencies": {
     "@types/chai": "^4.1.2",
     "@types/jest": "^22.2.3",
