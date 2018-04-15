@@ -25,9 +25,11 @@ export function makeAccessorHandler(mutatorMethods: string[]) {
   };
 }
 
+export type CanSetPropFunc = (prop: PropertyKey) => boolean;
+
 export function makeMutationHandler<T extends object>(internals: DeltaWatchInternals,
                                                       mutatorMethods: string[],
-                                                      settableProps: string[] | string = null): ProxyHandler<T> {
+                                                      canSetProp: boolean | CanSetPropFunc = false ): ProxyHandler<T> {
   return {
     get: function (_: T, prop: PropertyKey) {
       if (prop === "__DeltaWatchInternals") {
@@ -61,10 +63,15 @@ export function makeMutationHandler<T extends object>(internals: DeltaWatchInter
         throw Error("Cannot set value of __DeltaWatchInternals");
       }
 
+      let willSetProp;
+      if (canSetProp instanceof Function) {
+        willSetProp = canSetProp(prop);
+      } else {
+        willSetProp = canSetProp;
+      }
       // If any prop should be accepted as settable
       // or settableProps contains the given prop
-      if (settableProps === "*" ||
-        (settableProps !== null && settableProps.indexOf(prop as string) !== -1)) {
+      if (willSetProp === true) {
         // Need to mutate before array check,
         // because watcher's make mutator uses current value to determine
         // to make Object or Array mutator

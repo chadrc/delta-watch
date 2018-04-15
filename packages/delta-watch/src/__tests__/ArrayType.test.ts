@@ -15,6 +15,17 @@ describe(`Array Type`, () => {
     expect(watchable.Accessor.items.length).to.equal(2);
   });
 
+  it(`Can set element directly`, () => {
+    let watchable = new DeltaWatch({
+      items: []
+    });
+
+    watchable.Mutator.items[0] = "Value";
+  });
+
+  /**
+   * Array mutator method tests
+   */
   it('calls array callback when push to array', () => {
     let watchable = new DeltaWatch({
       items: [

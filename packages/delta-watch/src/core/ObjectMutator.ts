@@ -27,5 +27,5 @@ export function makeObjectMutator(watcher: ObjectWatcher): any {
     watcher: watcher,
     type: "Object"
   };
-  return new Proxy({}, makeMutationHandler(internals, [], "*"));
+  return new Proxy({}, makeMutationHandler(internals, [], true));
 }

@@ -23,7 +23,24 @@ export function makeArrayMutator(watcher: ObjectWatcher): any {
     type: "Array"
   };
 
-  return new Proxy({}, makeMutationHandler(internals, arrayMutatorMethods));
+  return new Proxy({}, makeMutationHandler(
+    internals,
+    arrayMutatorMethods,
+    (prop: PropertyKey) => {
+      let val = prop;
+      if (typeof prop === 'string') {
+        try {
+          val = parseInt(prop);
+        } catch (e) {
+          return false;
+        }
+      }
+
+      if (typeof val === 'number') {
+        return true;
+      }
+    })
+  );
 }
 
 export const ArrayTypeInfo = {
