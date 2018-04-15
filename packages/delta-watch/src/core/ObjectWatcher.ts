@@ -39,8 +39,8 @@ export class ObjectWatcher implements Watchable {
 
   readonly _parent: DeltaWatch | ObjectWatcher;
   readonly _parentKey: PropertyKey;
-  protected _subscriberOptions: WatcherOptions[] = [];
-  protected _lastValue: any;
+  private _watcherOptions: WatcherOptions[] = [];
+  private _lastValue: any;
   private readonly _childProperties: { [key: string]: ObjectWatcher };
   private readonly _mutators: { [key: string]: any };
 
@@ -63,19 +63,19 @@ export class ObjectWatcher implements Watchable {
   }
 
   _addWatcher(options: WatcherOptions): void {
-    this._subscriberOptions.push(options);
+    this._watcherOptions.push(options);
   }
 
   _removeWatcher(options: WatcherOptions): void {
-    let index = this._subscriberOptions.findIndex(opt => opt.change === options.change);
+    let index = this._watcherOptions.findIndex(opt => opt.change === options.change);
     if (index > -1) {
-      this._subscriberOptions.splice(index, 1);
+      this._watcherOptions.splice(index, 1);
     }
   }
 
   _makeMutator(field: PropertyKey) {
     let watcher = this._properties[field];
-    let makeMutator = this.typeRegistry.getMakeMutatorForValue(this._data[field]);
+    let makeMutator = this._typeRegistry.getMakeMutatorForValue(this._data[field]);
     if (makeMutator) {
       this._mutators[field] = makeMutator(watcher);
     }
@@ -132,7 +132,7 @@ export class ObjectWatcher implements Watchable {
     changed = changed || fromChangedChild;
 
     if (changed) {
-      for (let subscriber of this._subscriberOptions) {
+      for (let subscriber of this._watcherOptions) {
         if (typeof subscriber.change === 'function') {
           subscriber.change(this._data);
         }
@@ -160,14 +160,14 @@ export class ObjectWatcher implements Watchable {
   }
 
   get _subscribers(): WatcherOptions[] {
-    return this._subscriberOptions;
+    return this._watcherOptions;
   }
 
   get _properties() {
     return this._childProperties;
   }
 
-  get typeRegistry(): TypeRegistry {
-    return this._parent.typeRegistry;
+  get _typeRegistry(): TypeRegistry {
+    return this._parent._typeRegistry;
   }
 }

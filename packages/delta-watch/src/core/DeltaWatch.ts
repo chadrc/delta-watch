@@ -5,7 +5,7 @@ import {TypeRegistry} from "../types/TypeRegistry";
 export interface Watchable {
   _addWatcher(cb: WatcherOptions): void;
   _removeWatcher(cb: WatcherOptions): void;
-  typeRegistry: TypeRegistry;
+  _typeRegistry: TypeRegistry;
 }
 
 /**
@@ -36,18 +36,18 @@ export class DeltaWatch implements Watchable {
   private readonly _mutator: any;
   private readonly _accessor: any;
   private _dataValue: { [key: string]: any };
-  private readonly _typeRegistry: TypeRegistry;
+  private readonly _rootTypeRegistry: TypeRegistry;
 
   constructor(data: object) {
     if (data === null || typeof data === 'undefined') {
       throw new TypeError("data must be an object or array");
     }
 
-    this._typeRegistry = TypeRegistry.defaultTypeRegistry;
+    this._rootTypeRegistry = TypeRegistry.defaultTypeRegistry;
     this._dataValue = data;
     this._watcher = MakeObjectWatcher(this);
     this._mutator = makeObjectMutator(this._watcher);
-    this._accessor = makeObjectAccessor(data, this.typeRegistry);
+    this._accessor = makeObjectAccessor(data, this._typeRegistry);
   }
 
   get Watcher(): ObjectWatcher & any {
@@ -76,8 +76,8 @@ export class DeltaWatch implements Watchable {
     this._watcher._removeWatcher(cb);
   }
 
-  get typeRegistry(): TypeRegistry {
-    return this._typeRegistry;
+  get _typeRegistry(): TypeRegistry {
+    return this._rootTypeRegistry;
   }
 
   get _data() {
