@@ -32,6 +32,10 @@ export interface TypeInfo {
   type: string
 }
 
+export interface DeltaWatchInternals {
+  watcher: ObjectWatcher
+  type: string
+}
 
 /**
  * Container for change function that gets called when values in a Watchable are modified

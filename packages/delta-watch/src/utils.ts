@@ -1,4 +1,5 @@
 import {ObjectWatcher} from "./ObjectWatcher";
+import {DeltaWatchInternals} from "./Watchable";
 
 export function makeAccessorHandler(mutatorMethods: string[]) {
   return {
@@ -20,7 +21,7 @@ export function makeAccessorHandler(mutatorMethods: string[]) {
   };
 }
 
-export function makeMutationHandler<T extends object>(internals: any,
+export function makeMutationHandler<T extends object>(internals: DeltaWatchInternals,
                                                       mutatorMethods: string[],
                                                       settableProps: string[] | string = null): ProxyHandler<T> {
   return {
