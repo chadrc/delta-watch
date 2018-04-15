@@ -8,15 +8,6 @@ export interface Watchable {
   typeRegistry: TypeRegistry;
 }
 
-export interface DynamicProperties {
-  [key: string]: any
-}
-
-export interface DeltaWatchInternals {
-  watcher: ObjectWatcher
-  type: string
-}
-
 /**
  * Container for change function that gets called when values in a DeltaWatch are modified
  */
@@ -59,19 +50,19 @@ export class DeltaWatch implements Watchable {
     this._accessor = makeObjectAccessor(data, this.typeRegistry);
   }
 
-  get Watcher(): ObjectWatcher & DynamicProperties {
+  get Watcher(): ObjectWatcher & any {
     return this._watcher;
-  }
-
-  get Mutator(): DynamicProperties {
-    return this._mutator;
   }
 
   get Accessor(): any {
     return this._accessor;
   }
 
-  set Mutator(data: DynamicProperties) {
+  get Mutator(): any {
+    return this._mutator;
+  }
+
+  set Mutator(data: any) {
     this._dataValue = data;
     // No need to notify parent since it is the top
     this._watcher._notifySubscribers(false, true);

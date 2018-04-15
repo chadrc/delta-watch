@@ -1,4 +1,4 @@
-import {DeltaWatch, DynamicProperties, Watchable, WatcherOptions} from "./DeltaWatch";
+import {DeltaWatch, Watchable, WatcherOptions} from "./DeltaWatch";
 import {TypeRegistry} from "./types/TypeRegistry";
 
 const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
@@ -29,7 +29,7 @@ export function MakeObjectWatcher(parent: DeltaWatch | ObjectWatcher,
   return new Proxy<ObjectWatcher>(new ObjectWatcher(parent, parentKey, skipChildren), ObjectWatcherHandler);
 }
 
-export class ObjectWatcher implements Watchable, DynamicProperties {
+export class ObjectWatcher implements Watchable {
   static getMutator(watcher: ObjectWatcher, field: PropertyKey): any {
     return watcher._mutators[field] || null;
   }

@@ -1,5 +1,9 @@
 import {ObjectWatcher} from "../ObjectWatcher";
-import {DeltaWatchInternals} from "../DeltaWatch";
+
+export interface DeltaWatchInternals {
+  watcher: ObjectWatcher
+  type: string
+}
 
 export function makeAccessorHandler(mutatorMethods: string[]) {
   return {
