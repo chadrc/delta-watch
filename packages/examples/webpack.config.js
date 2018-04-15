@@ -48,6 +48,10 @@ module.exports = {
       filename: 'clock.html',
       template: 'pages/clock/clock.html'
     }),
+    new HtmlWebpackPlugin({
+      filename: 'downloads.html',
+      template: 'pages/downloads/downloads.html'
+    }),
     new MiniCssExtractPlugin({})
   ]
 };
