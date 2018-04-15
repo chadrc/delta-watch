@@ -17,18 +17,14 @@ function makeObjectAccessorHandler(register: TypeRegister) {
   };
 }
 
-export function makeGetOnlyProxy(obj: any, typeRegister: TypeRegister): any {
+export function makeObjectAccessor(obj: any, typeRegister: TypeRegister): any {
   return new Proxy(obj, makeObjectAccessorHandler(typeRegister));
 }
 
-function makeObjectMutatorProxy(watcher: ObjectWatcher): any {
+export function makeObjectMutator(watcher: ObjectWatcher): any {
   let internals = {
     watcher: watcher,
     type: "Object"
   };
   return new Proxy({}, makeMutationHandler(internals, [], "*"));
-}
-
-export function makeObjectMutator(watcher: ObjectWatcher): any {
-  return makeObjectMutatorProxy(watcher);
 }

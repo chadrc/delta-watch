@@ -1,5 +1,5 @@
 import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
-import {makeGetOnlyProxy, makeObjectMutator} from "./ObjectMutator";
+import {makeObjectAccessor, makeObjectMutator} from "./ObjectMutator";
 import {DateTypeInfo} from "./DateMutator";
 import {ArrayTypeInfo} from "./ArrayMutator";
 
@@ -89,7 +89,7 @@ export class Watchable implements Subscribable, TypeRegister {
     this._dataValue = data;
     this._watcher = MakeObjectWatcher(this);
     this._mutator = makeObjectMutator(this._watcher);
-    this._accessor = makeGetOnlyProxy(data, this);
+    this._accessor = makeObjectAccessor(data, this);
   }
 
   get Watcher(): ObjectWatcher & DynamicProperties {
@@ -128,7 +128,7 @@ export class Watchable implements Subscribable, TypeRegister {
     }
 
     if (accessor === null && typeof value === "object") {
-      return makeGetOnlyProxy(value, this);
+      return makeObjectAccessor(value, this);
     }
 
     return accessor;
