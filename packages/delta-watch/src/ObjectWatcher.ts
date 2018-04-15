@@ -1,4 +1,4 @@
-import {DynamicProperties, Mutator, Subscribable, TypeInfo, TypeRegister, DeltaWatch, WatcherOptions} from "./DeltaWatch";
+import {DynamicProperties, Mutator, Watchable, TypeInfo, TypeRegister, DeltaWatch, WatcherOptions} from "./DeltaWatch";
 
 const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
   get: function (obj: ObjectWatcher, prop: PropertyKey) {
@@ -28,7 +28,7 @@ export function MakeObjectWatcher(parent: DeltaWatch | ObjectWatcher,
   return new Proxy<ObjectWatcher>(new ObjectWatcher(parent, parentKey, skipChildren), ObjectWatcherHandler);
 }
 
-export class ObjectWatcher implements Subscribable, DynamicProperties, TypeRegister {
+export class ObjectWatcher implements Watchable, DynamicProperties, TypeRegister {
   static getMutator(watcher: ObjectWatcher, field: PropertyKey): Mutator {
     return watcher._mutators[field] || null;
   }
@@ -58,11 +58,11 @@ export class ObjectWatcher implements Subscribable, DynamicProperties, TypeRegis
     }
   }
 
-  _subscribe(options: WatcherOptions): void {
+  _addWatcher(options: WatcherOptions): void {
     this._subscriberOptions.push(options);
   }
 
-  _unsubscribe(options: WatcherOptions): void {
+  _removeWatcher(options: WatcherOptions): void {
     let index = this._subscriberOptions.findIndex(opt => opt.change === options.change);
     if (index > -1) {
       this._subscriberOptions.splice(index, 1);

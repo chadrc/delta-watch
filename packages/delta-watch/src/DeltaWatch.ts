@@ -3,10 +3,9 @@ import {makeObjectAccessor, makeObjectMutator} from "./ObjectMutator";
 import {DateTypeInfo} from "./types/DateType";
 import {ArrayTypeInfo} from "./types/ArrayType";
 
-export interface Subscribable {
-  _subscribe(cb: WatcherOptions): void;
-
-  _unsubscribe(cb: WatcherOptions): void;
+export interface Watchable {
+  _addWatcher(cb: WatcherOptions): void;
+  _removeWatcher(cb: WatcherOptions): void;
 }
 
 export interface TypeRegister {
@@ -52,13 +51,13 @@ export class WatcherOptions {
   }
 }
 
-export class DeltaWatch implements Subscribable, TypeRegister {
-  static watch(watchable: Subscribable, cb: Function) {
-    watchable._subscribe(new WatcherOptions(cb));
+export class DeltaWatch implements Watchable, TypeRegister {
+  static watch(watchable: Watchable, cb: Function) {
+    watchable._addWatcher(new WatcherOptions(cb));
   }
 
-  static unwatch(watchable: Subscribable, cb: Function) {
-    watchable._unsubscribe(new WatcherOptions(cb));
+  static unwatch(watchable: Watchable, cb: Function) {
+    watchable._removeWatcher(new WatcherOptions(cb));
   }
 
   private readonly _watcher: ObjectWatcher;
@@ -100,12 +99,12 @@ export class DeltaWatch implements Subscribable, TypeRegister {
     this._watcher._notifySubscribers(false, true);
   }
 
-  _subscribe(cb: WatcherOptions): void {
-    this._watcher._subscribe(cb);
+  _addWatcher(cb: WatcherOptions): void {
+    this._watcher._addWatcher(cb);
   }
 
-  _unsubscribe(cb: WatcherOptions): void {
-    this._watcher._unsubscribe(cb);
+  _removeWatcher(cb: WatcherOptions): void {
+    this._watcher._removeWatcher(cb);
   }
 
   getAccessorForValue(value: any): any {
