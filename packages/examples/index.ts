@@ -6,14 +6,14 @@ window.addEventListener('load', () => {
   // Setup
   const clockDateElement = document.getElementById('clock-date');
   const clockTimeElement = document.getElementById('clock-time');
-  const timeScaleInput = document.getElementById('timeScaleInput');
-
-  let interval = null;
+  const timeScaleInput = document.getElementById('timeScaleInput') as HTMLInputElement;
+  const playPauseButton = document.getElementById('playPauseButton');
+  const refreshButton = document.getElementById('refreshButton');
 
   const clockData = DeltaWatch.Watchable({
     time: new Date(),
     timeScale: 1,
-    active: false
+    active: true
   });
 
   const {Accessor, Mutator, Watcher} = clockData;
@@ -30,14 +30,36 @@ window.addEventListener('load', () => {
     setClockText(value);
   });
 
+  DeltaWatch.Watch(Watcher.active, (value: boolean) => {
+    let newText = "play_arrow";
+    if (value) {
+      newText = "pause";
+    }
+    playPauseButton.children.item(0).innerHTML = newText;
+  });
+
+  DeltaWatch.Watch(Watcher.timeScale, (value: number) => {
+    timeScaleInput.value = value.toString();
+  });
+
   // Mutate
-  interval = setInterval(() => {
-    let date = Accessor.time;
-    Mutator.time.setMilliseconds(date.getMilliseconds() + (Accessor.timeScale * 100));
+  setInterval(() => {
+    if (Accessor.active) {
+      let date = Accessor.time;
+      Mutator.time.setMilliseconds(date.getMilliseconds() + (Accessor.timeScale * 100));
+    }
   }, 100);
 
-  timeScaleInput.addEventListener('change', (event) => {
-    let value = (event.target as HTMLInputElement).value;
-    Mutator.timeScale = parseInt(value);
+  timeScaleInput.addEventListener('input', (event) => {
+    Mutator.timeScale = (event.target as HTMLInputElement).valueAsNumber;
+  });
+
+  playPauseButton.addEventListener('click', () => {
+    Mutator.active = !Accessor.active;
+  });
+
+  refreshButton.addEventListener('click', () => {
+    Mutator.time = new Date();
+    Mutator.timeScale = 1;
   });
 });
