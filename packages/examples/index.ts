@@ -4,7 +4,8 @@ import DeltaWatch from 'delta-watch';
 
 window.addEventListener('load', () => {
   // Setup
-  const clockElement = document.getElementById('clock');
+  const clockDateElement = document.getElementById('clock-date');
+  const clockTimeElement = document.getElementById('clock-time');
   let interval = null;
 
   const clockData = DeltaWatch.Watchable({
@@ -16,7 +17,8 @@ window.addEventListener('load', () => {
   const {Accessor, Mutator, Watcher} = clockData;
 
   const setClockText = (date: Date) => {
-    clockElement.innerHTML = date.toTimeString().split(' ')[0];
+    clockDateElement.innerHTML = date.toDateString();
+    clockTimeElement.innerHTML = date.toTimeString().split(' ')[0];
   };
 
   setClockText(Accessor.time);
