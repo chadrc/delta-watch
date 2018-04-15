@@ -1,11 +1,11 @@
 import {expect} from 'chai';
 import 'jest';
-import {Watchable} from "../Watchable";
+import {DeltaWatch} from "../DeltaWatch";
 import {assertWatcherCalled} from "./utils";
 
 describe(`Array Type`, () => {
   it('calls array callback when push to array', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         "one",
         "two"
@@ -13,7 +13,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: string[]) => {
       expect(value).to.deep.equal(["one", "two", "three"]);
       watcherCalled = true;
     });
@@ -25,7 +25,7 @@ describe(`Array Type`, () => {
   });
 
   it('calls array callback when unshift to array', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         "one",
         "two"
@@ -33,7 +33,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: string[]) => {
       expect(value).to.deep.equal(["zero", "one", "two"]);
       watcherCalled = true;
     });
@@ -45,7 +45,7 @@ describe(`Array Type`, () => {
   });
 
   it('calls array change callback when popping from array', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         "one",
         "two",
@@ -54,7 +54,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: string[]) => {
       expect(value).to.deep.equal(["one", "two"]);
       watcherCalled = true;
     });
@@ -68,7 +68,7 @@ describe(`Array Type`, () => {
   });
 
   it('calls array change callback when shifting from array', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         "one",
         "two",
@@ -77,7 +77,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: string[]) => {
       expect(value).to.deep.equal(["two", "three"]);
       watcherCalled = true;
     });
@@ -91,7 +91,7 @@ describe(`Array Type`, () => {
   });
 
   it('call array callback when splice with both deleteCount and items arguments', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         "one",
         "two",
@@ -100,7 +100,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: string[]) => {
       expect(value).to.deep.equal(["1", "2", "3", "three"]);
       watcherCalled = true;
     });
@@ -114,7 +114,7 @@ describe(`Array Type`, () => {
   });
 
   it('calls array callback when fill is called', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         "one",
         "two",
@@ -124,7 +124,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: string[]) => {
       expect(value).to.deep.equal([0, 0, 0, 0]);
       watcherCalled = true;
     });
@@ -138,7 +138,7 @@ describe(`Array Type`, () => {
   });
 
   it('calls array callback when sort is called', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         "one",
         "two",
@@ -148,7 +148,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: string[]) => {
       expect(value).to.deep.equal(["four", "one", "three", "two"]);
       watcherCalled = true;
     });
@@ -163,7 +163,7 @@ describe(`Array Type`, () => {
 
   it(`calls array callback when copyWithin is called`, () => {
 
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         "one",
         "two",
@@ -173,7 +173,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: string[]) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: string[]) => {
       expect(value).to.deep.equal(["one", "three", "three", "four"]);
       watcherCalled = true;
     });
@@ -187,7 +187,7 @@ describe(`Array Type`, () => {
   });
 
   it('can have watcher on array element', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         {
           headline: "Headline"
@@ -196,7 +196,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items[0], (value: any) => {
+    DeltaWatch.watch(watchable.Watcher.items[0], (value: any) => {
       expect(value).to.deep.equal({headline: "New Headline"});
       watcherCalled = true;
     });
@@ -207,7 +207,7 @@ describe(`Array Type`, () => {
   });
 
   it('element watcher receives undefined when it is removed from array', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         {
           headline: "Headline"
@@ -216,7 +216,7 @@ describe(`Array Type`, () => {
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items[0], (value: any) => {
+    DeltaWatch.watch(watchable.Watcher.items[0], (value: any) => {
       expect(value).to.be.undefined;
       watcherCalled = true;
     });
@@ -227,7 +227,7 @@ describe(`Array Type`, () => {
   });
 
   it('element receives new item after being removed from array', () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: [
         {
           headline: "Headline"
@@ -238,7 +238,7 @@ describe(`Array Type`, () => {
     watchable.Mutator.items.pop();
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items[0], (value: any) => {
+    DeltaWatch.watch(watchable.Watcher.items[0], (value: any) => {
       expect(value).to.deep.equal({headline: "New Headline"});
       watcherCalled = true;
     });
@@ -249,12 +249,12 @@ describe(`Array Type`, () => {
   });
 
   it(`can watch dynamic item`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: []
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items[0], (value: any) => {
+    DeltaWatch.watch(watchable.Watcher.items[0], (value: any) => {
       expect(value).to.equal("Value");
       watcherCalled = true;
     });
@@ -265,12 +265,12 @@ describe(`Array Type`, () => {
   });
 
   it(`can watch property on dynamic item`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       items: []
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.items[0].value, (value: any) => {
+    DeltaWatch.watch(watchable.Watcher.items[0].value, (value: any) => {
       expect(value).to.equal("Value");
       watcherCalled = true;
     });
@@ -281,10 +281,10 @@ describe(`Array Type`, () => {
   });
 
   it(`can perform push on a dynamic array`, () => {
-    let watchable = new Watchable({});
+    let watchable = new DeltaWatch({});
 
     let changeWatcherCalled = false;
-    Watchable.watch(watchable.Watcher.items, (value: any) => {
+    DeltaWatch.watch(watchable.Watcher.items, (value: any) => {
       // First set is an empty array, then this gets called again after push
       if (changeWatcherCalled === false) {
         expect(value).to.deep.equal([]);
@@ -304,7 +304,7 @@ describe(`Array Type`, () => {
    */
 
   it(`Calling concat works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -315,7 +315,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling entries works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -328,7 +328,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling every works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -339,7 +339,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling filter works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -350,7 +350,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling find works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -361,7 +361,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling findIndex works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -372,7 +372,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling forEach works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -384,7 +384,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling includes works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -395,7 +395,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling indexOf works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -406,7 +406,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling join works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -417,7 +417,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling keys works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -430,7 +430,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling lastIndexOf works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -441,7 +441,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling map works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -452,7 +452,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling reduce works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -465,7 +465,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling reduceRight works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -478,7 +478,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling slice works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -489,7 +489,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling some works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -501,7 +501,7 @@ describe(`Array Type`, () => {
 
   it(`Calling toLocaleString works normally leaves array value unmodified`, () => {
     let date = new Date('21 Dec 1997 14:12:00 UTC');
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', date]
     });
 

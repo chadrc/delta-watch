@@ -1,4 +1,4 @@
-import {Watchable} from "../Watchable";
+import {DeltaWatch} from "../DeltaWatch";
 import {expect} from 'chai';
 import 'jest';
 import {assertWatcherCalled} from "./utils";
@@ -6,14 +6,14 @@ import {assertWatcherCalled} from "./utils";
 describe(`Date Type`, () => {
   it(`Can watch, mutate, and access Date objects`, () => {
     let now = new Date();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: now
     });
 
     let newNow = new Date();
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value).to.equal(newNow);
       watcherCalled = true;
     });
@@ -28,7 +28,7 @@ describe(`Date Type`, () => {
 
   it(`Setting a value on a Date object throws error`, () => {
     let now = new Date();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: now
     });
 
@@ -40,13 +40,13 @@ describe(`Date Type`, () => {
    * Mutation and access tests for mutation methods
    */
   it(`Calling setDate on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
     let expectedDate = new Date('January 25, 2018 00:00:00');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -57,7 +57,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setDate on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
@@ -66,13 +66,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setFullYear on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
     let expectedDate = new Date('January 1, 2020 00:00:00');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -83,7 +83,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setFullYear on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
@@ -92,13 +92,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setHours on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
     let expectedDate = new Date('January 1, 2018 20:00:00');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -109,7 +109,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setHours on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
@@ -118,12 +118,12 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setMilliseconds on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getMilliseconds()).to.equal(200);
       watcherCalled = true;
     });
@@ -134,7 +134,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setMilliseconds on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
@@ -143,13 +143,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setMinutes on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
     let expectedDate = new Date('January 1, 2018 00:25:00');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -160,7 +160,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setMinutes on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
@@ -169,13 +169,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setMonth on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
     let expectedDate = new Date('May 1, 2018 00:00:00');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -186,7 +186,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setMonth on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
@@ -195,13 +195,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setSeconds on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
     let expectedDate = new Date('January 1, 2018 00:00:34');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -212,7 +212,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setSeconds on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
@@ -221,13 +221,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setTime on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
     let expectedDate = new Date('June 13, 2018 04:39:27');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -238,7 +238,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setTime on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00')
     });
 
@@ -247,13 +247,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCDate on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
     let expectedDate = new Date('January 25, 2018 00:00:00 GMT-0000');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -264,7 +264,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCDate on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
@@ -273,13 +273,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCFullYear on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
     let expectedDate = new Date('January 1, 2020 00:00:00 GMT-0000');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -290,7 +290,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCFullYear on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
@@ -299,13 +299,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCHours on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000 GMT-0000')
     });
 
     let expectedDate = new Date('January 1, 2018 20:00:00 GMT-0000');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -316,7 +316,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCHours on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
@@ -325,12 +325,12 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCMilliseconds on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getMilliseconds()).to.equal(200);
       watcherCalled = true;
     });
@@ -341,7 +341,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCMilliseconds on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
@@ -350,13 +350,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCMinutes on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
     let expectedDate = new Date('January 1, 2018 00:25:00 GMT-0000');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -367,7 +367,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCMinutes on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
@@ -376,13 +376,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCMonth on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
     let expectedDate = new Date('May 1, 2018 00:00:00 GMT-0000');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -393,7 +393,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCMonth on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
@@ -402,13 +402,13 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCSeconds on Date mutator calls callback`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
     let expectedDate = new Date('January 1, 2018 00:00:34 GMT-0000');
     let watcherCalled = false;
-    Watchable.watch(watchable.Watcher.date, (value: Date) => {
+    DeltaWatch.watch(watchable.Watcher.date, (value: Date) => {
       expect(value.getTime()).to.equal(expectedDate.getTime());
       watcherCalled = true;
     });
@@ -419,7 +419,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling setUTCSeconds on Date accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('January 1, 2018 00:00:00 GMT-0000')
     });
 
@@ -432,7 +432,7 @@ describe(`Date Type`, () => {
    */
 
   it(`Calling getDate on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59')
     });
 
@@ -443,7 +443,7 @@ describe(`Date Type`, () => {
   it(`Calling getDay on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59');
     let theDay = date.getDay();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -452,7 +452,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getFullYear on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59')
     });
 
@@ -461,7 +461,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getHours on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59')
     });
 
@@ -472,7 +472,7 @@ describe(`Date Type`, () => {
   it(`Calling getMilliseconds on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59');
     let ms = date.getMilliseconds();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -481,7 +481,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getMinutes on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59')
     });
 
@@ -490,7 +490,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getMonth on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59')
     });
 
@@ -499,7 +499,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getSeconds on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59')
     });
 
@@ -510,7 +510,7 @@ describe(`Date Type`, () => {
   it(`Calling getTime on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59');
     let sec = date.getTime();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -521,7 +521,7 @@ describe(`Date Type`, () => {
   it(`Calling getTimezoneOffset on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59');
     let timeZone = date.getTimezoneOffset();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -530,7 +530,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getUTCDate on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59 GMT-0300')
     });
 
@@ -541,7 +541,7 @@ describe(`Date Type`, () => {
   it(`Calling getUTCDay on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let theDay = date.getUTCDay();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -550,7 +550,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getUTCFullYear on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59 GMT-0300')
     });
 
@@ -559,7 +559,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getUTCHours on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59 GMT-0300')
     });
 
@@ -570,7 +570,7 @@ describe(`Date Type`, () => {
   it(`Calling getUTCMilliseconds on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let ms = date.getUTCMilliseconds();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -579,7 +579,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getUTCMinutes on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59 GMT-0300')
     });
 
@@ -588,7 +588,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getUTCMonth on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59 GMT-0300')
     });
 
@@ -597,7 +597,7 @@ describe(`Date Type`, () => {
   });
 
   it(`Calling getUTCSeconds on Accessor and Mutator Date object return normal value`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: new Date('April 27, 2018 19:34:59 GMT-0300')
     });
 
@@ -608,7 +608,7 @@ describe(`Date Type`, () => {
   it(`Calling toDateString on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toDateString();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -619,7 +619,7 @@ describe(`Date Type`, () => {
   it(`Calling toISOString on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toISOString();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -630,7 +630,7 @@ describe(`Date Type`, () => {
   it(`Calling toJSON on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toJSON();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -641,7 +641,7 @@ describe(`Date Type`, () => {
   it(`Calling toLocaleDateString on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toLocaleDateString();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -652,7 +652,7 @@ describe(`Date Type`, () => {
   it(`Calling toLocaleString on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toLocaleString();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -663,7 +663,7 @@ describe(`Date Type`, () => {
   it(`Calling toLocaleTimeString on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toLocaleTimeString();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -674,7 +674,7 @@ describe(`Date Type`, () => {
   it(`Calling toString on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toString();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -685,7 +685,7 @@ describe(`Date Type`, () => {
   it(`Calling toTimeString on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toTimeString();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -696,7 +696,7 @@ describe(`Date Type`, () => {
   it(`Calling toUTCString on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedString = date.toUTCString();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 
@@ -707,7 +707,7 @@ describe(`Date Type`, () => {
   it(`Calling valueOf on Accessor and Mutator Date object return normal value`, () => {
     let date = new Date('April 27, 2018 19:34:59 GMT-0300');
     let expectedValue = date.valueOf();
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       date: date
     });
 

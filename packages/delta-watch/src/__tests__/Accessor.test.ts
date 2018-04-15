@@ -1,15 +1,15 @@
-import {Watchable} from '../Watchable';
+import {DeltaWatch} from '../DeltaWatch';
 import {expect} from 'chai';
 import 'jest';
 
 describe(`Accessors`, () => {
   it(`First tier property is accessible`, () => {
-    let watchable = new Watchable({value: 'Value'});
+    let watchable = new DeltaWatch({value: 'Value'});
     expect(watchable.Accessor.value).to.equal('Value');
   });
 
   it(`Second tier property is accessible`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       data: {
         value: 'Value'
       }
@@ -18,7 +18,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Third tier property is accessible`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       data: {
         obj: {
           value: 'Value'
@@ -29,7 +29,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Assigning to a value on the Accessor throws an error`, () => {
-    let watchable = new Watchable({value: 'Value'});
+    let watchable = new DeltaWatch({value: 'Value'});
     let func = () => watchable.Accessor.value = 'New Value';
     expect(func).to.throw();
   });
@@ -39,7 +39,7 @@ describe(`Accessors`, () => {
    */
 
   it(`Calling push on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -48,7 +48,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling unshift on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -57,7 +57,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling pop on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -66,7 +66,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling shift on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -75,7 +75,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling splice on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -84,7 +84,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling fill on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -93,7 +93,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling sort on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -102,7 +102,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling copyWithin on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -111,7 +111,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling reverse on array Accessor throws error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -120,7 +120,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Assigning a new value to an array item throws an error`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
     let func = () => watchable.Accessor.list[0] = '1';
@@ -132,7 +132,7 @@ describe(`Accessors`, () => {
    */
 
   it(`Calling concat works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
     
@@ -143,7 +143,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling entries works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -156,7 +156,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling every works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -167,7 +167,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling filter works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -178,7 +178,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling find works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -189,7 +189,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling findIndex works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -200,7 +200,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling forEach works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -212,7 +212,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling includes works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -223,7 +223,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling indexOf works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -234,7 +234,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling join works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -245,7 +245,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling keys works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -258,7 +258,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling lastIndexOf works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -269,7 +269,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling map works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -280,7 +280,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling reduce works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -293,7 +293,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling reduceRight works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -306,7 +306,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling slice works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -317,7 +317,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling some works normally leaves array value unmodified`, () => {
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', 'three']
     });
 
@@ -329,7 +329,7 @@ describe(`Accessors`, () => {
 
   it(`Calling toLocaleString works normally leaves array value unmodified`, () => {
     let date = new Date('21 Dec 1997 14:12:00 UTC');
-    let watchable = new Watchable({
+    let watchable = new DeltaWatch({
       list: ['one', 'two', date]
     });
 

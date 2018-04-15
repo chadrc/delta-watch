@@ -38,7 +38,7 @@ export interface DeltaWatchInternals {
 }
 
 /**
- * Container for change function that gets called when values in a Watchable are modified
+ * Container for change function that gets called when values in a DeltaWatch are modified
  */
 export class WatcherOptions {
   private readonly _change: Function;
@@ -52,17 +52,7 @@ export class WatcherOptions {
   }
 }
 
-export interface WatcherArgs {
-  change: Function
-}
-
-export interface ArrayWatcherArgs {
-  change?: Function
-  add?: Function
-  remove?: Function
-}
-
-export class Watchable implements Subscribable, TypeRegister {
+export class DeltaWatch implements Subscribable, TypeRegister {
   static watch(watchable: Subscribable, cb: Function) {
     watchable._subscribe(new WatcherOptions(cb));
   }

@@ -1,6 +1,6 @@
 import {ObjectWatcher} from "./ObjectWatcher";
 import {makeMutationHandler} from "./types/utils";
-import {TypeRegister} from "./Watchable";
+import {TypeRegister} from "./DeltaWatch";
 
 function makeObjectAccessorHandler(register: TypeRegister) {
   return {
