@@ -1,13 +1,13 @@
 {
   "name": "delta-watch",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Utility for watching objects and separating mutating, watching, and accessing.",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "clean": "echo `rm -r core types index.js index.js.map index.d.ts &>/dev/null`",
     "build": "tsc",
-    "publish": "npm run clean && npm run build && npm publish"
+    "build-publish": "npm run clean && npm run build && npm publish"
   },
   "repository": {
     "type": "git",
