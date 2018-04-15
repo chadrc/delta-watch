@@ -4,6 +4,17 @@ import {DeltaWatch} from "../core/DeltaWatch";
 import {assertWatcherCalled} from "./utils";
 
 describe(`Array Type`, () => {
+  it(`array length is accurate`, () => {
+    let watchable = new DeltaWatch({
+      items: [
+        "one",
+        "two"
+      ]
+    });
+
+    expect(watchable.Accessor.items.length).to.equal(2);
+  });
+
   it('calls array callback when push to array', () => {
     let watchable = new DeltaWatch({
       items: [
