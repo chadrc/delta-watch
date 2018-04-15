@@ -4,7 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: {
-    'main': './index.ts'
+    'main': './index.ts',
+    'clock': './pages/clock/clock.ts'
   },
   output: {
     filename: '[name].bundle.js',
@@ -36,9 +37,15 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist')
   },
   plugins: [
-    new HtmlWebpackPlugin({  // Also generate a test.html
+    new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'index.html'
+      template: 'index.html',
+      chunks: ['main']
+
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'clock.html',
+      template: 'pages/clock/clock.html'
     }),
     new MiniCssExtractPlugin({})
   ]
