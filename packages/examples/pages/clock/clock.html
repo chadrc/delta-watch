@@ -5,23 +5,25 @@
     <title>Simple Clock</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body>
-<h1>Simple Clock</h1>
-<section>
-    <h2 id="clock-date"></h2>
-    <h2 id="clock-time"></h2>
-    <p class="range-field">
-        <label>
-            Time Scale:
-            <input type="range" id="timeScaleInput" value="1" min="1" max="10" step="0.1"/>
-        </label>
-    </p>
-    <a class="btn-floating btn-large waves-effect waves-light blue" id="playPauseButton">
-        <i class="material-icons">pause</i>
-    </a>
-    <a class="btn-floating btn-large waves-effect waves-light blue" id="refreshButton">
-        <i class="material-icons">refresh</i>
-    </a>
-</section>
+<body class="blue-grey lighten-5">
+<main class="container center-align">
+    <h1>Simple Clock</h1>
+    <section class="card-panel blue lighten-5">
+        <h2 id="clock-date"></h2>
+        <h2 id="clock-time"></h2>
+        <p class="range-field">
+            <label>
+                Time Scale:
+                <input type="range" id="timeScaleInput" value="1" min="1" max="10" step="0.1"/>
+            </label>
+        </p>
+        <a class="btn-floating btn-large waves-effect waves-light teal lighten-1" id="playPauseButton">
+            <i class="material-icons">pause</i>
+        </a>
+        <a class="btn-floating btn-large waves-effect waves-light teal lighten-1" id="refreshButton">
+            <i class="material-icons">refresh</i>
+        </a>
+    </section>
+</main>
 </body>
 </html>

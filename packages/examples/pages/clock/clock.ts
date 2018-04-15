@@ -17,8 +17,16 @@ window.addEventListener('load', () => {
   const {Accessor, Mutator, Watcher} = clockData;
 
   const setClockText = (date: Date) => {
-    clockDateElement.innerHTML = date.toDateString();
-    clockTimeElement.innerHTML = date.toTimeString().split(' ')[0];
+    let newDateText = date.toDateString();
+    let newTimeText = date.toTimeString().split(' ')[0];
+
+    if (newDateText !== clockDateElement.innerHTML) {
+      clockDateElement.innerHTML = newDateText;
+    }
+
+    if (newTimeText !== clockTimeElement.innerHTML) {
+      clockTimeElement.innerHTML = newTimeText;
+    }
   };
 
   setClockText(Accessor.time);
