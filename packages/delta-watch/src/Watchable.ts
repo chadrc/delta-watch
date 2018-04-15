@@ -2,7 +2,6 @@ import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
 import {makeGetOnlyProxy, makeObjectMutator} from "./ObjectMutator";
 import {DateTypeInfo} from "./DateMutator";
 import {ArrayTypeInfo} from "./ArrayMutator";
-import any = jasmine.any;
 
 export interface Subscribable {
   _subscribe(cb: WatcherOptions): void;
@@ -13,8 +12,9 @@ export interface Subscribable {
 export interface TypeRegister {
   _typeRegistry: TypeInfo[];
 
-  getMutatorForValue(value: any): any
+  getMutatorForValue(value: any, watcher: ObjectWatcher): any
   getAccessorForValue(value: any): any
+  getTypeForValue(value: any): string
 }
 
 export interface DynamicProperties {
@@ -29,6 +29,7 @@ export interface TypeInfo {
   makeMutator: (watcher: ObjectWatcher) => any
   makeAccessor: (obj: any, typeRegister: TypeRegister) => any
   handlesValue: (value: any) => boolean
+  type: string
 }
 
 
@@ -129,7 +130,32 @@ export class Watchable implements Subscribable, TypeRegister {
     return accessor;
   }
 
-  getMutatorForValue(value: any): any {
+  getMutatorForValue(value: any, watcher: ObjectWatcher): any {
+    let mutator = null;
+    for (let info of this._types) {
+      if (info.handlesValue(value)) {
+        mutator = info.makeMutator(watcher);
+      }
+    }
+
+    if (mutator === null && typeof value === 'object') {
+      mutator = makeObjectMutator(watcher);
+    }
+
+    return mutator;
+  }
+
+  getTypeForValue(value: any): string {
+    let type = "";
+    for (let info of this._types) {
+      if (info.handlesValue(value)) {
+        type = info.type
+      }
+    }
+    if (type === "" && typeof value === "object") {
+      type = "Object";
+    }
+    return type;
   }
 
   get _typeRegistry(): TypeInfo[] {

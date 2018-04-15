@@ -38,5 +38,6 @@ export const DateTypeInfo = {
   makeAccessor: makeGetOnlyDateProxy,
   handlesValue: (value: any) => {
     return value instanceof Date;
-  }
+  },
+  type: "Date"
 };

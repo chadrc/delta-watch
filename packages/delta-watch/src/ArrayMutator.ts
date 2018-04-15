@@ -31,5 +31,6 @@ export const ArrayTypeInfo = {
   makeAccessor: makeGetOnlyArrayProxy,
   handlesValue: (value: any) => {
     return Array.isArray(value);
-  }
+  },
+  type: "Array"
 };

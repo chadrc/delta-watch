@@ -74,13 +74,8 @@ export class ObjectWatcher implements Subscribable, DynamicProperties, TypeRegis
 
   _makeMutator(field: PropertyKey) {
     let watcher = this._properties[field];
-    if (Array.isArray(this._data[field])) {
-      this._mutators[field] = makeArrayMutator(watcher);
-    } else if (this._data[field] instanceof Date) {
-      this._mutators[field] = makeDateMutator(watcher);
-    } else {
-      this._mutators[field] = makeObjectMutator(watcher);
-    }
+    let value = this._data[field];
+    this._mutators[field] = this.getMutatorForValue(value, watcher);
   }
 
   _makeProperty(field: PropertyKey) {
@@ -172,7 +167,11 @@ export class ObjectWatcher implements Subscribable, DynamicProperties, TypeRegis
     return this._parent.getAccessorForValue(value);
   }
 
-  getMutatorForValue(value: any): any {
-    return this._parent.getAccessorForValue(value);
+  getMutatorForValue(value: any, watcher: ObjectWatcher): any {
+    return this._parent.getMutatorForValue(value, watcher);
+  }
+
+  getTypeForValue(value: any): string {
+    return this._parent.getTypeForValue(value);
   }
 }

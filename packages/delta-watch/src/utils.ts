@@ -65,10 +65,14 @@ export function makeMutationHandler<T extends object>(internals: any,
         // to make Object or Array mutator
         internals.watcher._data[prop] = value;
         let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
+        let type = internals.watcher.getTypeForValue(value);
+
         if (Array.isArray(value) &&
           (fieldMutator === null || typeof fieldMutator === 'undefined'
-            || (fieldMutator as any).__DeltaWatchInternals.type !== "Array")) {
-          // setting this field to an array but doesn't have an array mutator associated with it
+            || (fieldMutator as any).__DeltaWatchInternals.type !== type)) {
+          // if mutator hasn't been initialized
+          // or the type of the mutator doesn't match the new value
+          // make a new mutator for it
           internals.watcher._makeMutator(prop);
         }
 
