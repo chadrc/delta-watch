@@ -1,11 +1,11 @@
 import {expect} from 'chai';
 import 'jest';
-import {assertWatcherCalled, assertWatcherNotCalled} from "./utils";
+import {assertWatcherCalled} from "./utils";
 import DeltaWatch from '../index';
 
 describe(`Testing package exports`, () => {
   it(`Work just like their internal counterparts`, () => {
-    let watchable = DeltaWatch.Make({
+    let watchable = DeltaWatch.Watchable({
       value: "Starting Value"
     });
 
