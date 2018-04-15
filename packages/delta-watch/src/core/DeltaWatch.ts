@@ -1,6 +1,6 @@
 import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
 import {makeObjectAccessor, makeObjectMutator} from "./ObjectMutator";
-import {TypeRegistry} from "./types/TypeRegistry";
+import {TypeRegistry} from "../types/TypeRegistry";
 
 export interface Watchable {
   _addWatcher(cb: WatcherOptions): void;

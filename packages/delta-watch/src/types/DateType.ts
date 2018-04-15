@@ -1,4 +1,4 @@
-import {ObjectWatcher} from "../ObjectWatcher";
+import {ObjectWatcher} from "../core/ObjectWatcher";
 import {makeAccessorHandler, makeMutationHandler} from "./utils";
 
 const dateMutatorMethods = [

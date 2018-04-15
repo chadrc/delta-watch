@@ -1,5 +1,5 @@
 {
-  "name": "delta-watch-group",
+  "name": "delta-watch-root",
   "version": "1.0.0",
   "description": "Utility for watching objects and separating mutations, watching, and accessing.",
   "main": "index.js",

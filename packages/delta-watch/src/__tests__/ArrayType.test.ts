@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import 'jest';
-import {DeltaWatch} from "../DeltaWatch";
+import {DeltaWatch} from "../core/DeltaWatch";
 import {assertWatcherCalled} from "./utils";
 
 describe(`Array Type`, () => {

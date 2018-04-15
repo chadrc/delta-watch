@@ -1,4 +1,4 @@
-import {ObjectWatcher} from "../ObjectWatcher";
+import {ObjectWatcher} from "../core/ObjectWatcher";
 
 export interface DeltaWatchInternals {
   watcher: ObjectWatcher

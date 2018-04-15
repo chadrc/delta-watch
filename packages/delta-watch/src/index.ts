@@ -1,1 +1,1 @@
-export {DeltaWatch} from './DeltaWatch';
+export {DeltaWatch} from './core/DeltaWatch';

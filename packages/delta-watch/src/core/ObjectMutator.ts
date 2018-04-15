@@ -1,6 +1,6 @@
 import {ObjectWatcher} from "./ObjectWatcher";
-import {makeMutationHandler} from "./types/utils";
-import {TypeRegistry} from "./types/TypeRegistry";
+import {makeMutationHandler} from "../types/utils";
+import {TypeRegistry} from "../types/TypeRegistry";
 
 function makeObjectAccessorHandler(typeRegistry: TypeRegistry) {
   return {

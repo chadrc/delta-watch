@@ -1,4 +1,4 @@
-import {DeltaWatch} from "../DeltaWatch";
+import {DeltaWatch} from "../core/DeltaWatch";
 import {expect} from 'chai';
 import 'jest';
 import {assertWatcherCalled} from "./utils";

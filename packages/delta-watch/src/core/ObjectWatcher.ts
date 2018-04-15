@@ -1,5 +1,5 @@
 import {DeltaWatch, Watchable, WatcherOptions} from "./DeltaWatch";
-import {TypeRegistry} from "./types/TypeRegistry";
+import {TypeRegistry} from "../types/TypeRegistry";
 
 const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
   get: function (obj: ObjectWatcher, prop: PropertyKey) {

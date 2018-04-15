@@ -4,7 +4,9 @@
   "description": "Utility for watching objects and separating mutating, watching, and accessing.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "clean": "rm -r core types index.js index.js.map index.d.ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -37,6 +39,6 @@
     "transform": {
       "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "/__tests__/.*\\.test\\.(ts|tsx|js)$"
+    "testRegex": "src/__tests__/.*\\.test\\.(ts|tsx|js)$"
   }
 }
