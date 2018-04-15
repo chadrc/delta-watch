@@ -1,5 +1,5 @@
 import {ObjectWatcher} from "./ObjectWatcher";
-import {makeMutationHandler} from "./utils";
+import {makeMutationHandler} from "./types/utils";
 import {TypeRegister} from "./Watchable";
 
 function makeObjectAccessorHandler(register: TypeRegister) {

@@ -1,7 +1,7 @@
 import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
 import {makeObjectAccessor, makeObjectMutator} from "./ObjectMutator";
-import {DateTypeInfo} from "./DateMutator";
-import {ArrayTypeInfo} from "./ArrayMutator";
+import {DateTypeInfo} from "./types/DateType";
+import {ArrayTypeInfo} from "./types/ArrayType";
 
 export interface Subscribable {
   _subscribe(cb: WatcherOptions): void;

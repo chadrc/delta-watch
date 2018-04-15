@@ -1,2 +1,2 @@
 export {Watchable, WatcherArgs, ArrayWatcherArgs} from './Watchable';
-export {AddInfo, RemoveInfo} from './ArrayMutator';
+export {AddInfo, RemoveInfo} from './types/ArrayType';
