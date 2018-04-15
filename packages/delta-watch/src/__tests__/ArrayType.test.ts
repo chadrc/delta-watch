@@ -3,7 +3,7 @@ import 'jest';
 import {Watchable} from "../Watchable";
 import {assertWatcherCalled} from "./utils";
 
-describe(`Array Mutator`, () => {
+describe(`Array Type`, () => {
   it('calls array callback when push to array', () => {
     let watchable = new Watchable({
       items: [

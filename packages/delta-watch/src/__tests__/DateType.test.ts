@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import 'jest';
 import {assertWatcherCalled} from "./utils";
 
-describe(`Dates`, () => {
+describe(`Date Type`, () => {
   it(`Can watch, mutate, and access Date objects`, () => {
     let now = new Date();
     let watchable = new Watchable({
