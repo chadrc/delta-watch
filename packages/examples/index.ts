@@ -6,6 +6,8 @@ window.addEventListener('load', () => {
   // Setup
   const clockDateElement = document.getElementById('clock-date');
   const clockTimeElement = document.getElementById('clock-time');
+  const timeScaleInput = document.getElementById('timeScaleInput');
+
   let interval = null;
 
   const clockData = DeltaWatch.Watchable({
@@ -30,6 +32,12 @@ window.addEventListener('load', () => {
 
   // Mutate
   interval = setInterval(() => {
-    Mutator.time = new Date()
-  }, 1000);
+    let date = Accessor.time;
+    Mutator.time.setMilliseconds(date.getMilliseconds() + (Accessor.timeScale * 100));
+  }, 100);
+
+  timeScaleInput.addEventListener('change', (event) => {
+    let value = (event.target as HTMLInputElement).value;
+    Mutator.timeScale = parseInt(value);
+  });
 });
