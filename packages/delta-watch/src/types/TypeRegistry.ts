@@ -48,7 +48,8 @@ export class TypeRegistry {
       }
     }
 
-    if (mutator === null && typeof value === 'object') {
+    if (mutator === null
+      && (typeof value === 'object' || typeof value === 'undefined')) {
       mutator = makeObjectMutator;
     }
 

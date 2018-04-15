@@ -8,11 +8,11 @@ const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
 
       // Trying to access a field on an undefined data
       // Make data an object and create a dynamic property on it
-      if (typeof obj._data === 'undefined') {
-        obj._parent._data[obj._parentKey] = {};
-        if (obj._parent instanceof ObjectWatcher) {
-          obj._parent._makeMutator(obj._parentKey);
-        }
+      if (typeof obj._data === 'undefined'
+        && obj._parent instanceof ObjectWatcher
+        && typeof ObjectWatcher.getMutator(obj._parent, prop) === 'undefined') {
+        // obj._parent._data[obj._parentKey] = {};
+        obj._parent._makeMutator(obj._parentKey);
       }
 
       obj._makeProperty(prop);
@@ -35,6 +35,10 @@ export function MakeObjectWatcher(parent: DeltaWatch | ObjectWatcher,
 export class ObjectWatcher implements Watchable {
   static getMutator(watcher: ObjectWatcher, field: PropertyKey): any {
     return watcher._mutators[field] || null;
+  }
+
+  static getFieldWatcher(watcher: ObjectWatcher, field: PropertyKey): ObjectWatcher {
+    return watcher._childProperties[field];
   }
 
   readonly _parent: DeltaWatch | ObjectWatcher;
@@ -83,8 +87,9 @@ export class ObjectWatcher implements Watchable {
 
   _makeProperty(field: PropertyKey) {
     let self = this;
-    let dataType = typeof this._data[field];
-    if (this._data[field] !== null && dataType === "object") {
+    let fieldData = this._fieldData(field);
+    let dataType = typeof fieldData;
+    if (fieldData !== null && dataType === "object") {
       this._properties[field] = MakeObjectWatcher(this, field);
       this._makeMutator(field);
     } else {
@@ -149,6 +154,10 @@ export class ObjectWatcher implements Watchable {
     }
 
     return changed;
+  }
+
+  _fieldData(field: PropertyKey): any {
+    return this._data ? this._data[field] : undefined;
   }
 
   get _data(): any {

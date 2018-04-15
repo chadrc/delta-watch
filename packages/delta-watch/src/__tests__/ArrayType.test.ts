@@ -39,6 +39,26 @@ describe(`Array Type`, () => {
     assertWatcherCalled(watcherCalled);
   });
 
+  it(`Watching dynamic item leaves that slot 'undefined'`, () => {
+    let watchable = new DeltaWatch({
+      items: []
+    });
+
+    DeltaWatch.watch(watchable.Watcher.items[0], (value: any) => {});
+
+    expect(watchable.Accessor.items[0]).to.be.undefined;
+  });
+
+  it(`Watching dynamic item leaves length of array unchanged'`, () => {
+    let watchable = new DeltaWatch({
+      items: []
+    });
+
+    DeltaWatch.watch(watchable.Watcher.items[0], (value: any) => {});
+
+    expect(watchable.Accessor.items.length).to.equal(0);
+  });
+
   it(`can watch property on dynamic item`, () => {
     let watchable = new DeltaWatch({
       items: []
@@ -53,6 +73,26 @@ describe(`Array Type`, () => {
     watchable.Mutator.items[0].value = "Value";
 
     assertWatcherCalled(watcherCalled);
+  });
+
+  it(`Watching property on dynamic item leaves that slot 'undefined'`, () => {
+    let watchable = new DeltaWatch({
+      items: []
+    });
+
+    DeltaWatch.watch(watchable.Watcher.items[0].value, (value: any) => {});
+
+    expect(watchable.Accessor.items[0]).to.be.undefined;
+  });
+
+  it(`Watching property on dynamic item leaves length of array unchanged'`, () => {
+    let watchable = new DeltaWatch({
+      items: []
+    });
+
+    DeltaWatch.watch(watchable.Watcher.items[0].value, (value: any) => {});
+
+    expect(watchable.Accessor.items.length).to.equal(0);
   });
 
   /**

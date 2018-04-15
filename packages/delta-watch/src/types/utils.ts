@@ -36,6 +36,8 @@ export function makeMutationHandler<T extends object>(internals: DeltaWatchInter
         return internals;
       }
 
+      let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
+      let fieldWatcher = ObjectWatcher.getFieldWatcher(internals.watcher, prop);
       if (prop in internals.watcher._data) {
         let field = (internals.watcher._data as any)[prop];
         if (typeof field === 'function') {
@@ -50,12 +52,17 @@ export function makeMutationHandler<T extends object>(internals: DeltaWatchInter
         } else {
           // let fieldMutator = ObjectWatcher.getMutator(self._watcher, field);
           // return fieldMutator == null ? self._watcher._properties[field]._data : fieldMutator;
-          let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
+
           if (fieldMutator !== null && typeof fieldMutator !== 'undefined') {
             return fieldMutator;
           }
         }
         return field;
+      } else if (fieldMutator !== null && typeof fieldMutator !== 'undefined') {
+        return fieldMutator;
+      } else if (fieldWatcher !== null && typeof fieldWatcher !== 'undefined') {
+        internals.watcher._makeMutator(prop);
+        return ObjectWatcher.getMutator(internals.watcher, prop);
       }
     },
     set: function (_: T, prop: PropertyKey, value: any): boolean {
@@ -75,6 +82,11 @@ export function makeMutationHandler<T extends object>(internals: DeltaWatchInter
         // Need to mutate before array check,
         // because watcher's make mutator uses current value to determine
         // to make Object or Array mutator
+
+        // if data is undefined then we need to make it an object
+        if (typeof internals.watcher._data === 'undefined') {
+          internals.watcher._parent._data[internals.watcher._parentKey] = {};
+        }
         internals.watcher._data[prop] = value;
         let fieldMutator = ObjectWatcher.getMutator(internals.watcher, prop);
         let type = internals.watcher._typeRegistry.getTypeForValue(value);
