@@ -1,7 +1,5 @@
 import {MakeObjectWatcher, ObjectWatcher} from "./ObjectWatcher";
 import {makeObjectAccessor, makeObjectMutator} from "./ObjectMutator";
-import {DateTypeInfo} from "./types/DateType";
-import {ArrayTypeInfo} from "./types/ArrayType";
 import {TypeRegistry} from "./types/TypeRegistry";
 
 export interface Watchable {
@@ -12,10 +10,6 @@ export interface Watchable {
 
 export interface DynamicProperties {
   [key: string]: any
-}
-
-export interface Mutator {
-  _makeProperty(field: PropertyKey): void;
 }
 
 export interface DeltaWatchInternals {
