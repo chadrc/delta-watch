@@ -1,7 +1,7 @@
 {
   "lerna": "2.10.1",
   "packages": [
-    "packages/*"
+    "packages/delta-watch"
   ],
   "version": "0.0.0"
 }
