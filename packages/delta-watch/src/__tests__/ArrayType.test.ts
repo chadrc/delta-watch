@@ -23,6 +23,38 @@ describe(`Array Type`, () => {
     watchable.Mutator.items[0] = "Value";
   });
 
+  it(`can watch dynamic item`, () => {
+    let watchable = new DeltaWatch({
+      items: []
+    });
+
+    let watcherCalled = false;
+    DeltaWatch.watch(watchable.Watcher.items[0], (value: any) => {
+      expect(value).to.equal("Value");
+      watcherCalled = true;
+    });
+
+    watchable.Mutator.items.push("Value");
+
+    assertWatcherCalled(watcherCalled);
+  });
+
+  it(`can watch property on dynamic item`, () => {
+    let watchable = new DeltaWatch({
+      items: []
+    });
+
+    let watcherCalled = false;
+    DeltaWatch.watch(watchable.Watcher.items[0].value, (value: any) => {
+      expect(value).to.equal("Value");
+      watcherCalled = true;
+    });
+
+    watchable.Mutator.items[0].value = "Value";
+
+    assertWatcherCalled(watcherCalled);
+  });
+
   /**
    * Array mutator method tests
    */
@@ -266,38 +298,6 @@ describe(`Array Type`, () => {
     });
 
     watchable.Mutator.items.push({headline: "New Headline"});
-
-    assertWatcherCalled(watcherCalled);
-  });
-
-  it(`can watch dynamic item`, () => {
-    let watchable = new DeltaWatch({
-      items: []
-    });
-
-    let watcherCalled = false;
-    DeltaWatch.watch(watchable.Watcher.items[0], (value: any) => {
-      expect(value).to.equal("Value");
-      watcherCalled = true;
-    });
-
-    watchable.Mutator.items.push("Value");
-
-    assertWatcherCalled(watcherCalled);
-  });
-
-  it(`can watch property on dynamic item`, () => {
-    let watchable = new DeltaWatch({
-      items: []
-    });
-
-    let watcherCalled = false;
-    DeltaWatch.watch(watchable.Watcher.items[0].value, (value: any) => {
-      expect(value).to.equal("Value");
-      watcherCalled = true;
-    });
-
-    watchable.Mutator.items[0].value = "Value";
 
     assertWatcherCalled(watcherCalled);
   });
