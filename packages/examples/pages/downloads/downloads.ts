@@ -97,10 +97,8 @@ window.addEventListener('load', () => {
       // the element was created when the watch was made
       // so we to find first undefined element
       // then insert the selected download
-      let insertIndex = Accessor.active.findIndex((item: any) => typeof item === 'undefined');
+      let insertIndex = Accessor.active.findIndex((item: any) => typeof item === 'undefined' || Object.keys(item).length === 0);
       Mutator.active[insertIndex] = download;
-
-      console.log(Accessor.active);
     });
   }
 
