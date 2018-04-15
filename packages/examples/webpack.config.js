@@ -6,7 +6,8 @@ module.exports = {
   mode: 'production',
   entry: {
     'main': './index.ts',
-    'clock': './pages/clock/clock.ts'
+    'clock': './pages/clock/clock.ts',
+    'downloads': './pages/downloads/downloads.ts'
   },
   output: {
     filename: '[name].bundle.js',
@@ -46,11 +47,13 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       filename: 'clock.html',
-      template: 'pages/clock/clock.html'
+      template: 'pages/clock/clock.html',
+      chunks: ['main', 'clock']
     }),
     new HtmlWebpackPlugin({
       filename: 'downloads.html',
-      template: 'pages/downloads/downloads.html'
+      template: 'pages/downloads/downloads.html',
+      chunks: ['main', 'downloads']
     }),
     new MiniCssExtractPlugin({})
   ]
