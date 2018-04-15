@@ -1,0 +1,23 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "Example usage of delta-watch packages.",
+  "main": "index.js",
+  "scripts": {
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chadrc/delta-watch.git"
+  },
+  "keywords": [
+    "examples",
+    "delta-watch"
+  ],
+  "author": "Chad Collins",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chadrc/delta-watch/issues"
+  },
+  "homepage": "https://github.com/chadrc/delta-watch#readme"
+}
