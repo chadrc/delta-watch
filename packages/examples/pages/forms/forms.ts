@@ -157,7 +157,8 @@ window.addEventListener('load', () => {
     }
   });
 
-  // Set up one way binding mutations
+  // Set up receiving side of two way binding
+  // Each change also enables the showErrors flag, which is set to false by submitting or pressing reset button
   fullNameInput.addEventListener('change', (event) => {
     Mutator.showErrors = true;
     Mutator.formData.fullName = (event.target as HTMLInputElement).value;
