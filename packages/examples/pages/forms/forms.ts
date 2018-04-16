@@ -84,6 +84,7 @@ window.addEventListener('load', () => {
   // Data setup
   const formData = DeltaWatch.Watchable({
     loading: false,
+    showErrors: false,
     formData: makeDefaultDeliveryFormData()
   });
 
@@ -112,7 +113,7 @@ window.addEventListener('load', () => {
   });
 
   DeltaWatch.Watch(Watcher.formData.email, (email: string) => {
-    if (isValidEmail(email)) {
+    if (isValidEmail(email) || !Accessor.showErrors) {
       emailInput.classList.remove('invalid')
     } else {
       emailInput.classList.add('invalid')
@@ -121,7 +122,7 @@ window.addEventListener('load', () => {
   });
 
   DeltaWatch.Watch(Watcher.formData.phone, (phone: string) => {
-    if (isValidPhone(phone)) {
+    if (isValidPhone(phone) || !Accessor.showErrors) {
       phoneInput.classList.remove('invalid')
     } else {
       phoneInput.classList.add('invalid')
@@ -159,35 +160,43 @@ window.addEventListener('load', () => {
 
   // Set up one way binding mutations
   fullNameInput.addEventListener('change', (event) => {
+    Mutator.showErrors = true;
     Mutator.formData.fullName = (event.target as HTMLInputElement).value;
   });
 
   addressInput.addEventListener('change', (event) => {
+    Mutator.showErrors = true;
     Mutator.formData.address = (event.target as HTMLInputElement).value;
   });
 
   emailInput.addEventListener('change', (event) => {
+    Mutator.showErrors = true;
     Mutator.formData.email = (event.target as HTMLInputElement).value;
   });
 
   phoneInput.addEventListener('change', (event) => {
+    Mutator.showErrors = true;
     Mutator.formData.phone = (event.target as HTMLInputElement).value;
   });
 
   deliveryDatePickerInput.addEventListener('change', (event) => {
+    Mutator.showErrors = true;
     Mutator.formData.deliveryDate = (event.target as HTMLInputElement).value;
   });
 
   deliveryTimePickerInput.addEventListener('change', (event) => {
+    Mutator.showErrors = true;
     Mutator.formData.deliveryTime = (event.target as HTMLInputElement).value;
   });
 
   additionalOptionsSelect.addEventListener('change', () => {
+    Mutator.showErrors = true;
     // Materialize CSS method for getting the values
     Mutator.formData.additionalOptions = additionalOptionsSelectInstance.getSelectedValues();
   });
 
   termsAgreementCheckbox.addEventListener('change', (event) => {
+    Mutator.showErrors = true;
     Mutator.formData.agreedToTerms = (event.target as HTMLInputElement).checked;
   });
 
@@ -195,6 +204,7 @@ window.addEventListener('load', () => {
   function resetData() {
     // can't use a local variable to set the entire data
     // need to set from the root data object
+    Mutator.showErrors = false;
     Mutator.formData = makeDefaultDeliveryFormData();
 
     // Materialize CSS thing
