@@ -28,6 +28,15 @@ function getRandomDownloadAmount(total: number) {
   return Math.floor(Math.random() * max + 100);
 }
 
+function makeRandomDownload() {
+  return {
+    name: getRandomName(),
+    size: getRandomSize(),
+    amountDownloaded: 0,
+    completed: false
+  };
+}
+
 window.addEventListener('load', () => {
   // Setup
   let downloadsData = DeltaWatch.Watchable({
@@ -78,6 +87,7 @@ window.addEventListener('load', () => {
     // Watches for active downloads
     let activeDownloadText = document.getElementById(`activeDownloadText${i}`);
     let activeDownloadProgress = document.getElementById(`activeDownloadProgress${i}`);
+    let activeDownloadCompletedIcon = document.getElementById(`activeDownloadCompletedIcon${i}`);
 
     // Watch name and amountDownloaded individually since name doesn't change, but amountDownloaded will
     DeltaWatch.Watch(Watcher.active[index].name, (value: string) => {
@@ -92,6 +102,14 @@ window.addEventListener('load', () => {
       activeDownloadProgress.style.width = `${percent}%`;
     });
 
+    DeltaWatch.Watch(Watcher.active[index].completed, (value: boolean) => {
+      if (value) {
+        activeDownloadCompletedIcon.classList.remove('hide');
+      } else {
+        activeDownloadCompletedIcon.classList.add('hide');
+      }
+    });
+
     // Also need to set up a Mutation based on clicking available download button
     availableDownloadBtn.addEventListener('click', () => {
       // Take download from available and put it into active
@@ -102,20 +120,19 @@ window.addEventListener('load', () => {
 
   // Initialize available array and start event for mocking data downloads
   for (let i=0; i<5; i++) {
-    let download = {
-      name: getRandomName(),
-      size: getRandomSize(),
-      amountDownloaded: 0,
-    };
-    Mutator.available.push(download);
+    Mutator.available.push(makeRandomDownload());
   }
 
   setInterval(() => {
     for (let i=0; i<Accessor.active.length; i++) {
-      let amountDownloaded = Accessor.active[i].amountDownloaded;
-      let size = Accessor.active[i].size;
-      if (amountDownloaded < size) {
-        Mutator.active[i].amountDownloaded = amountDownloaded + getRandomDownloadAmount(size);
+      if (!Accessor.active[i].completed) {
+        let amountDownloaded = Accessor.active[i].amountDownloaded;
+        let size = Accessor.active[i].size;
+        let newAmount = amountDownloaded + getRandomDownloadAmount(size);
+        Mutator.active[i].amountDownloaded = newAmount;
+        if (newAmount >= size) {
+          Mutator.active[i].completed = true;
+        }
       }
     }
   }, 100);
