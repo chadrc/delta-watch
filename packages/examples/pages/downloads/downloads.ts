@@ -14,6 +14,9 @@ const possibleDownloadNames = [
   'Grey'
 ];
 
+const activeLinkBtnClass = "orange-text text-accent-2";
+const inactiveLinkBtnClass = "grey-text";
+
 let availableDownloadNames = possibleDownloadNames.slice();
 
 function getRandomName() {
@@ -51,6 +54,27 @@ window.addEventListener('load', () => {
   });
 
   const {Accessor, Watcher, Mutator} = downloadsData;
+
+  // Common mutation logic
+  // Used when clicking a download button for one download or the download all button
+  function moveAvailableToActive(index: number) {
+    // Take download from available and put it into active
+    let download = Accessor.available[index];
+    Mutator.available[index] = null; // Null instead of splice so available downloads don't move in ui
+
+    // If active length is 5, that means its full of in progress or completed downloads
+    // Need to first completed and replace it
+    if (Accessor.active.length === 5) {
+      // New download only becomes available only when one is completed
+      // So completedIndex should never be -1
+      // Also check for null in case of clear button being pressed
+      let completedIndex = Accessor.active.findIndex((download: any) => download === null || download.completed === true);
+      Mutator.active[completedIndex] = download;
+    } else {
+      // Else just need to push download
+      Mutator.active.push(download);
+    }
+  }
 
   // Download complete text Watcher
   let downloadsCompleteText = document.getElementById(`downloadsCompleteText`);
@@ -110,7 +134,10 @@ window.addEventListener('load', () => {
     });
 
     DeltaWatch.Watch(Watcher.active[index].amountDownloaded, () => {
-      let percent = Math.floor((Accessor.active[index].amountDownloaded / Accessor.active[index].size) * 100);
+      let percent = 100;
+      if (Accessor.active[index] !== null) {
+        percent = Math.floor((Accessor.active[index].amountDownloaded / Accessor.active[index].size) * 100);
+      }
       activeDownloadProgress.style.width = `${percent}%`;
     });
 
@@ -124,23 +151,31 @@ window.addEventListener('load', () => {
 
     // Also need to set up a Mutation based on clicking available download button
     availableDownloadBtn.addEventListener('click', () => {
-      // Take download from available and put it into active
-      let download = Accessor.available[index];
-      Mutator.available[index] = null; // Null instead of splice so available downloads don't move in ui
-
-      // If active length is 5, that means its full of in progress or completed downloads
-      // Need to first completed and replace it
-      if (Accessor.active.length === 5) {
-        // New download only becomes available only when one is completed
-        // So completedIndex should never be -1
-        let completedIndex = Accessor.active.findIndex((download: any) => download.completed === true);
-        Mutator.active[completedIndex] = download;
-      } else {
-        // Else just need to push download
-        Mutator.active.push(download);
-      }
+      moveAvailableToActive(index);
     });
   }
+
+  // Download all available button action
+  let downloadAllBtn = document.getElementById('downloadAllBtn');
+  downloadAllBtn.addEventListener('click', () => {
+    for (let i=0; i<Accessor.available.length; i++) {
+      if (Accessor.available[i] !== null) {
+        moveAvailableToActive(i);
+      }
+    }
+  });
+
+  // Clear completed button action
+  let clearCompletedBtn = document.getElementById('clearCompletedBtn');
+  clearCompletedBtn.addEventListener('click', () => {
+    for (let i=0; i<Accessor.active.length; i++) {
+      // Skip already cleared downloads
+      if (Accessor.active[i] !== null && Accessor.active[i].completed) {
+        // Null out so downloads stay in same position
+        Mutator.active[i] = null;
+      }
+    }
+  });
 
   // Initialize available array and start event for mocking data downloads
   for (let i=0; i<5; i++) {
@@ -149,7 +184,9 @@ window.addEventListener('load', () => {
 
   setInterval(() => {
     for (let i=0; i<Accessor.active.length; i++) {
-      if (!Accessor.active[i].completed) {
+      // Active download slots get nulled out when clear button is pressed
+      // Skipp these slots
+      if (Accessor.active[i] !== null && !Accessor.active[i].completed) {
         let amountDownloaded = Accessor.active[i].amountDownloaded;
         let size = Accessor.active[i].size;
         let newAmount = amountDownloaded + getRandomDownloadAmount(size);
