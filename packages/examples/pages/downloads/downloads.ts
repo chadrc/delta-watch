@@ -41,10 +41,17 @@ window.addEventListener('load', () => {
   // Setup
   let downloadsData = DeltaWatch.Watchable({
     available: [],
-    active: []
+    active: [],
+    downloadsCompleted: 0
   });
 
   const {Accessor, Watcher, Mutator} = downloadsData;
+
+  // Download complete text Watcher
+  let downloadsCompleteText = document.getElementById(`downloadsCompleteText`);
+  DeltaWatch.Watch(Watcher.downloadsCompleted, (value: number) => {
+    downloadsCompleteText.innerHTML = `Downloads Completed: ${value}`;
+  });
 
   // There are 5 of each available and active downloads
   // Loop 1 to 5 and create watches for them
@@ -133,6 +140,9 @@ window.addEventListener('load', () => {
         Mutator.active[i].amountDownloaded = newAmount;
         if (newAmount >= size) {
           Mutator.active[i].completed = true;
+          Mutator.downloadsCompleted = Accessor.downloadsCompleted + 1;
+          // ++ only works the first time TODO: figure out if ++ operator works normally with Proxies, same issue with +=
+          // Mutator.downloadsCompleted++;
         }
       }
     }
