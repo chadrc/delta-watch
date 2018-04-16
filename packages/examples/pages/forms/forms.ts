@@ -64,6 +64,7 @@ window.addEventListener('load', () => {
   const termsAgreementCheckbox = document.getElementById('termsAgreement') as HTMLInputElement;
   const submitBtn = document.getElementById('submitBtn');
   const resetBtn = document.getElementById('resetBtn');
+  const loadingSpinner = document.getElementById('loadingSpinner');
 
   // Get modal elements
   const submitModal = document.getElementById('submitModal');
@@ -81,7 +82,10 @@ window.addEventListener('load', () => {
   let additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
 
   // Data setup
-  const formData = DeltaWatch.Watchable(makeDefaultDeliveryFormData());
+  const formData = DeltaWatch.Watchable({
+    loading: false,
+    formData: makeDefaultDeliveryFormData()
+  });
 
   const {Watcher, Accessor, Mutator} = formData;
 
@@ -90,7 +94,7 @@ window.addEventListener('load', () => {
   // two way binding (watcher to set the value and mutator to receive the value) on each input
   // we are going to validate the email and phone inputs
   // and the submit button will be enabled/disabled depending on validity of the form data
-  DeltaWatch.Watch(Watcher, (data: DeliveryFormData) => {
+  DeltaWatch.Watch(Watcher.formData, (data: DeliveryFormData) => {
     console.log('data', data);
     if (isValidDeliveryFormData(data)) {
       submitBtn.removeAttribute('disabled');
@@ -99,15 +103,15 @@ window.addEventListener('load', () => {
     }
   });
 
-  DeltaWatch.Watch(Watcher.fullName, (name: string) => {
+  DeltaWatch.Watch(Watcher.formData.fullName, (name: string) => {
     fullNameInput.value = name;
   });
 
-  DeltaWatch.Watch(Watcher.address, (address: string) => {
+  DeltaWatch.Watch(Watcher.formData.address, (address: string) => {
     addressInput.value = address;
   });
 
-  DeltaWatch.Watch(Watcher.email, (email: string) => {
+  DeltaWatch.Watch(Watcher.formData.email, (email: string) => {
     if (isValidEmail(email)) {
       emailInput.classList.remove('invalid')
     } else {
@@ -116,7 +120,7 @@ window.addEventListener('load', () => {
     emailInput.value = email;
   });
 
-  DeltaWatch.Watch(Watcher.phone, (phone: string) => {
+  DeltaWatch.Watch(Watcher.formData.phone, (phone: string) => {
     if (isValidPhone(phone)) {
       phoneInput.classList.remove('invalid')
     } else {
@@ -125,63 +129,73 @@ window.addEventListener('load', () => {
     phoneInput.value = phone;
   });
 
-  DeltaWatch.Watch(Watcher.deliveryDate, (date: string) => {
+  DeltaWatch.Watch(Watcher.formData.deliveryDate, (date: string) => {
     deliveryDatePickerInput.value = date;
     submitModalDeliveryDateText.innerHTML = date;
   });
 
-  DeltaWatch.Watch(Watcher.deliveryTime, (time: string) => {
+  DeltaWatch.Watch(Watcher.formData.deliveryTime, (time: string) => {
     deliveryTimePickerInput.value = time;
     submitModalDeliveryTimeText.innerHTML = time;
   });
 
-  DeltaWatch.Watch(Watcher.additionalOptions, (options: string[]) => {
+  DeltaWatch.Watch(Watcher.formData.additionalOptions, (options: string[]) => {
     (additionalOptionsSelect as any).value = options;
   });
 
-  DeltaWatch.Watch(Watcher.agreedToTerms, (agreed: boolean) => {
+  DeltaWatch.Watch(Watcher.formData.agreedToTerms, (agreed: boolean) => {
     termsAgreementCheckbox.checked = agreed;
+  });
+
+  DeltaWatch.Watch(Watcher.loading, (loading: boolean) => {
+    if (loading) {
+      submitBtn.classList.add('hide');
+      loadingSpinner.classList.remove('hide');
+    } else {
+      submitBtn.classList.remove('hide');
+      loadingSpinner.classList.add('hide');
+    }
   });
 
   // Set up one way binding mutations
   fullNameInput.addEventListener('change', (event) => {
-    Mutator.fullName = (event.target as HTMLInputElement).value;
+    Mutator.formData.fullName = (event.target as HTMLInputElement).value;
   });
 
   addressInput.addEventListener('change', (event) => {
-    Mutator.address = (event.target as HTMLInputElement).value;
+    Mutator.formData.address = (event.target as HTMLInputElement).value;
   });
 
   emailInput.addEventListener('change', (event) => {
-    Mutator.email = (event.target as HTMLInputElement).value;
+    Mutator.formData.email = (event.target as HTMLInputElement).value;
   });
 
   phoneInput.addEventListener('change', (event) => {
-    Mutator.phone = (event.target as HTMLInputElement).value;
+    Mutator.formData.phone = (event.target as HTMLInputElement).value;
   });
 
   deliveryDatePickerInput.addEventListener('change', (event) => {
-    Mutator.deliveryDate = (event.target as HTMLInputElement).value;
+    Mutator.formData.deliveryDate = (event.target as HTMLInputElement).value;
   });
 
   deliveryTimePickerInput.addEventListener('change', (event) => {
-    Mutator.deliveryTime = (event.target as HTMLInputElement).value;
+    Mutator.formData.deliveryTime = (event.target as HTMLInputElement).value;
   });
 
   additionalOptionsSelect.addEventListener('change', () => {
     // Materialize CSS method for getting the values
-    Mutator.additionalOptions = additionalOptionsSelectInstance.getSelectedValues();
+    Mutator.formData.additionalOptions = additionalOptionsSelectInstance.getSelectedValues();
   });
 
   termsAgreementCheckbox.addEventListener('change', (event) => {
-    Mutator.agreedToTerms = (event.target as HTMLInputElement).checked;
+    Mutator.formData.agreedToTerms = (event.target as HTMLInputElement).checked;
   });
 
   // Shared functionality for reset and close submit modal buttons
   function resetData() {
     // can't use a local variable to set the entire data
     // need to set from the root data object
-    formData.Mutator = makeDefaultDeliveryFormData();
+    Mutator.formData = makeDefaultDeliveryFormData();
 
     // Materialize CSS thing
     // need to reinitialize it for ui to update
@@ -198,11 +212,17 @@ window.addEventListener('load', () => {
     event.stopPropagation();
 
     // Normally this would be sent to a server, but were just going to log it
-    let data = JSON.stringify(Accessor, null, 2);
+    let data = JSON.stringify(Accessor.formData, null, 2);
     console.log("Sending data");
     console.log(data);
 
-    submitModalInstance.open();
+    // Simulate request delay
+    Mutator.loading = true;
+    let loadingTimeout = setTimeout(() => {
+      Mutator.loading = false;
+      submitModalInstance.open();
+      clearTimeout(loadingTimeout);
+    }, (Math.random() * 5000 + 1000));
   });
 
   closeSubmitModalBtn.addEventListener('click', () => {
