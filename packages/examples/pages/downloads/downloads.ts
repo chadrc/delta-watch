@@ -23,6 +23,11 @@ function getRandomSize() {
   return Math.floor(Math.random() * 100001 + 1000);
 }
 
+function getRandomDownloadAmount(total: number) {
+  let max = Math.floor(total * .01);
+  return Math.floor(Math.random() * max + 100);
+}
+
 window.addEventListener('load', () => {
   // Setup
   let downloadsData = DeltaWatch.Watchable({
@@ -83,7 +88,7 @@ window.addEventListener('load', () => {
     });
 
     DeltaWatch.Watch(Watcher.active[index].amountDownloaded, (value: number) => {
-      let percent = value / Accessor.active[index].size;
+      let percent = Math.floor((Accessor.active[index].amountDownloaded / Accessor.active[index].size) * 100);
       activeDownloadProgress.style.width = `${percent}%`;
     });
 
@@ -104,4 +109,14 @@ window.addEventListener('load', () => {
     };
     Mutator.available.push(download);
   }
+
+  setInterval(() => {
+    for (let i=0; i<Accessor.active.length; i++) {
+      let amountDownloaded = Accessor.active[i].amountDownloaded;
+      let size = Accessor.active[i].size;
+      if (amountDownloaded < size) {
+        Mutator.active[i].amountDownloaded = amountDownloaded + getRandomDownloadAmount(size);
+      }
+    }
+  }, 100);
 });
