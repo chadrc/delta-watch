@@ -1,6 +1,6 @@
 import DeltaWatch from 'delta-watch';
 
-const possibleDownloadNames = [
+const possibleDownloadNames: string[] = [
   'Red',
   'Blue',
   'Green',
@@ -14,8 +14,19 @@ const possibleDownloadNames = [
   'Grey'
 ];
 
-const activeLinkBtnClass = "orange-text text-accent-2";
-const inactiveLinkBtnClass = "grey-text";
+const activeLinkBtnClass = ["orange-text", "text-accent-2"];
+const inactiveLinkBtnClass = ["grey-text"];
+
+// Small utility to set classes on a button
+function resolveBtnActiveClass(btn: HTMLElement, active: boolean) {
+  if (active) {
+    btn.classList.remove(...inactiveLinkBtnClass);
+    btn.classList.add(...activeLinkBtnClass);
+  } else {
+    btn.classList.add(...inactiveLinkBtnClass);
+    btn.classList.remove(...activeLinkBtnClass);
+  }
+}
 
 let availableDownloadNames = possibleDownloadNames.slice();
 
@@ -76,10 +87,35 @@ window.addEventListener('load', () => {
     }
   }
 
-  // Download complete text Watcher
+  // Singular components
   let downloadsCompleteText = document.getElementById(`downloadsCompleteText`);
+  let clearCompletedBtn = document.getElementById('clearCompletedBtn');
+  let downloadAllBtn = document.getElementById('downloadAllBtn');
+
+  // Download complete text Watcher
   DeltaWatch.Watch(Watcher.downloadsCompleted, (value: number) => {
     downloadsCompleteText.innerHTML = `Downloads Completed: ${value}`;
+  });
+
+  // Watcher on entire available array to determine if 'Download All' button should be active
+  DeltaWatch.Watch(Watcher.available, (value: any[]) => {
+    // button active if any slot is non-null
+    let count = Accessor.available.reduce((result: number, item: any) => item === null ? result : result + 1, 0);
+    resolveBtnActiveClass(downloadAllBtn, count > 0);
+  });
+
+  // Watcher on entire active array to determine if 'Clear Completed' button should be active
+  DeltaWatch.Watch(Watcher.active, (value: any[]) => {
+    // button active if any in active list are completed
+    let count = Accessor.active.reduce((result: number, item: any) => {
+      if (item === null) {
+        return result;
+      }
+
+      return item.completed ? result + 1 : result;
+    }, 0);
+
+    resolveBtnActiveClass(clearCompletedBtn, count > 0);
   });
 
   // There are 5 of each available and active downloads
@@ -156,7 +192,6 @@ window.addEventListener('load', () => {
   }
 
   // Download all available button action
-  let downloadAllBtn = document.getElementById('downloadAllBtn');
   downloadAllBtn.addEventListener('click', () => {
     for (let i=0; i<Accessor.available.length; i++) {
       if (Accessor.available[i] !== null) {
@@ -166,7 +201,6 @@ window.addEventListener('load', () => {
   });
 
   // Clear completed button action
-  let clearCompletedBtn = document.getElementById('clearCompletedBtn');
   clearCompletedBtn.addEventListener('click', () => {
     for (let i=0; i<Accessor.active.length; i++) {
       // Skip already cleared downloads
