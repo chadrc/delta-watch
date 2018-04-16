@@ -11,6 +11,8 @@ let rowCount = 10;
 
 window.addEventListener('load', () => {
   const tableBody = document.getElementById('movieTable');
+  const searchTextInput = document.getElementById('searchText');
+  const searchSubmitBtn = document.getElementById('searchSubmit');
 
   const movieData = DeltaWatch.Watchable({
     searchText: "Star",
@@ -21,7 +23,7 @@ window.addEventListener('load', () => {
   const {Watcher, Accessor, Mutator} = movieData;
 
   // Generate table rows
-  for (let i=0; i<rowCount; i++) {
+  for (let i = 0; i < rowCount; i++) {
     let rowEle = document.createElement('tr');
     rowEle.classList.add('hide');
 
@@ -63,11 +65,31 @@ window.addEventListener('load', () => {
     });
   }
 
-  // Api Calls
-  fetch(`//www.omdbapi.com/?apikey=650ad66d&s=${Accessor.searchText}&page=1`)
-    .then((response) => response.json())
-    .then((data) => {
-      Mutator.movies = data.Search;
-      Mutator.totalResults = data.totalResults;
-    });
+  // Mutations
+
+  function searchOMDb() {
+    fetch(`//www.omdbapi.com/?apikey=650ad66d&s=${Accessor.searchText}&page=1`)
+      .then((response) => response.json())
+      .then((data) => {
+        Mutator.movies = data.Search;
+        Mutator.totalResults = data.totalResults;
+      });
+  }
+
+  searchTextInput.addEventListener('input', (event) => {
+    let value = (event.target as HTMLInputElement).value;
+    Mutator.searchText = value;
+    if (value.trim() === "") {
+      searchSubmitBtn.setAttribute('disabled','');
+    } else {
+      searchSubmitBtn.removeAttribute('disabled');
+    }
+  });
+
+  searchSubmitBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    searchOMDb();
+  })
 });
