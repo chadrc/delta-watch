@@ -70,7 +70,9 @@
                         <p>
                             <label>
                                 <input type="checkbox" id="termsAgreement" class="filled-in"/>
-                                <span>I agree to the Terms &amp; Conditions outlined <a href="#">here</a>.</span>
+                                <span>I agree to the Terms &amp; Conditions outlined
+                                    <a  href="#termsModal" class="modal-trigger">here</a>.
+                                </span>
                             </label>
                         </p>
                     </div>
@@ -88,6 +90,40 @@
             </form>
         </div>
     </section>
+    <div id="submitModal" class="modal">
+        <div class="modal-content">
+            <h4>Thank You</h4>
+            <p>Your delivery will arrive on
+                <span id="submitModalDeliveryDate"></span>
+                at <span id="submitModalDeliveryTime"></span>.</p>
+        </div>
+        <div class="modal-footer">
+            <a id="closeSubmitModalBtn" href="#!" class="modal-action waves-effect waves-green btn-flat">OK</a>
+        </div>
+    </div>
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <h4>Terms and Conditions</h4>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eu sapien nunc. Aenean sit amet sodales lacus. Nulla lacinia hendrerit condimentum. Donec at maximus turpis. Duis ut metus eu velit tincidunt ullamcorper eleifend sed velit. Curabitur scelerisque nisi a turpis luctus commodo. Nulla luctus, mauris vel mollis hendrerit, ligula dui dapibus eros, eget pretium nisl elit ac libero. Curabitur at mattis justo. Vestibulum gravida laoreet dignissim. Curabitur iaculis pretium mi eu venenatis. Pellentesque diam massa, placerat ac accumsan malesuada, sagittis vel orci. Donec eu laoreet felis, ut pretium ex. Praesent rutrum in velit in luctus. Vivamus ac tristique nulla. Sed ultricies luctus orci, id viverra tellus auctor non.
+            </p>
+            <p>
+                Duis quis egestas arcu, vel viverra magna. Nullam cursus diam neque, ut luctus augue sollicitudin hendrerit. Donec vitae nulla sit amet dolor gravida scelerisque. Nam sed facilisis nisl. Mauris ac mi at enim consectetur gravida. In hac habitasse platea dictumst. In purus quam, bibendum sed auctor quis, dictum ac dolor. Vivamus dolor felis, sagittis non quam ut, tincidunt imperdiet sapien. Vivamus pellentesque sagittis dolor ut maximus.
+            </p>
+            <p>
+                Nunc sagittis congue mi, cursus auctor augue semper a. Aenean ut eros rhoncus, pharetra erat in, tempor massa. Proin dignissim erat cursus ligula dapibus consectetur. Fusce eget dolor quis orci varius semper. Nulla tristique, tortor at tincidunt tincidunt, sapien velit maximus orci, eget viverra nisl nibh id ex. Mauris ultricies, ex vel placerat mollis, eros velit sodales ante, id mollis massa felis sit amet lorem. Nulla eleifend eros eu diam blandit accumsan. Nulla facilisi. Quisque non mi at sem lacinia aliquet sit amet non diam. In at dolor ac leo molestie tincidunt ultrices nec ante. Vestibulum fermentum commodo nisl, quis eleifend neque pretium nec. Donec ut tincidunt mi. Pellentesque accumsan, sem vitae iaculis facilisis, dui lacus tincidunt tortor, eu molestie erat quam consectetur leo. Ut sit amet massa efficitur, faucibus felis vitae, hendrerit ante.
+            </p>
+            <p>
+                Vestibulum facilisis quam et ligula condimentum lobortis. Nulla feugiat vitae tortor et tincidunt. Nullam suscipit viverra tempor. Vestibulum vestibulum id sapien ac vulputate. Aliquam sed pharetra ipsum. Phasellus sit amet massa ligula. Sed id eros a leo tristique venenatis in et urna. Suspendisse eleifend at metus vel malesuada. Sed eget libero aliquet, sollicitudin urna ac, finibus metus.
+            </p>
+            <p>
+                Fusce tristique ante est, id egestas ipsum pulvinar et. Pellentesque id dolor consequat, tincidunt neque nec, imperdiet metus. Vestibulum quis mi lacinia, ullamcorper metus sed, porttitor eros. Mauris vitae orci vel mi venenatis feugiat non sit amet mauris. Maecenas a imperdiet quam, ac vulputate metus. Suspendisse vitae arcu faucibus, molestie metus pellentesque, blandit dui. Donec placerat metus vel tellus scelerisque iaculis. Fusce porta risus quis lorem consectetur consequat. Praesent quis tincidunt nisl. Nullam congue feugiat turpis at ullamcorper. Nullam velit elit, cursus non efficitur quis, maximus id arcu.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" >OK</a>
+        </div>
+    </div>
 </main>
 </body>
 </html>

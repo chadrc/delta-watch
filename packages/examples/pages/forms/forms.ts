@@ -65,9 +65,18 @@ window.addEventListener('load', () => {
   const submitBtn = document.getElementById('submitBtn');
   const resetBtn = document.getElementById('resetBtn');
 
+  // Get modal elements
+  const submitModal = document.getElementById('submitModal');
+  const closeSubmitModalBtn = document.getElementById('closeSubmitModalBtn');
+  const submitModalDeliveryDateText = document.getElementById('submitModalDeliveryDate');
+  const submitModalDeliveryTimeText = document.getElementById('submitModalDeliveryTime');
+  const termsModal = document.getElementById('termsModal');
+
   // Materialize CSS initialization
   M.Datepicker.init(deliveryDatePickerInput, {});
   M.Timepicker.init(deliveryTimePickerInput, {});
+  const submitModalInstance = M.Modal.init(submitModal, {});
+  M.Modal.init(termsModal, {});
   // keep reference for resetting late
   let additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
 
@@ -118,10 +127,12 @@ window.addEventListener('load', () => {
 
   DeltaWatch.Watch(Watcher.deliveryDate, (date: string) => {
     deliveryDatePickerInput.value = date;
+    submitModalDeliveryDateText.innerHTML = date;
   });
 
   DeltaWatch.Watch(Watcher.deliveryTime, (time: string) => {
     deliveryTimePickerInput.value = time;
+    submitModalDeliveryTimeText.innerHTML = time;
   });
 
   DeltaWatch.Watch(Watcher.additionalOptions, (options: string[]) => {
@@ -166,8 +177,8 @@ window.addEventListener('load', () => {
     Mutator.agreedToTerms = (event.target as HTMLInputElement).checked;
   });
 
-  // Setup button actions
-  resetBtn.addEventListener('click', () => {
+  // Shared functionality for reset and close submit modal buttons
+  function resetData() {
     // can't use a local variable to set the entire data
     // need to set from the root data object
     formData.Mutator = makeDefaultDeliveryFormData();
@@ -175,6 +186,11 @@ window.addEventListener('load', () => {
     // Materialize CSS thing
     // need to reinitialize it for ui to update
     additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
+  }
+
+  // Setup button actions
+  resetBtn.addEventListener('click', () => {
+    resetData();
   });
 
   submitBtn.addEventListener('click', (event) => {
@@ -185,5 +201,12 @@ window.addEventListener('load', () => {
     let data = JSON.stringify(Accessor, null, 2);
     console.log("Sending data");
     console.log(data);
+
+    submitModalInstance.open();
+  });
+
+  closeSubmitModalBtn.addEventListener('click', () => {
+    submitModalInstance.close();
+    resetData();
   });
 });
