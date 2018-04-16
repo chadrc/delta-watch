@@ -16,7 +16,7 @@ const possibleDownloadNames = [
 
 function getRandomName() {
   let roll = Math.floor(Math.random() * possibleDownloadNames.length);
-  return possibleDownloadNames[roll];
+  return possibleDownloadNames.splice(roll, 1)[0];
 }
 
 function getRandomSize() {
