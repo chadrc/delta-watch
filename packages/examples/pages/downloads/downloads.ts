@@ -30,7 +30,6 @@ function resolveBtnActiveClass(btn: HTMLElement, active: boolean) {
   }
 }
 
-
 // Utilities for rolling randoms
 let availableDownloadNames = possibleDownloadNames.slice();
 
