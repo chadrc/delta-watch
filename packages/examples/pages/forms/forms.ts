@@ -183,6 +183,7 @@ window.addEventListener('load', () => {
 
     // Normally this would be sent to a server, but were just going to log it
     let data = JSON.stringify(Accessor, null, 2);
+    console.log("Sending data");
     console.log(data);
   });
 });
