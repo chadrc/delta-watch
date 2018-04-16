@@ -221,7 +221,7 @@ window.addEventListener('load', () => {
     event.preventDefault();
     event.stopPropagation();
 
-    // Normally this would be sent to a server, but were just going to log it
+    // No server so we're just going to log it
     let data = JSON.stringify(Accessor.formData, null, 2);
     console.log("Sending data");
     console.log(data);
