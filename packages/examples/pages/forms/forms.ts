@@ -113,18 +113,18 @@ window.addEventListener('load', () => {
 
   DeltaWatch.Watch(Watcher.formData.email, (email: string) => {
     if (isValidEmail(email) || !Accessor.showErrors) {
-      emailInput.classList.remove('invalid')
+      emailInput.classList.remove('invalid');
     } else {
-      emailInput.classList.add('invalid')
+      emailInput.classList.add('invalid');
     }
     emailInput.value = email;
   });
 
   DeltaWatch.Watch(Watcher.formData.phone, (phone: string) => {
     if (isValidPhone(phone) || !Accessor.showErrors) {
-      phoneInput.classList.remove('invalid')
+      phoneInput.classList.remove('invalid');
     } else {
-      phoneInput.classList.add('invalid')
+      phoneInput.classList.add('invalid');
     }
     phoneInput.value = phone;
   });
