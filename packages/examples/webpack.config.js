@@ -1,14 +1,40 @@
 const path = require('path');
+const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+let entries = {
+  'main': './index.ts'
+};
+
+let plugins = [
+  new HtmlWebpackPlugin({
+    filename: 'index.html',
+    template: 'index.html',
+    chunks: ['main']
+
+  }),
+  new MiniCssExtractPlugin({})
+];
+
+let pagesGlob = glob.sync("pages/*/");
+
+for (let page of pagesGlob) {
+  let pageName = page.replace('pages/', '').replace('/', '');
+  entries[pageName] = `./pages/${pageName}/${pageName}.ts`;
+
+  plugins.push(
+    new HtmlWebpackPlugin({
+      filename: `${pageName}.html`,
+      template: `pages/${pageName}/${pageName}.html`,
+      chunks: ['main', pageName]
+    })
+  )
+}
+
 module.exports = {
   mode: 'production',
-  entry: {
-    'main': './index.ts',
-    'clock': './pages/clock/clock.ts',
-    'downloads': './pages/downloads/downloads.ts'
-  },
+  entry: entries,
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -38,23 +64,5 @@ module.exports = {
     port: 3000,
     contentBase: path.join(__dirname, 'dist')
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      chunks: ['main']
-
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'clock.html',
-      template: 'pages/clock/clock.html',
-      chunks: ['main', 'clock']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'downloads.html',
-      template: 'pages/downloads/downloads.html',
-      chunks: ['main', 'downloads']
-    }),
-    new MiniCssExtractPlugin({})
-  ]
+  plugins: plugins
 };
