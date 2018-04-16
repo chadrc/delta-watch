@@ -14,9 +14,14 @@ const possibleDownloadNames = [
   'Grey'
 ];
 
+let availableDownloadNames = possibleDownloadNames.slice();
+
 function getRandomName() {
-  let roll = Math.floor(Math.random() * possibleDownloadNames.length);
-  return possibleDownloadNames.splice(roll, 1)[0];
+  if (availableDownloadNames.length === 0) {
+    availableDownloadNames = possibleDownloadNames.slice();
+  }
+  let roll = Math.floor(Math.random() * availableDownloadNames.length);
+  return availableDownloadNames.splice(roll, 1)[0];
 }
 
 function getRandomSize() {
@@ -122,7 +127,18 @@ window.addEventListener('load', () => {
       // Take download from available and put it into active
       let download = Accessor.available[index];
       Mutator.available[index] = null; // Null instead of splice so available downloads don't move in ui
-      Mutator.active.push(download);
+
+      // If active length is 5, that means its full of in progress or completed downloads
+      // Need to first completed and replace it
+      if (Accessor.active.length === 5) {
+        // New download only becomes available only when one is completed
+        // So completedIndex should never be -1
+        let completedIndex = Accessor.active.findIndex((download: any) => download.completed === true);
+        Mutator.active[completedIndex] = download;
+      } else {
+        // Else just need to push download
+        Mutator.active.push(download);
+      }
     });
   }
 
@@ -143,6 +159,12 @@ window.addEventListener('load', () => {
           Mutator.downloadsCompleted = Accessor.downloadsCompleted + 1;
           // ++ only works the first time TODO: figure out if ++ operator works normally with Proxies, same issue with +=
           // Mutator.downloadsCompleted++;
+
+          // Since we null out available download slots pushing won't work
+          // We need to find the first null slot to insert a new download
+          // If a download completed then we have at least one nulled slot, so nullIndex should never equal -1
+          let nullIndex = Accessor.available.findIndex((download: any) => download === null);
+          Mutator.available[nullIndex] = makeRandomDownload();
         }
       }
     }
