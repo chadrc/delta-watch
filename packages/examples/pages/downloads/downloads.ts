@@ -22,9 +22,11 @@ function resolveBtnActiveClass(btn: HTMLElement, active: boolean) {
   if (active) {
     btn.classList.remove(...inactiveLinkBtnClass);
     btn.classList.add(...activeLinkBtnClass);
+    btn.setAttribute('href', '#');
   } else {
     btn.classList.add(...inactiveLinkBtnClass);
     btn.classList.remove(...activeLinkBtnClass);
+    btn.removeAttribute('href');
   }
 }
 
