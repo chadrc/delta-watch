@@ -78,7 +78,7 @@ window.addEventListener('load', () => {
   M.Timepicker.init(deliveryTimePickerInput, {});
   const submitModalInstance = M.Modal.init(submitModal, {});
   M.Modal.init(termsModal, {});
-  // keep reference for resetting late
+  // keep reference for resetting later
   let additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
 
   // Data setup
