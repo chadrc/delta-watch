@@ -96,7 +96,6 @@ window.addEventListener('load', () => {
   // we are going to validate the email and phone inputs
   // and the submit button will be enabled/disabled depending on validity of the form data
   DeltaWatch.Watch(Watcher.formData, (data: DeliveryFormData) => {
-    console.log('data', data);
     if (isValidDeliveryFormData(data)) {
       submitBtn.removeAttribute('disabled');
     } else {
