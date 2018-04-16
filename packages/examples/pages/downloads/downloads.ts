@@ -113,7 +113,8 @@ window.addEventListener('load', () => {
     // Also need to set up a Mutation based on clicking available download button
     availableDownloadBtn.addEventListener('click', () => {
       // Take download from available and put it into active
-      let download = Mutator.available.splice(index, 1)[0];
+      let download = Accessor.available[index];
+      Mutator.available[index] = null; // Null instead of splice so available downloads don't move in ui
       Mutator.active.push(download);
     });
   }
