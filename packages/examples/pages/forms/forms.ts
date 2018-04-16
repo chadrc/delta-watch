@@ -38,26 +38,8 @@ function isValidDeliveryFormData(data: DeliveryFormData) {
   && data.agreedToTerms === true;
 }
 
-window.addEventListener('load', () => {
-
-  // Get all form elements
-  const fullNameInput = document.getElementById('fullName');
-  const addressInput = document.getElementById('address');
-  const emailInput = document.getElementById('email');
-  const phoneInput = document.getElementById('phone');
-  const deliveryDatePickerInput = document.getElementById('deliveryDate');
-  const deliveryTimePickerInput = document.getElementById('deliveryTime');
-  const additionalOptionsSelect = document.getElementById('additionalOptions');
-  const termsAgreementCheckbox = document.getElementById('termsAgreement');
-  const submitBtn = document.getElementById('submitBtn');
-
-  // Materialize CSS initialization
-  const deliveryDatePickerInstance = M.Datepicker.init(deliveryDatePickerInput, {});
-  const deliveryTimePickerInstance = M.Timepicker.init(deliveryTimePickerInput, {});
-  const additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
-
-  // Data setup
-  const formData = DeltaWatch.Watchable({
+function makeDefaultDeliveryFormData(): DeliveryFormData {
+  return {
     fullName: "",
     address: "",
     email: "",
@@ -66,13 +48,37 @@ window.addEventListener('load', () => {
     deliveryTime: "",
     additionalOptions: [],
     agreedToTerms: false
-  });
+  };
+}
+
+window.addEventListener('load', () => {
+
+  // Get all form elements
+  const fullNameInput = document.getElementById('fullName') as HTMLInputElement;
+  const addressInput = document.getElementById('address') as HTMLInputElement;
+  const emailInput = document.getElementById('email') as HTMLInputElement;
+  const phoneInput = document.getElementById('phone') as HTMLInputElement;
+  const deliveryDatePickerInput = document.getElementById('deliveryDate') as HTMLInputElement;
+  const deliveryTimePickerInput = document.getElementById('deliveryTime') as HTMLInputElement;
+  const additionalOptionsSelect = document.getElementById('additionalOptions') as HTMLSelectElement;
+  const termsAgreementCheckbox = document.getElementById('termsAgreement') as HTMLInputElement;
+  const submitBtn = document.getElementById('submitBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  // Materialize CSS initialization
+  const deliveryDatePickerInstance = M.Datepicker.init(deliveryDatePickerInput, {});
+  const deliveryTimePickerInstance = M.Timepicker.init(deliveryTimePickerInput, {});
+  let additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
+
+  // Data setup
+  const formData = DeltaWatch.Watchable(makeDefaultDeliveryFormData());
 
   const {Watcher, Accessor, Mutator} = formData;
 
   // Setup watchers
-  // Only need watchers on values we are going to validate
-  // For this form, we are going to validate the email and phone inputs
+  // For this form we need
+  // two way binding (watcher to set the value and mutator to receive the value) on each input
+  // we are going to validate the email and phone inputs
   // and the submit button will be enabled/disabled depending on validity of the form data
   DeltaWatch.Watch(Watcher, (data: DeliveryFormData) => {
     if (isValidDeliveryFormData(data)) {
@@ -82,22 +88,46 @@ window.addEventListener('load', () => {
     }
   });
 
+  DeltaWatch.Watch(Watcher.fullName, (name: string) => {
+    fullNameInput.value = name;
+  });
+
+  DeltaWatch.Watch(Watcher.address, (address: string) => {
+    addressInput.value = address;
+  });
+
   DeltaWatch.Watch(Watcher.email, (email: string) => {
-    console.log('email', email);
     if (isValidEmail(email)) {
       emailInput.classList.remove('invalid')
     } else {
       emailInput.classList.add('invalid')
     }
+    emailInput.value = email;
   });
 
   DeltaWatch.Watch(Watcher.phone, (phone: string) => {
-    console.log('phone', phone);
     if (isValidPhone(phone)) {
       phoneInput.classList.remove('invalid')
     } else {
       phoneInput.classList.add('invalid')
     }
+    phoneInput.value = phone;
+  });
+
+  DeltaWatch.Watch(Watcher.deliveryDate, (date: string) => {
+    deliveryDatePickerInput.value = date;
+  });
+
+  DeltaWatch.Watch(Watcher.deliveryTime, (time: string) => {
+    deliveryTimePickerInput.value = time;
+  });
+
+  DeltaWatch.Watch(Watcher.additionalOptions, (options: string[]) => {
+    (additionalOptionsSelect as any).value = options;
+  });
+
+  DeltaWatch.Watch(Watcher.agreedToTerms, (agreed: boolean) => {
+    termsAgreementCheckbox.checked = agreed;
   });
 
   // Set up one way binding mutations
@@ -125,17 +155,22 @@ window.addEventListener('load', () => {
     Mutator.deliveryTime = (event.target as HTMLInputElement).value;
   });
 
-  additionalOptionsSelect.addEventListener('change', (event) => {
-    let options = (event.target as HTMLSelectElement).selectedOptions;
-    let values = [];
-    for (let i=0; i<options.length; i++) {
-      let option = options.item(i);
-      values.push(option.value);
-    }
-    Mutator.additionalOptions = values;
+  additionalOptionsSelect.addEventListener('change', () => {
+    // Materialize CSS method for getting the values
+    Mutator.additionalOptions = additionalOptionsSelectInstance.getSelectedValues();
   });
 
   termsAgreementCheckbox.addEventListener('change', (event) => {
     Mutator.agreedToTerms = (event.target as HTMLInputElement).checked;
+  });
+
+  // Setup button actions
+  resetBtn.addEventListener('click', () => {
+    // in order to reset entire data object, need to reference Mutator from the root object
+    formData.Mutator = makeDefaultDeliveryFormData();
+
+    // Materialize CSS thing
+    // need to reinitialize it for ui to update
+    additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
   });
 });
