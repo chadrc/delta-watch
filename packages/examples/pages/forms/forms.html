@@ -13,6 +13,78 @@
 </nav>
 <main class="container">
     <h1 class="center-align">Forms</h1>
+    <section class="container blue-grey lighten-5">
+        <div class="row">
+            <div class="col s12">
+                <h3 class="center-align">Schedule a Delivery</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col s12" id="deliveryForm">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="John Doe" id="fullName" type="text">
+                        <label for="fullName">Full Name*</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="123 Far Far Away" id="address" type="text">
+                        <label for="address">Address*</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="johndoe@example.com" id="email" type="text">
+                        <label for="email">Email*</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="123-456-7890" id="phone" type="text">
+                        <label for="phone">Phone*</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6">
+                        <label for="deliveryDate">Delivery Date*</label>
+                        <input type="text" placeholder="Jan 01, 2018" id="deliveryDate" class="datepicker">
+                    </div>
+                    <div class="col s6">
+                        <label for="deliveryTime">Delivery Time*</label>
+                        <input type="text" placeholder="12:00 PM" id="deliveryTime" class="timepicker">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select multiple id="additionalOptions">
+                            <option value="" disabled selected>None</option>
+                            <option value="giftWrapping">Gift Wrapping</option>
+                            <option value="requireSignature">Require Signature</option>
+                        </select>
+                        <label for="additionalOptions">Additional Options</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <label>
+                                <input type="checkbox" id="termsAgreement" class="filled-in"/>
+                                <span>I agree to the Terms &amp; Conditions outlined <a href="#">here</a>.</span>
+                            </label>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <button id="submitBtn" class="btn waves-effect waves-light right" disabled type="submit" name="action">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
 </main>
 </body>
 </html>
