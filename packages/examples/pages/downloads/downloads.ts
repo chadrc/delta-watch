@@ -103,14 +103,14 @@ window.addEventListener('load', () => {
   // Watcher on entire available array to determine if 'Download All' button should be active
   DeltaWatch.Watch(Watcher.available, (value: any[]) => {
     // button active if any slot is non-null
-    let count = Accessor.available.reduce((result: number, item: any) => item === null ? result : result + 1, 0);
+    let count = value.reduce((result: number, item: any) => item === null ? result : result + 1, 0);
     resolveBtnActiveClass(downloadAllBtn, count > 0);
   });
 
   // Watcher on entire active array to determine if 'Clear Completed' button should be active
   DeltaWatch.Watch(Watcher.active, (value: any[]) => {
     // button active if any in active list are completed
-    let count = Accessor.active.reduce((result: number, item: any) => {
+    let count = value.reduce((result: number, item: any) => {
       if (item === null) {
         return result;
       }
