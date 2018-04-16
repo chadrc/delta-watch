@@ -87,7 +87,7 @@ window.addEventListener('load', () => {
       }
     });
 
-    DeltaWatch.Watch(Watcher.active[index].amountDownloaded, (value: number) => {
+    DeltaWatch.Watch(Watcher.active[index].amountDownloaded, () => {
       let percent = Math.floor((Accessor.active[index].amountDownloaded / Accessor.active[index].size) * 100);
       activeDownloadProgress.style.width = `${percent}%`;
     });
