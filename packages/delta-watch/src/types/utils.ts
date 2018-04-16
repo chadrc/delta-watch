@@ -55,6 +55,9 @@ export function makeMutationHandler<T extends object>(internals: DeltaWatchInter
 
           if (fieldMutator !== null && typeof fieldMutator !== 'undefined') {
             return fieldMutator;
+          } else if (fieldWatcher !== null && typeof fieldWatcher !== 'undefined') {
+            internals.watcher._makeMutator(prop);
+            return ObjectWatcher.getMutator(internals.watcher, prop);
           }
         }
         return field;

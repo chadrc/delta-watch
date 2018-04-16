@@ -361,6 +361,28 @@ describe(`Array Type`, () => {
     assertWatcherCalled(changeWatcherCalled);
   });
 
+  it(`Callback called on dynamic prop after pushing to array`, () => {
+    let watchable = new DeltaWatch({
+      items: []
+    });
+
+    let watcherCallCount = 0;
+    DeltaWatch.watch(watchable.Watcher.items[0].value, (value: string) => {
+      if (watcherCallCount === 0) {
+        expect(value).to.equal("Pushed Value");
+      } else if (watcherCallCount === 1) {
+        expect(value).to.equal("Set Value");
+      }
+      watcherCallCount++;
+    });
+
+    watchable.Mutator.items.push({value: "Pushed Value"});
+
+    watchable.Mutator.items[0].value = "Set Value";
+
+    expect(watcherCallCount).to.equal(2);
+  });
+
   /**
    * Non Mutator method testing
    */

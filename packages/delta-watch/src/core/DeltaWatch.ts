@@ -47,7 +47,6 @@ export class DeltaWatch implements Watchable {
     this._dataValue = data;
     this._watcher = MakeObjectWatcher(this);
     this._mutator = makeObjectMutator(this._watcher);
-    this._accessor = makeObjectAccessor(data, this._typeRegistry);
   }
 
   get Watcher(): ObjectWatcher & any {
@@ -55,7 +54,7 @@ export class DeltaWatch implements Watchable {
   }
 
   get Accessor(): any {
-    return this._accessor;
+    return makeObjectAccessor(this._dataValue, this._typeRegistry);
   }
 
   get Mutator(): any {

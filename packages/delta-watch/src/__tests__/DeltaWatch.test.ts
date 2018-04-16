@@ -216,7 +216,7 @@ describe(`Watchable`, () => {
 
     let watcherCalled = false;
     DeltaWatch.watch(watchable.Watcher.obj.item.title, (newValue: object) => {
-      expect(newValue).to.deep.equal("New Title");
+      expect(newValue).to.equal("New Title");
       watcherCalled = true;
     });
 
@@ -226,7 +226,7 @@ describe(`Watchable`, () => {
       }
     };
 
-    expect(watchable.Mutator.obj.item.title).to.equal("New Title");
+    expect(watchable.Accessor.obj.item.title).to.equal("New Title");
 
     assertWatcherCalled(watcherCalled);
   });
@@ -242,7 +242,7 @@ describe(`Watchable`, () => {
 
     let watcherCalled = false;
     DeltaWatch.watch(watchable.Watcher.obj.item.title, (newValue: object) => {
-      expect(newValue).to.deep.equal("New Title");
+      expect(newValue).to.equal("New Title");
       watcherCalled = true;
     });
 
@@ -254,7 +254,7 @@ describe(`Watchable`, () => {
       }
     };
 
-    expect(watchable.Mutator.obj.item.title).to.equal("New Title");
+    expect(watchable.Accessor.obj.item.title).to.equal("New Title");
 
     assertWatcherCalled(watcherCalled);
   });
@@ -350,7 +350,7 @@ describe(`Watchable`, () => {
       }
     };
 
-    expect(watchable.Mutator.obj.item.title).to.equal("New Title");
+    expect(watchable.Accessor.obj.item.title).to.equal("New Title");
   });
 
   it(`can watch first tier property that wasn't in initial set`, () => {
