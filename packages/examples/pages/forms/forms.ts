@@ -66,8 +66,9 @@ window.addEventListener('load', () => {
   const resetBtn = document.getElementById('resetBtn');
 
   // Materialize CSS initialization
-  const deliveryDatePickerInstance = M.Datepicker.init(deliveryDatePickerInput, {});
-  const deliveryTimePickerInstance = M.Timepicker.init(deliveryTimePickerInput, {});
+  M.Datepicker.init(deliveryDatePickerInput, {});
+  M.Timepicker.init(deliveryTimePickerInput, {});
+  // keep reference for resetting late
   let additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
 
   // Data setup
@@ -81,6 +82,7 @@ window.addEventListener('load', () => {
   // we are going to validate the email and phone inputs
   // and the submit button will be enabled/disabled depending on validity of the form data
   DeltaWatch.Watch(Watcher, (data: DeliveryFormData) => {
+    console.log('data', data);
     if (isValidDeliveryFormData(data)) {
       submitBtn.removeAttribute('disabled');
     } else {
@@ -166,11 +168,21 @@ window.addEventListener('load', () => {
 
   // Setup button actions
   resetBtn.addEventListener('click', () => {
-    // in order to reset entire data object, need to reference Mutator from the root object
+    // can't use a local variable to set the entire data
+    // need to set from the root data object
     formData.Mutator = makeDefaultDeliveryFormData();
 
     // Materialize CSS thing
     // need to reinitialize it for ui to update
     additionalOptionsSelectInstance = M.FormSelect.init(additionalOptionsSelect, {});
+  });
+
+  submitBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Normally this would be sent to a server, but were just going to log it
+    let data = JSON.stringify(Accessor, null, 2);
+    console.log(data);
   });
 });
