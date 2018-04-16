@@ -17,7 +17,7 @@ const possibleDownloadNames: string[] = [
 const activeLinkBtnClass = ["orange-text", "text-accent-2"];
 const inactiveLinkBtnClass = ["grey-text"];
 
-// Small utility to set classes on a button
+// Utility to set classes on a button
 function resolveBtnActiveClass(btn: HTMLElement, active: boolean) {
   if (active) {
     btn.classList.remove(...inactiveLinkBtnClass);
@@ -30,6 +30,8 @@ function resolveBtnActiveClass(btn: HTMLElement, active: boolean) {
   }
 }
 
+
+// Utilities for rolling randoms
 let availableDownloadNames = possibleDownloadNames.slice();
 
 function getRandomName() {
