@@ -13,14 +13,38 @@ window.addEventListener('load', () => {
   const tableBody = document.getElementById('movieTable');
   const searchTextInput = document.getElementById('searchText');
   const searchSubmitBtn = document.getElementById('searchSubmit');
+  const previousPageBtn = document.getElementById('previousPageBtn');
+  const previousPageLink = previousPageBtn.children[0];
+  const nextPageBtn = document.getElementById('nextPageBtn');
+  const nextPageLink = nextPageBtn.children[0];
+  const firstPageBtn = document.getElementById('firstPageBtn');
+  const firstPageLink = firstPageBtn.children[0];
+  const lastPageBtn = document.getElementById('lastPageBtn');
+  const lastPageLink = lastPageBtn.children[0];
+  const totalResultsText = document.getElementById('totalResultsText');
 
   const movieData = DeltaWatch.Watchable({
-    searchText: "Star",
+    searchText: "Star Wars",
     movies: [],
     currentPage: 0
   });
 
   const {Watcher, Accessor, Mutator} = movieData;
+
+  // Api Call
+  function searchOMDb(page: number) {
+    fetch(`//www.omdbapi.com/?apikey=650ad66d&s=${Accessor.searchText}&page=${page}`)
+      .then((response) => response.json())
+      .then((data) => {
+        Mutator.movies = data.Search;
+        Mutator.totalResults = data.totalResults;
+        Mutator.currentPage = page;
+      });
+  }
+
+  function getMaxPages(): number {
+    return Math.ceil(Accessor.totalResults / 10);
+  }
 
   // Generate table rows
   for (let i = 0; i < rowCount; i++) {
@@ -65,16 +89,117 @@ window.addEventListener('load', () => {
     });
   }
 
-  // Mutations
+  const pageBtns: {btn: HTMLElement, link: HTMLElement}[] = [];
+  for (let i=0; i<5; i++) {
+    let num = i+1;
+    let pageBtn = document.getElementById(`pageBtn${num}`);
+    let pageLink = pageBtn.children[0] as HTMLElement;
+    pageBtns.push({
+      btn: pageBtn,
+      link: pageLink
+    });
 
-  function searchOMDb() {
-    fetch(`//www.omdbapi.com/?apikey=650ad66d&s=${Accessor.searchText}&page=1`)
-      .then((response) => response.json())
-      .then((data) => {
-        Mutator.movies = data.Search;
-        Mutator.totalResults = data.totalResults;
-      });
+    let offset = i - 2;
+
+    pageLink.addEventListener('click', () => {
+      let newPage = Accessor.currentPage + offset;
+      if (newPage > 1 && newPage < getMaxPages()) {
+        searchOMDb(newPage);
+      }
+    });
   }
+
+  DeltaWatch.Watch(Watcher.totalResults, (value: number) => {
+    totalResultsText.innerHTML = `${value}`;
+  });
+
+  DeltaWatch.Watch(Watcher.currentPage, (value: number) => {
+    // Show first page link if it isn't already in list
+    if (value > 3) {
+      firstPageLink.innerHTML = `1`;
+      firstPageBtn.classList.remove('disabled');
+    } else {
+      firstPageLink.innerHTML = `...`;
+      firstPageBtn.classList.add('disabled');
+    }
+
+    // Show one more previous page if its not the first
+    if (value > 2) {
+      pageBtns[0].link.innerHTML = `${value - 2}`;
+      pageBtns[0].btn.classList.remove('disabled');
+    } else {
+      pageBtns[0].link.innerHTML = `...`;
+      pageBtns[0].btn.classList.add('disabled');
+    }
+
+    // Set two before it if there are previous pages
+    if (value > 1) {
+      pageBtns[1].link.innerHTML = `${value - 1}`;
+      pageBtns[1].btn.classList.remove('disabled');
+      previousPageBtn.classList.remove('disabled');
+    } else {
+      pageBtns[1].link.innerHTML = `...`;
+      pageBtns[1].btn.classList.add('disabled');
+      previousPageBtn.classList.add('disabled');
+    }
+
+    // Set middle to current page
+    let middlePageBtn = pageBtns[2];
+    middlePageBtn.link.innerHTML = `${value}`;
+
+    let maxPages: number = getMaxPages();
+
+    // If not on last page, show next page button and number of next page
+    if (value < maxPages) {
+      pageBtns[3].link.innerHTML = `${value + 1}`;
+      pageBtns[3].btn.classList.remove('disabled');
+      nextPageBtn.classList.remove('disabled');
+    } else {
+      pageBtns[3].link.innerHTML = `...`;
+      pageBtns[3].btn.classList.add('disabled');
+      nextPageBtn.classList.add('disabled');
+    }
+
+    // Show one more page button if its not the last one
+    if (value < maxPages - 1) {
+      pageBtns[4].link.innerHTML = `${value + 2}`;
+      pageBtns[4].btn.classList.remove('disabled');
+    } else {
+      pageBtns[4].link.innerHTML = `...`;
+      pageBtns[4].btn.classList.add('disabled');
+    }
+
+    // Show last page link if not already in list
+    if (value < maxPages - 2) {
+      lastPageLink.innerHTML = `${maxPages}`;
+      lastPageBtn.classList.remove('disabled');
+    } else {
+      lastPageLink.innerHTML = `...`;
+      lastPageBtn.classList.add('disabled');
+    }
+  });
+
+  previousPageLink.addEventListener('click', () => {
+    if (Accessor.currentPage > 1) {
+      searchOMDb(Accessor.currentPage - 1);
+    }
+  });
+
+  nextPageLink.addEventListener('click', () => {
+    let maxPages = Math.ceil(Accessor.totalResults / 10);
+    if (Accessor.currentPage < maxPages) {
+      searchOMDb(Accessor.currentPage + 1);
+    }
+  });
+
+  firstPageLink.addEventListener('click', () => {
+    searchOMDb(1);
+  });
+
+  lastPageLink.addEventListener('click', () => {
+    let maxPages = Math.ceil(Accessor.totalResults / 10);
+    searchOMDb(maxPages);
+  });
 
   searchTextInput.addEventListener('input', (event) => {
     let value = (event.target as HTMLInputElement).value;
@@ -90,6 +215,10 @@ window.addEventListener('load', () => {
     event.preventDefault();
     event.stopPropagation();
 
-    searchOMDb();
-  })
+    // Always get first page on new search
+    searchOMDb(1);
+  });
+
+  // do initial search
+  searchOMDb(1);
 });
