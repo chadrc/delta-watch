@@ -65,7 +65,7 @@ window.addEventListener('load', () => {
     imdbLink.classList.add("orange-text", "text-accent-2");
     imdbLink.setAttribute('href', '#');
     imdbLink.setAttribute('target', '_blank');
-    imdbLink.innerHTML = "Go";
+    imdbLink.innerHTML = "View";
 
     imdbCell.appendChild(imdbLink);
 
