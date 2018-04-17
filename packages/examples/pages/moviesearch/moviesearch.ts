@@ -181,7 +181,7 @@ window.addEventListener('load', () => {
     setPagination();
   });
 
-  DeltaWatch.Watch(Watcher.currentPage, (value: number) => {
+  DeltaWatch.Watch(Watcher.currentPage, () => {
     // Show first page link if it isn't already in list
     setPagination();
   });
