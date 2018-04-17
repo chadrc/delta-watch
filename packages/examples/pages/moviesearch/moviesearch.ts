@@ -109,8 +109,63 @@ window.addEventListener('load', () => {
     });
   }
 
-  function setLastPageBtn() {
+  function setPagination() {
+    let currentPage = Accessor.currentPage;
+
+    if (currentPage > 3) {
+      firstPageLink.innerHTML = `1`;
+      firstPageBtn.classList.remove('disabled');
+    } else {
+      firstPageLink.innerHTML = `...`;
+      firstPageBtn.classList.add('disabled');
+    }
+
+    // Show one more previous page if its not the first
+    if (currentPage > 2) {
+      pageBtns[0].link.innerHTML = `${currentPage - 2}`;
+      pageBtns[0].btn.classList.remove('disabled');
+    } else {
+      pageBtns[0].link.innerHTML = `...`;
+      pageBtns[0].btn.classList.add('disabled');
+    }
+
+    // Set two before it if there are previous pages
+    if (currentPage > 1) {
+      pageBtns[1].link.innerHTML = `${currentPage - 1}`;
+      pageBtns[1].btn.classList.remove('disabled');
+      previousPageBtn.classList.remove('disabled');
+    } else {
+      pageBtns[1].link.innerHTML = `...`;
+      pageBtns[1].btn.classList.add('disabled');
+      previousPageBtn.classList.add('disabled');
+    }
+
+    // Set middle to current page
+    let middlePageBtn = pageBtns[2];
+    middlePageBtn.link.innerHTML = `${currentPage}`;
+
     let maxPages: number = getMaxPages();
+
+    // If not on last page, show next page button and number of next page
+    if (currentPage < maxPages) {
+      pageBtns[3].link.innerHTML = `${currentPage + 1}`;
+      pageBtns[3].btn.classList.remove('disabled');
+      nextPageBtn.classList.remove('disabled');
+    } else {
+      pageBtns[3].link.innerHTML = `...`;
+      pageBtns[3].btn.classList.add('disabled');
+      nextPageBtn.classList.add('disabled');
+    }
+
+    // Show one more page button if its not the last one
+    if (currentPage < maxPages - 1) {
+      pageBtns[4].link.innerHTML = `${currentPage + 2}`;
+      pageBtns[4].btn.classList.remove('disabled');
+    } else {
+      pageBtns[4].link.innerHTML = `...`;
+      pageBtns[4].btn.classList.add('disabled');
+    }
+
     // Show last page link if not already in list
     if (Accessor.currentPage < maxPages - 2) {
       lastPageLink.innerHTML = `${maxPages}`;
@@ -123,66 +178,12 @@ window.addEventListener('load', () => {
 
   DeltaWatch.Watch(Watcher.totalResults, (value: number) => {
     totalResultsText.innerHTML = `${value}`;
-    setLastPageBtn();
+    setPagination();
   });
 
   DeltaWatch.Watch(Watcher.currentPage, (value: number) => {
     // Show first page link if it isn't already in list
-    if (value > 3) {
-      firstPageLink.innerHTML = `1`;
-      firstPageBtn.classList.remove('disabled');
-    } else {
-      firstPageLink.innerHTML = `...`;
-      firstPageBtn.classList.add('disabled');
-    }
-
-    // Show one more previous page if its not the first
-    if (value > 2) {
-      pageBtns[0].link.innerHTML = `${value - 2}`;
-      pageBtns[0].btn.classList.remove('disabled');
-    } else {
-      pageBtns[0].link.innerHTML = `...`;
-      pageBtns[0].btn.classList.add('disabled');
-    }
-
-    // Set two before it if there are previous pages
-    if (value > 1) {
-      pageBtns[1].link.innerHTML = `${value - 1}`;
-      pageBtns[1].btn.classList.remove('disabled');
-      previousPageBtn.classList.remove('disabled');
-    } else {
-      pageBtns[1].link.innerHTML = `...`;
-      pageBtns[1].btn.classList.add('disabled');
-      previousPageBtn.classList.add('disabled');
-    }
-
-    // Set middle to current page
-    let middlePageBtn = pageBtns[2];
-    middlePageBtn.link.innerHTML = `${value}`;
-
-    let maxPages: number = getMaxPages();
-
-    // If not on last page, show next page button and number of next page
-    if (value < maxPages) {
-      pageBtns[3].link.innerHTML = `${value + 1}`;
-      pageBtns[3].btn.classList.remove('disabled');
-      nextPageBtn.classList.remove('disabled');
-    } else {
-      pageBtns[3].link.innerHTML = `...`;
-      pageBtns[3].btn.classList.add('disabled');
-      nextPageBtn.classList.add('disabled');
-    }
-
-    // Show one more page button if its not the last one
-    if (value < maxPages - 1) {
-      pageBtns[4].link.innerHTML = `${value + 2}`;
-      pageBtns[4].btn.classList.remove('disabled');
-    } else {
-      pageBtns[4].link.innerHTML = `...`;
-      pageBtns[4].btn.classList.add('disabled');
-    }
-
-    setLastPageBtn();
+    setPagination();
   });
 
   previousPageLink.addEventListener('click', () => {
