@@ -109,8 +109,21 @@ window.addEventListener('load', () => {
     });
   }
 
+  function setLastPageBtn() {
+    let maxPages: number = getMaxPages();
+    // Show last page link if not already in list
+    if (Accessor.currentPage < maxPages - 2) {
+      lastPageLink.innerHTML = `${maxPages}`;
+      lastPageBtn.classList.remove('disabled');
+    } else {
+      lastPageLink.innerHTML = `...`;
+      lastPageBtn.classList.add('disabled');
+    }
+  }
+
   DeltaWatch.Watch(Watcher.totalResults, (value: number) => {
     totalResultsText.innerHTML = `${value}`;
+    setLastPageBtn();
   });
 
   DeltaWatch.Watch(Watcher.currentPage, (value: number) => {
@@ -169,14 +182,7 @@ window.addEventListener('load', () => {
       pageBtns[4].btn.classList.add('disabled');
     }
 
-    // Show last page link if not already in list
-    if (value < maxPages - 2) {
-      lastPageLink.innerHTML = `${maxPages}`;
-      lastPageBtn.classList.remove('disabled');
-    } else {
-      lastPageLink.innerHTML = `...`;
-      lastPageBtn.classList.add('disabled');
-    }
+    setLastPageBtn();
   });
 
   previousPageLink.addEventListener('click', () => {
