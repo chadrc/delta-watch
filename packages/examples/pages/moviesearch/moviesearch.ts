@@ -1,9 +1,23 @@
 import DeltaWatch from 'delta-watch';
+
 declare const M: any; // Materialize CSS global
 
+// Subsets of the data returned from the OMDb API
 interface MovieInfo {
   Title: string
   Year: string
+  imdbID: string
+}
+
+interface MovieDetails {
+  Title: string
+  Year: string
+  Rated: string
+  Runtime: string
+  Director: string
+  Plot: string
+  Poster: string
+  BoxOffice: string
   imdbID: string
 }
 
@@ -29,9 +43,9 @@ window.addEventListener('load', () => {
   // Modal elements
   const movieDetailModal = document.getElementById('movieDetailModal');
   const movieDetailModalInstance = M.Modal.init(movieDetailModal, {}); // Materialize
-  movieDetailModalInstance.open();
 
   const closeMovieDetailModalBtn = document.getElementById('closeMovieDetailModalBtn');
+  const movieDetailTitle = document.getElementById('movieDetailTitle');
   const movieDetailYear = document.getElementById('movieDetailYear');
   const movieDetailRated = document.getElementById('movieDetailRated');
   const movieDetailRuntime = document.getElementById('movieDetailRuntime');
@@ -45,12 +59,12 @@ window.addEventListener('load', () => {
     searchText: "Star Wars",
     movies: [],
     currentPage: 0,
-    selectedMovie: -1 // By index in current page
+    selectedMovieData: null
   });
 
   const {Watcher, Accessor, Mutator} = movieData;
 
-  // Api Call
+  // Api Calls
   function searchOMDb(page: number) {
     fetch(`//www.omdbapi.com/?apikey=650ad66d&s=${Accessor.searchText}&page=${page}`)
       .then((response) => response.json())
@@ -61,11 +75,48 @@ window.addEventListener('load', () => {
       });
   }
 
+  function getMovie(id: string) {
+    fetch(`http://www.omdbapi.com/?apikey=650ad66d&i=${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        Mutator.selectedMovieData = data;
+        movieDetailModalInstance.open();
+      });
+  }
+
   function getMaxPages(): number {
     return Math.ceil(Accessor.totalResults / 10);
   }
 
-  // Generate table rows
+  //
+  // Detail Modal
+  //
+
+  DeltaWatch.Watch(Watcher.selectedMovieData, (data: MovieDetails) => {
+    if (data === null) {
+      return;
+    }
+    movieDetailTitle.innerHTML = data.Title;
+    movieDetailYear.innerHTML = data.Year;
+    movieDetailRated.innerHTML = data.Rated;
+    movieDetailRuntime.innerHTML = data.Runtime;
+    movieDetailDirector.innerHTML = data.Director;
+    movieDetailBoxOffice.innerHTML = data.BoxOffice;
+    movieDetailPlot.innerHTML = data.Plot;
+    movieDetailPoster.setAttribute('src', data.Poster);
+    movieDetailViewOnIMDb.setAttribute('href', `http://www.imdb.com/title/${data.imdbID}`);
+  });
+
+  closeMovieDetailModalBtn.addEventListener('click', () => {
+    Mutator.selectedMovieData = null;
+    movieDetailModalInstance.close();
+  });
+
+  //
+  // Table setup
+  //
+
+  // generate rows and create watcher and actions
   for (let i = 0; i < rowCount; i++) {
     let rowEle = document.createElement('tr');
     rowEle.classList.add('hide');
@@ -83,7 +134,6 @@ window.addEventListener('load', () => {
 
     imdbLink.classList.add("orange-text", "text-accent-2");
     imdbLink.setAttribute('href', '#');
-    imdbLink.setAttribute('target', '_blank');
     imdbLink.innerHTML = "View";
 
     imdbCell.appendChild(imdbLink);
@@ -109,16 +159,16 @@ window.addEventListener('load', () => {
 
     // Mutation to set current movie as selected and open the detail modal
     imdbLink.addEventListener('click', () => {
-      Mutator.selectedMovie = i;
+      getMovie(Accessor.movies[i].imdbID);
     });
   }
 
   //
   // Pagination setup
   //
-  const pageBtns: {btn: HTMLElement, link: HTMLElement}[] = [];
-  for (let i=0; i<5; i++) {
-    let num = i+1;
+  const pageBtns: { btn: HTMLElement, link: HTMLElement }[] = [];
+  for (let i = 0; i < 5; i++) {
+    let num = i + 1;
     let pageBtn = document.getElementById(`pageBtn${num}`);
     let pageLink = pageBtn.children[0] as HTMLElement;
     pageBtns.push({
@@ -245,7 +295,7 @@ window.addEventListener('load', () => {
     let value = (event.target as HTMLInputElement).value;
     Mutator.searchText = value;
     if (value.trim() === "") {
-      searchSubmitBtn.setAttribute('disabled','');
+      searchSubmitBtn.setAttribute('disabled', '');
     } else {
       searchSubmitBtn.removeAttribute('disabled');
     }
