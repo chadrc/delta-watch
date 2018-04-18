@@ -1,4 +1,5 @@
 import DeltaWatch from 'delta-watch';
+declare const M: any; // Materialize CSS global
 
 interface MovieInfo {
   Title: string
@@ -10,6 +11,8 @@ interface MovieInfo {
 let rowCount = 10;
 
 window.addEventListener('load', () => {
+
+  // Table and pagination elements
   const tableBody = document.getElementById('movieTable');
   const searchTextInput = document.getElementById('searchText');
   const searchSubmitBtn = document.getElementById('searchSubmit');
@@ -23,10 +26,26 @@ window.addEventListener('load', () => {
   const lastPageLink = lastPageBtn.children[0];
   const totalResultsText = document.getElementById('totalResultsText');
 
+  // Modal elements
+  const movieDetailModal = document.getElementById('movieDetailModal');
+  const movieDetailModalInstance = M.Modal.init(movieDetailModal, {}); // Materialize
+  movieDetailModalInstance.open();
+
+  const closeMovieDetailModalBtn = document.getElementById('closeMovieDetailModalBtn');
+  const movieDetailYear = document.getElementById('movieDetailYear');
+  const movieDetailRated = document.getElementById('movieDetailRated');
+  const movieDetailRuntime = document.getElementById('movieDetailRuntime');
+  const movieDetailDirector = document.getElementById('movieDetailDirector');
+  const movieDetailBoxOffice = document.getElementById('movieDetailBoxOffice');
+  const movieDetailPlot = document.getElementById('movieDetailPlot');
+  const movieDetailPoster = document.getElementById('movieDetailPoster');
+  const movieDetailViewOnIMDb = document.getElementById('movieDetailViewOnIMDb');
+
   const movieData = DeltaWatch.Watchable({
     searchText: "Star Wars",
     movies: [],
-    currentPage: 0
+    currentPage: 0,
+    selectedMovie: -1 // By index in current page
   });
 
   const {Watcher, Accessor, Mutator} = movieData;
@@ -84,11 +103,19 @@ window.addEventListener('load', () => {
 
         titleCell.innerHTML = movieInfo.Title;
         yearCell.innerHTML = movieInfo.Year;
-        imdbLink.setAttribute('href', `http://www.imdb.com/title/${movieInfo.imdbID}`)
+        // imdbLink.setAttribute('href', `http://www.imdb.com/title/${movieInfo.imdbID}`)
       }
+    });
+
+    // Mutation to set current movie as selected and open the detail modal
+    imdbLink.addEventListener('click', () => {
+      Mutator.selectedMovie = i;
     });
   }
 
+  //
+  // Pagination setup
+  //
   const pageBtns: {btn: HTMLElement, link: HTMLElement}[] = [];
   for (let i=0; i<5; i++) {
     let num = i+1;
@@ -109,6 +136,7 @@ window.addEventListener('load', () => {
     });
   }
 
+  // Sets active/inactive state of each page button
   function setPagination() {
     let currentPage = Accessor.currentPage;
 
@@ -176,6 +204,7 @@ window.addEventListener('load', () => {
     }
   }
 
+  // A change to total results or current page will trigger pagination to update
   DeltaWatch.Watch(Watcher.totalResults, (value: number) => {
     totalResultsText.innerHTML = `${value}`;
     setPagination();
@@ -186,6 +215,7 @@ window.addEventListener('load', () => {
     setPagination();
   });
 
+  // Pagination actions
   previousPageLink.addEventListener('click', () => {
     if (Accessor.currentPage > 1) {
       searchOMDb(Accessor.currentPage - 1);
@@ -208,6 +238,9 @@ window.addEventListener('load', () => {
     searchOMDb(maxPages);
   });
 
+  //
+  // Search Actions
+  //
   searchTextInput.addEventListener('input', (event) => {
     let value = (event.target as HTMLInputElement).value;
     Mutator.searchText = value;
