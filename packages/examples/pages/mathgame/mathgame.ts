@@ -5,10 +5,10 @@ import setupMutations from './mutations';
 window.addEventListener('load', () => {
 
   const mathGameData = DeltaWatch.Watchable({
-    playing: false,
     currentMathProblem: null,
     currentAnswer: '',
-    result: null
+    result: null,
+    answerTimer: 0
   });
 
   const elements = {

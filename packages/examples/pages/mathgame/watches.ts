@@ -39,6 +39,7 @@ export default (elements: { [key: string]: HTMLElement },
     } else {
       elements.answerInput.setAttribute('disabled', '');
       elements.resultPanel.classList.remove('hide');
+      elements.startSubmitBtn.removeAttribute('disabled'); // in case there was no input
       elements.startSubmitBtn.innerHTML = "Next";
 
       if (result === true) {
@@ -46,8 +47,12 @@ export default (elements: { [key: string]: HTMLElement },
         elements.resultText.innerHTML = `Correct!`;
       } else {
         elements.resultPanel.classList.add('red', 'lighten-3');
-        elements.resultText.innerHTML = `Incorrect. The answer is ${accessor.currentMathProblem.solution}`;
+        elements.resultText.innerHTML = `${accessor.answerTimer === 0 ? "Out of Time" : "Incorrect"}. The answer is ${accessor.currentMathProblem.solution}`;
       }
     }
+  });
+
+  DeltaWatch.Watch(watcher.answerTimer, (time: number) => {
+    elements.timerText.innerHTML = time.toString();
   });
 };
