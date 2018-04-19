@@ -49,7 +49,7 @@ export function randomMathProblem(): MathProblem {
     solution = leftOperand * rightOperand;
   }
 
-  if (operation === Operation.Subtraction || operation === Operation.Multiplication) {
+  if (operation === Operation.Subtraction || operation === Operation.Division) {
     // To make easy subtraction and division problems, we'll just swap the left operand and solution
     let temp = leftOperand;
     leftOperand = solution;
