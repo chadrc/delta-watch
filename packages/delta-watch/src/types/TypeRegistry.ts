@@ -33,7 +33,9 @@ export class TypeRegistry {
       }
     }
 
-    if (accessor === null && typeof value === "object") {
+    if (accessor === null
+      && typeof value === "object"
+      && value !== null) { // Don't handle null by default, if a custom type want's to handle it accessor won't be null for this check
       return makeObjectAccessor;
     }
 

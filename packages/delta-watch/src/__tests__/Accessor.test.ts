@@ -28,6 +28,14 @@ describe(`Accessors`, () => {
     expect(watchable.Accessor.data.obj.value).to.equal('Value');
   });
 
+  it(`Access a null value returns a null value`, () => {
+    let watchable = new DeltaWatch({
+      data: null
+    });
+
+    expect(watchable.Accessor.data).to.be.null;
+  });
+
   it(`Assigning to a value on the Accessor throws an error`, () => {
     let watchable = new DeltaWatch({value: 'Value'});
     let func = () => watchable.Accessor.value = 'New Value';
