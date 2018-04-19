@@ -4,12 +4,18 @@ import setupMutations from './mutations';
 
 window.addEventListener('load', () => {
 
-  let mathGameData = DeltaWatch.Watchable({
-
+  const mathGameData = DeltaWatch.Watchable({
+    playing: false,
+    currentMathProblem: null
   });
 
-  let elements = {
-
+  const elements = {
+    timerText: document.getElementById('timerText'),
+    pendingTextRow: document.getElementById('pendingTextRow'),
+    mathProblemRow: document.getElementById('mathProblemRow'),
+    mathProblemText: document.getElementById('mathProblemText'),
+    answerInput: document.getElementById('answerInput'),
+    startSubmitBtn: document.getElementById('startSubmitBtn'),
   };
 
   setupWatches(elements, mathGameData.Accessor, mathGameData.Watcher);

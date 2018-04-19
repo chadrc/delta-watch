@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <title>Delta Watch | Math Game</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .content-padding {
+            padding: 2.8rem;
+        }
+
+        .content-padding > h1 {
+            margin-bottom: 2.8rem;
+        }
+
+        .content-padding > h4 {
+            margin-top: 0;
+        }
+
+        .display-text {
+            font-size: 48px;
+        }
+
+        main.container input[type=number].answer-input {
+            border: none;
+        }
+    </style>
 </head>
 <body>
 <nav>
@@ -13,7 +34,34 @@
 </nav>
 <main class="container">
     <h1 class="center-align">Math Game</h1>
-
+    <div class="blue-grey lighten-5 content-padding">
+        <h4 class="center-align" id="timerText">00</h4>
+        <form>
+            <div id="pendingTextRow" class="row">
+                <div class="col s12 center-align">
+                    <span id="pendingText" class="display-text">Ready to Math?</span>
+                </div>
+            </div>
+            <div id="mathProblemRow" class="row hide">
+                <div class="col s7">
+                    <span id="mathProblemText" class="display-text right">100 &#43; 100 =</span>
+                </div>
+                <div class="input-field col s3">
+                    <input id="answerInput" type="number" class="left-align answer-input display-text">
+                    <label for="answerInput">Answer</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 center-align">
+                    <button id="startSubmitBtn"
+                            class="btn btn-large waves-effect waves-light"
+                            type="submit">
+                        Start
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </main>
 </body>
 </html>

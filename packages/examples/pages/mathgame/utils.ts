@@ -3,10 +3,10 @@ export const TimeToSolve = 10; // seconds
 export const MaxMultiplier = 5;
 
 export enum Operation {
-  Addition = "+",
-  Subtraction = "-",
-  Multiplication = "*",
-  Division = "/"
+  Addition,
+  Subtraction,
+  Multiplication,
+  Division
 }
 
 export interface MathProblem {
