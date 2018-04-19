@@ -1,4 +1,4 @@
-import {randomMathProblem, TimeToSolve} from "./utils";
+import {MaxMultiplier, NumCorrectToIncreaseMultiplier, randomMathProblem, TimeToSolve} from "./utils";
 
 export default (elements: { [key: string]: HTMLElement },
                 accessor: any,
@@ -10,6 +10,8 @@ export default (elements: { [key: string]: HTMLElement },
     if (accessor.answerTimer === 0) {
       clearInterval(interval);
       mutator.result = false;
+      mutator.streak = 0;
+      mutator.multiplier = 1;
     }
   };
 
@@ -26,7 +28,19 @@ export default (elements: { [key: string]: HTMLElement },
       mutator.answerTimer = TimeToSolve;
       startInterval();
     } else if (accessor.result === null) { // Submitting
-      mutator.result = accessor.currentAnswer === accessor.currentMathProblem.solution;
+      let correct = accessor.currentAnswer === accessor.currentMathProblem.solution;
+      mutator.result = correct;
+      if (correct) {
+        let streak = accessor.streak + 1;
+        mutator.streak = streak;
+        let multiplier = Math.floor(streak / NumCorrectToIncreaseMultiplier) + 1;
+        mutator.multiplier = multiplier > MaxMultiplier ? MaxMultiplier : multiplier;
+        mutator.points = accessor.points + (accessor.currentMathProblem.points * multiplier);
+      } else {
+        mutator.streak = 0;
+        mutator.multiplier = 1;
+      }
+
       clearInterval(interval);
     } else { // Restarting
       mutator.currentMathProblem = randomMathProblem();

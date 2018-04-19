@@ -43,9 +43,11 @@ export default (elements: { [key: string]: HTMLElement },
       elements.startSubmitBtn.innerHTML = "Next";
 
       if (result === true) {
+        elements.resultPanel.classList.remove('red');
         elements.resultPanel.classList.add('green', 'lighten-3');
         elements.resultText.innerHTML = `Correct!`;
       } else {
+        elements.resultPanel.classList.remove('green');
         elements.resultPanel.classList.add('red', 'lighten-3');
         elements.resultText.innerHTML = `${accessor.answerTimer === 0 ? "Out of Time" : "Incorrect"}. The answer is ${accessor.currentMathProblem.solution}`;
       }
@@ -54,5 +56,13 @@ export default (elements: { [key: string]: HTMLElement },
 
   DeltaWatch.Watch(watcher.answerTimer, (time: number) => {
     elements.timerText.innerHTML = time.toString();
+  });
+
+  DeltaWatch.Watch(watcher.points, (points: number) => {
+    elements.pointsText.innerHTML = points.toString();
+  });
+
+  DeltaWatch.Watch(watcher.multiplier, (multiplier: number) => {
+    elements.multiplierText.innerHTML = `x${multiplier}`;
   });
 };

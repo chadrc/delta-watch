@@ -1,6 +1,7 @@
 
 export const TimeToSolve = 10; // seconds
 export const MaxMultiplier = 5;
+export const NumCorrectToIncreaseMultiplier = 2;
 
 export enum Operation {
   Addition,
@@ -14,6 +15,7 @@ export interface MathProblem {
   leftOperand: number
   rightOperand: number
   solution: number
+  points: number
 }
 
 // for random rolling
@@ -24,12 +26,12 @@ function randomOperation() {
 }
 
 // Addition and subtraction operands will be in range [1, 100]
-// Multiplication and Division operands will be in range [1, 20]
+// Multiplication and Division operands will be in range [1, 10]
 const maxForOperation: {[key: string]: number} = {
   [Operation.Addition]: 101,
   [Operation.Subtraction]: 101,
-  [Operation.Multiplication]: 21,
-  [Operation.Division]: 21,
+  [Operation.Multiplication]: 11,
+  [Operation.Division]: 11,
 };
 
 function randomForOperation(op: Operation): number {
@@ -60,6 +62,7 @@ export function randomMathProblem(): MathProblem {
     operation,
     leftOperand,
     rightOperand,
-    solution
+    solution,
+    points: 5
   }
 }
