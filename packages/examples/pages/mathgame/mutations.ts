@@ -30,11 +30,15 @@ export default (elements: { [key: string]: HTMLElement },
     } else if (accessor.result === null) { // Submitting
       let correct = accessor.currentAnswer === accessor.currentMathProblem.solution;
       mutator.result = correct;
+
       if (correct) {
         let streak = accessor.streak + 1;
         mutator.streak = streak;
+
         let multiplier = Math.floor(streak / NumCorrectToIncreaseMultiplier) + 1;
-        mutator.multiplier = multiplier > MaxMultiplier ? MaxMultiplier : multiplier;
+        multiplier = multiplier > MaxMultiplier ? MaxMultiplier : multiplier;
+        mutator.multiplier = multiplier;
+
         mutator.points = accessor.points + (accessor.currentMathProblem.points * multiplier);
       } else {
         mutator.streak = 0;
