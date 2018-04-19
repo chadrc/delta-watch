@@ -29,4 +29,19 @@ export default (elements: { [key: string]: HTMLElement },
       elements.startSubmitBtn.setAttribute('disabled', '');
     }
   });
+
+  DeltaWatch.Watch(watcher.result, (result: boolean) => {
+    if (result === null) {
+      elements.resultPanel.classList.add('hide');
+      elements.resultText.innerHTML = '';
+    } else if (result === true) {
+      elements.resultPanel.classList.remove('hide');
+      elements.resultPanel.classList.add('green', 'lighten-3');
+      elements.resultText.innerHTML = `Correct!`;
+    } else {
+      elements.resultPanel.classList.remove('hide');
+      elements.resultPanel.classList.add('red', 'lighten-3');
+      elements.resultText.innerHTML = `Incorrect. The answer is ${accessor.currentMathProblem.solution}`;
+    }
+  });
 };

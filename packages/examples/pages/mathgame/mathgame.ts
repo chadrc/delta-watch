@@ -7,7 +7,8 @@ window.addEventListener('load', () => {
   const mathGameData = DeltaWatch.Watchable({
     playing: false,
     currentMathProblem: null,
-    currentAnswer: ''
+    currentAnswer: '',
+    result: null
   });
 
   const elements = {
@@ -17,6 +18,8 @@ window.addEventListener('load', () => {
     mathProblemText: document.getElementById('mathProblemText'),
     answerInput: document.getElementById('answerInput'),
     startSubmitBtn: document.getElementById('startSubmitBtn'),
+    resultText: document.getElementById('resultText'),
+    resultPanel: document.getElementById('resultPanel')
   };
 
   setupWatches(elements, mathGameData.Accessor, mathGameData.Watcher);
