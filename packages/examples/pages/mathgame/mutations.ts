@@ -8,11 +8,14 @@ export default (elements: { [key: string]: HTMLElement },
     event.preventDefault();
     event.stopPropagation();
 
-    if (accessor.currentMathProblem === null) {
+    if (accessor.currentMathProblem === null) { // Starting
       mutator.currentMathProblem = randomMathProblem();
       mutator.playing = true;
-    } else {
+    } else if (accessor.result === null) { // Submitting
       mutator.result = accessor.currentAnswer === accessor.currentMathProblem.solution;
+    } else { // Restarting
+      mutator.currentMathProblem = randomMathProblem();
+      mutator.result = null;
     }
   });
 
