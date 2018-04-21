@@ -77,6 +77,7 @@ export default (elements: { [key: string]: HTMLElement },
     }
   }
 
+  // Table row watchers
   for (let i=0; i<RowCount; i++) {
     let rowEle = elements[`rowElement${i}`];
     let titleCell = elements[`titleCell${i}`];
@@ -106,6 +107,7 @@ export default (elements: { [key: string]: HTMLElement },
     setPagination();
   });
 
+  // Modal watcher
   DeltaWatch.Watch(watcher.selectedMovieData, (data: MovieDetails) => {
     if (data === null) {
       return;
