@@ -5,15 +5,24 @@ declare const M: any; // Materialize CSS global
 
 window.addEventListener('load', () => {
   const elements = {
-    todoList: document.getElementById('todoList'),
+    noteList: document.getElementById('todoList'),
     selectedNoteName: document.getElementById('selectedNoteName'),
-    selectedNoteText: document.getElementById('selectedNoteText')
+    selectedNoteText: document.getElementById('selectedNoteText'),
+    noteTemplate: document.getElementById('noteTemplate'),
+    noteCollectionTemplate: document.getElementById('noteCollectionTemplate'),
+    collectionNameModal: document.getElementById('collectionNameModal'),
+    collectionNameInput: document.getElementById('collectionNameInput'),
+    collectionNameSubmitBtn: document.getElementById('collectionNameSubmitBtn'),
+    createCollectionBtn: document.getElementById('createCollectionBtn'),
   };
 
-  M.Collapsible.init(elements.todoList, {});
+  M.Collapsible.init(elements.noteList, {});
 
   const {Watcher, Mutator, Accessor} = DeltaWatch.Watchable({
-
+    noteCollections: [],
+    selectedTodoList: null,
+    selectedTodo: null,
+    collectionName: ''
   });
 
   setupWatches(elements, Accessor, Watcher);
