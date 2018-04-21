@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delta Watch | Notes</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        a.add-icon {
+            padding: 0 8px;
+        }
+    </style>
+</head>
+<body>
+<template id="noteCollectionTemplate">
+    <li>
+        <div class="collapsible-header">Collection 1</div>
+        <div class="collapsible-body">
+            <ul>
+            </ul>
+        </div>
+    </li>
+</template>
+<template id="noteTemplate">
+    <li class="collection-item">
+        <a href="#"
+           class="orange-text text-accent-2">
+            Note
+        </a>
+    </li>
+</template>
+<nav>
+    <div class="nav-wrapper teal lighten-1">
+        <a href="/" class="brand-logo">Delta Watch Examples</a>
+    </div>
+</nav>
+<main class="container">
+    <h1 class="center-align">Notes</h1>
+    <section class="row">
+        <div class="col s4">
+            <h5>
+                Collections
+                <a href="#" class="btn btn-small waves-effect right add-icon">
+                    <i class="material-icons">add</i>
+                </a>
+            </h5>
+            <ul class="collapsible" id="todoList">
+                <li>
+                    <div class="collapsible-header">Collection 1</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li class="collection-item">
+                                <a href="#"
+                                   class="orange-text text-accent-2">
+                                    Note 1
+                                </a>
+                            </li>
+                            <li class="collection-item">
+                                <a href="#"
+                                   class="orange-text text-accent-2">
+                                    Note 2
+                                </a>
+                            </li>
+                            <li class="collection-item">
+                                <a href="#"
+                                   class="orange-text text-accent-2">
+                                    Note 3
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Collection 2</div>
+                    <div class="collapsible-body">
+                        <ul>
+                            <li>No Notes</li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Collection 3</div>
+                    <div class="collapsible-body">
+                        <ul>
+                            <li>No Notes</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col s8">
+            <h4 id="selectedNoteName">Note</h4>
+            <p id="selectedNoteText">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi varius facilisis nisi nec hendrerit. Mauris sed sem vel justo dignissim ultricies et quis felis. Nam sit amet ipsum ultricies turpis mattis efficitur id sit amet lorem. Duis non ligula quis nisl blandit sodales sit amet eget lacus. Ut maximus non nisl ut varius. Nam pellentesque risus nec porttitor tincidunt. Pellentesque in semper nibh. Aliquam ac pharetra purus, eu condimentum sapien. Etiam feugiat pharetra lacus id vulputate. Morbi volutpat dolor ut eleifend ultrices. Fusce sit amet erat eget est venenatis accumsan. Aliquam id lobortis ipsum.
+            </p>
+        </div>
+    </section>
+</main>
+</body>
+</html>
