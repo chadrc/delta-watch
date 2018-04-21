@@ -1,4 +1,5 @@
 import DeltaWatch from "delta-watch";
+import {NoteCollection} from "./utils";
 
 export default (elements: { [key: string]: HTMLElement },
                 accessor: any,
@@ -12,5 +13,7 @@ export default (elements: { [key: string]: HTMLElement },
     }
   });
 
-
+  DeltaWatch.Watch(watcher.noteCollections, (collections: NoteCollection[]) => {
+    console.log('collection changed', collections);
+  });
 }
