@@ -8,12 +8,26 @@
         a.add-icon {
             padding: 0 8px;
         }
+
+        a.add-icon i {
+            margin: 0;
+            width: auto;
+        }
+
+        .collapsible-header {
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
 <template id="noteCollectionTemplate">
     <li>
-        <div class="collapsible-header">Collection 1</div>
+        <div class="collapsible-header valign-wrapper">
+            <span class="note-text">Collection 1</span>
+            <a href="#" class="btn btn-small red waves-effect waves-red right add-icon">
+                <i class="material-icons">delete</i>
+            </a>
+        </div>
         <div class="collapsible-body">
             <ul>
                 <li>No Notes</li>
@@ -47,7 +61,12 @@
             <ul class="collapsible" id="todoList">
                 <!--
                 <li>
-                    <div class="collapsible-header">Collection 1</div>
+                    <div class="collapsible-header valign-wrapper">
+                        <span>Collection 1</span>
+                        <a href="#" class="btn btn-small red waves-effect waves-red add-icon">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </div>
                     <div class="collapsible-body">
                         <ul class="collection">
                             <li class="collection-item">
@@ -89,7 +108,7 @@
                         </ul>
                     </div>
                 </li>
-                -->
+            -->
             </ul>
         </div>
         <div class="col s8">

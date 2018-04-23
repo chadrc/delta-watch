@@ -30,7 +30,7 @@ window.addEventListener('load', () => {
   const methods = {
     createCollectionItem: () => {
       let clone = document.importNode(elements.noteCollectionTemplate.content, true);
-      let header = clone.querySelector('.collapsible-header');
+      let header = clone.querySelector('.collapsible-header > .note-text');
       let list = clone.querySelector('.collapsible-body ul');
 
       DeltaWatch.Watch(Watcher.noteCollections[collectionElements.length].name, (name: string) => {
