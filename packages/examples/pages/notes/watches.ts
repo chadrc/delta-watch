@@ -2,6 +2,7 @@ import DeltaWatch from "delta-watch";
 import {NoteCollection} from "./utils";
 
 export default (elements: { [key: string]: HTMLElement },
+                methods: { [key: string]: Function},
                 accessor: any,
                 watcher: any) => {
 

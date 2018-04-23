@@ -3,6 +3,7 @@ import {NoteCollection} from "./utils";
 declare const M: any; // Materialize CSS global
 
 export default (elements: { [key: string]: HTMLElement },
+                methods: { [key: string]: Function},
                 accessor: any,
                 mutator: any) => {
 
@@ -25,6 +26,8 @@ export default (elements: { [key: string]: HTMLElement },
       name: accessor.collectionName,
       notes: []
     };
+
+    methods.createCollectionItem();
 
     mutator.collectionName = '';
     mutator.noteCollections.push(newCollection);

@@ -8,13 +8,15 @@ window.addEventListener('load', () => {
     noteList: document.getElementById('todoList'),
     selectedNoteName: document.getElementById('selectedNoteName'),
     selectedNoteText: document.getElementById('selectedNoteText'),
-    noteTemplate: document.getElementById('noteTemplate'),
-    noteCollectionTemplate: document.getElementById('noteCollectionTemplate'),
+    noteTemplate: document.getElementById('noteTemplate') as HTMLTemplateElement,
+    noteCollectionTemplate: document.getElementById('noteCollectionTemplate') as HTMLTemplateElement,
     collectionNameModal: document.getElementById('collectionNameModal'),
     collectionNameInput: document.getElementById('collectionNameInput'),
     collectionNameSubmitBtn: document.getElementById('collectionNameSubmitBtn'),
     createCollectionBtn: document.getElementById('createCollectionBtn'),
   };
+
+  const collectionElements: Node[] = [];
 
   M.Collapsible.init(elements.noteList, {});
 
@@ -25,6 +27,21 @@ window.addEventListener('load', () => {
     collectionName: ''
   });
 
-  setupWatches(elements, Accessor, Watcher);
-  setupMutations(elements, Accessor, Mutator);
+  const methods = {
+    createCollectionItem: () => {
+      let clone = document.importNode(elements.noteCollectionTemplate.content, true);
+      let header = clone.querySelector('.collapsible-header');
+      let list = clone.querySelector('.collapsible-body ul');
+
+      DeltaWatch.Watch(Watcher.noteCollections[collectionElements.length].name, (name: string) => {
+        header.innerHTML = name;
+      });
+
+      collectionElements.push(clone);
+      elements.noteList.appendChild(clone);
+    }
+  };
+
+  setupWatches(elements, methods, Accessor, Watcher);
+  setupMutations(elements, methods, Accessor, Mutator);
 });
