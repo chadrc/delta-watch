@@ -1,0 +1,51 @@
+{
+  "name": "delta-watch-react",
+  "version": "1.0.0",
+  "description": "React bindings for delta-watch library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chadrc/delta-watch.git"
+  },
+  "keywords": [
+    "delta",
+    "watch",
+    "react",
+    "watcher"
+  ],
+  "author": "Chad Collins",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chadrc/delta-watch/issues"
+  },
+  "homepage": "https://github.com/chadrc/delta-watch#readme",
+  "dependencies": {
+    "delta-watch": "0.0.6"
+  },
+  "peerDependencies": {
+    "react": ">=15.0.0",
+    "react-dom": ">=15.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/jest": "^22.2.3",
+    "chai": "^4.1.2",
+    "jest": "^22.4.3",
+    "ts-jest": "^22.4.2",
+    "typescript": "^2.8.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "src/__tests__/.*\\.test\\.(ts|tsx|js)$"
+  }
+}
