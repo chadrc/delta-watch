@@ -17,6 +17,22 @@
         .collapsible-header {
             justify-content: space-between;
         }
+
+        #todoList ul li {
+            padding-left: 0;
+        }
+
+        #todoList ul li:last-of-type {
+            padding: 0;
+        }
+
+        #todoList ul li:last-of-type .input-field {
+            margin-bottom: 0;
+        }
+
+        #todoList ul li:last-of-type .input-field input {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -30,7 +46,12 @@
         </div>
         <div class="collapsible-body">
             <ul>
-                <li>No Notes</li>
+                <li class="collection-item">
+                    <div class="input-field">
+                        <input id="noteCollectionXInput" type="text">
+                        <label for="noteCollectionXInput">New Note</label>
+                    </div>
+                </li>
             </ul>
         </div>
     </li>
@@ -63,7 +84,7 @@
                 <li>
                     <div class="collapsible-header valign-wrapper">
                         <span>Collection 1</span>
-                        <a href="#" class="btn btn-small red waves-effect waves-red add-icon">
+                        <a href="#" class="btn btn-small red waves-effect waves-red button-icon">
                             <i class="material-icons">delete</i>
                         </a>
                     </div>
@@ -87,6 +108,12 @@
                                     Note 3
                                 </a>
                             </li>
+                            <li class="collection-item">
+                                <div class="input-field">
+                                    <input id="noteCollection1Input" type="text">
+                                    <label for="noteCollection1Input">New Note</label>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -108,7 +135,7 @@
                         </ul>
                     </div>
                 </li>
-            -->
+                -->
             </ul>
         </div>
         <div class="col s8">
