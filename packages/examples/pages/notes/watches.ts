@@ -13,8 +13,4 @@ export default (elements: { [key: string]: HTMLElement },
       elements.collectionNameSubmitBtn.removeAttribute('disabled');
     }
   });
-
-  DeltaWatch.Watch(watcher.noteCollections, (collections: NoteCollection[]) => {
-    console.log('collection changed', collections);
-  });
 }

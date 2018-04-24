@@ -1,6 +1,7 @@
 import DeltaWatch from 'delta-watch';
 import setupMutations from './mutations';
 import setupWatches from './watches';
+import {NoteCollection} from "./utils";
 declare const M: any; // Materialize CSS global
 
 window.addEventListener('load', () => {
@@ -16,8 +17,6 @@ window.addEventListener('load', () => {
     createCollectionBtn: document.getElementById('createCollectionBtn'),
   };
 
-  const collectionElements: Node[] = [];
-
   M.Collapsible.init(elements.noteList, {});
 
   const {Watcher, Mutator, Accessor} = DeltaWatch.Watchable({
@@ -28,17 +27,33 @@ window.addEventListener('load', () => {
   });
 
   const methods = {
-    createCollectionItem: () => {
-      let clone = document.importNode(elements.noteCollectionTemplate.content, true);
-      let header = clone.querySelector('.collapsible-header > .note-text');
-      let list = clone.querySelector('.collapsible-body ul');
+    createCollectionItem: (name: string) => {
+      let newCollection: NoteCollection = {
+        name: name,
+        notes: []
+      };
 
-      DeltaWatch.Watch(Watcher.noteCollections[collectionElements.length].name, (name: string) => {
+      let clone = document.importNode(elements.noteCollectionTemplate.content, true);
+      let root = clone.querySelector('li');
+      let header = clone.querySelector('.collapsible-header > .note-text');
+      let deleteBtn = clone.querySelector('.collapsible-header > a');
+      let list = clone.querySelector('.collapsible-body ul');
+      let index = Accessor.noteCollections.length;
+
+      DeltaWatch.Watch(Watcher.noteCollections[index].name, (name: string) => {
         header.innerHTML = name;
       });
 
-      collectionElements.push(clone);
+      deleteBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        Mutator.noteCollections.splice(index, 1);
+        elements.noteList.removeChild(elements.noteList.children[elements.noteList.children.length - 1]);
+      });
+
       elements.noteList.appendChild(clone);
+      Mutator.noteCollections.push(newCollection);
     }
   };
 

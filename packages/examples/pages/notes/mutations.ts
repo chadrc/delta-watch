@@ -1,5 +1,3 @@
-import {NoteCollection} from "./utils";
-
 declare const M: any; // Materialize CSS global
 
 export default (elements: { [key: string]: HTMLElement },
@@ -22,15 +20,9 @@ export default (elements: { [key: string]: HTMLElement },
     event.preventDefault();
     event.stopPropagation();
 
-    let newCollection: NoteCollection = {
-      name: accessor.collectionName,
-      notes: []
-    };
-
-    methods.createCollectionItem();
+    methods.createCollectionItem(accessor.collectionName);
 
     mutator.collectionName = '';
-    mutator.noteCollections.push(newCollection);
 
     collectionNameModalInstance.close();
   });
