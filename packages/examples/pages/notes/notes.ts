@@ -34,7 +34,6 @@ window.addEventListener('load', () => {
       };
 
       let clone = document.importNode(elements.noteCollectionTemplate.content, true);
-      let root = clone.querySelector('li');
       let header = clone.querySelector('.collapsible-header > .note-text');
       let deleteBtn = clone.querySelector('.collapsible-header > a');
       let list = clone.querySelector('.collapsible-body ul');
