@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Core Mutating a watchable store causes a wrapped component to re-render 1`] = `
+<p>
+  Hello
+</p>
+`;
+
+exports[`Core Mutating a watchable store causes a wrapped component to re-render 2`] = `
+<p>
+  Delta Watch Render
+</p>
+`;
