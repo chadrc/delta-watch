@@ -1,5 +1,5 @@
-import hoc from './hoc';
+import MakeStore from './WatchableStore';
 
 export default {
-  Watch: hoc
+  MakeStore: MakeStore
 }
