@@ -30,7 +30,7 @@ function MakeStore(data: any): DeltaWatchStore {
           }
         }
 
-        componentWillReceiveProps(nextProps: any, nextContext: any) {
+        componentWillReceiveProps(nextProps: any) {
           this.makeWatchers(nextProps);
         }
 
