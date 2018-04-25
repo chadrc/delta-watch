@@ -18,7 +18,7 @@ describe(`WatchStore`, () => {
         renderCount++;
         return (
           <p>{this.props.message}</p>
-      );
+        );
       }
     }
 
@@ -55,9 +55,9 @@ describe(`WatchStore`, () => {
         return (
           <div>
             <h1>{this.props.headline}</h1>
-        <p>{this.props.message}</p>
-        </div>
-      );
+            <p>{this.props.message}</p>
+          </div>
+        );
       }
     }
 
@@ -96,8 +96,8 @@ describe(`WatchStore`, () => {
         return (
           <div>
             <p>{this.props.selectedItem}</p>
-        </div>
-      );
+          </div>
+        );
       }
     }
 
