@@ -33,3 +33,19 @@ exports[`Core Mutating a watchable store causes a wrapped component to re-render
   Delta Watch Render
 </p>
 `;
+
+exports[`Core Providing a mapStore function transforms props 1`] = `
+<div>
+  <p>
+    item one
+  </p>
+</div>
+`;
+
+exports[`Core Providing a mapStore function transforms props 2`] = `
+<div>
+  <p>
+    item two
+  </p>
+</div>
+`;

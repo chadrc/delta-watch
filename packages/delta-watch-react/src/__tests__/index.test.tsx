@@ -29,6 +29,7 @@ describe(`Core`, () => {
     });
 
     let renderCount = 0;
+
     class Text extends React.Component<any, any> {
       render() {
         renderCount++;
@@ -64,6 +65,7 @@ describe(`Core`, () => {
     });
 
     let renderCount = 0;
+
     class Text extends React.Component<any, any> {
       render() {
         renderCount++;
@@ -100,6 +102,42 @@ describe(`Core`, () => {
   });
 
   it(`Providing a mapStore function transforms props`, () => {
+    let {Watch, Store} = DeltaWatchReact.MakeStore({
+      items: [
+        'item one',
+        'item two'
+      ],
+      selectedItem: 0
+    });
 
+    class Text extends React.Component<any, any> {
+      render() {
+        return (
+          <div>
+            <p>{this.props.selectedItem}</p>
+          </div>
+        );
+      }
+    }
+
+    let Wrapped = Watch(
+      (watcher: any) => ({
+        selectedItem: watcher.selectedItem
+      }),
+      (accessor: any, props: any) => ({
+        selectedItem: accessor.items[props.selectedItem]
+      })
+    )(Text);
+
+    let component = renderer.create(<Wrapped/>);
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+
+    Store.Mutator.selectedItem = 1;
+
+    flushTimers();
+
+    tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
   });
 });

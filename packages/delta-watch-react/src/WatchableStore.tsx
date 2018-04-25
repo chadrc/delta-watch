@@ -16,7 +16,8 @@ export interface DeltaWatchStore {
 function MakeStore(data: any): DeltaWatchStore {
   let watchable = DeltaWatch.Watchable(data);
   let Watch = (
-    mapWatchers: (watcher: any, props: any) => { [key: string]: any }
+    mapWatchers: (watcher: any, props: any) => { [key: string]: any },
+    mapStore?: (accessor: any, props: any) => { [key: string]: any }
   ) => {
     return (Target: any) => {
       let c: any = class extends React.Component<any> {
@@ -54,8 +55,19 @@ function MakeStore(data: any): DeltaWatchStore {
           for (let field of Object.keys(this.watchers)) {
             watchProps[field] = this.watchers[field]._data;
           }
+
+          let allProps = {
+            ...this.props,
+            ...watchProps
+          };
+
+          let storeProps = {};
+          if (mapStore) {
+            storeProps = mapStore(watchable.Accessor, allProps);
+          }
+
           return (
-            <Target {...this.props} {...watchProps} />
+            <Target {...allProps} {...storeProps} />
           )
         }
       };
