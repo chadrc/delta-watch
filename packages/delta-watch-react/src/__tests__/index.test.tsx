@@ -12,14 +12,18 @@ function flushTimers() {
 }
 
 describe(`Core`, () => {
+  afterEach(() => {
+    jest.clearAllTimers()
+  });
+
   it(`Module loads`, () => {
-    expect(DeltaWatchReact).not.toBeTruthy();
+    expect(DeltaWatchReact).toBeTruthy();
   });
 
   it(`MakeStore and Watch create a renderable component`, () => {
     let watchableStore = DeltaWatchReact.MakeStore({});
     let comp = () => <div/>;
-    let Wrapped = watchableStore.Watch()(comp);
+    let Wrapped = watchableStore.Watch(() => ({}))(comp);
     renderer.create(<Wrapped/>);
   });
 
@@ -95,8 +99,6 @@ describe(`Core`, () => {
     tree = component.toJSON();
     expect(tree).toMatchSnapshot();
 
-    // First one will be canceled due to second
-    expect(setTimeout).toHaveBeenCalledTimes(2);
     // 1 for initial render, 1 for re-render
     expect(renderCount).toEqual(2);
   });

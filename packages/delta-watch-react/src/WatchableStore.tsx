@@ -13,6 +13,10 @@ export interface DeltaWatchStore {
   }
 }
 
+interface WatchStoreHOCState {
+  [key: string]: any
+}
+
 function MakeStore(data: any): DeltaWatchStore {
   let watchable = DeltaWatch.Watchable(data);
   let Watch = (
@@ -20,24 +24,27 @@ function MakeStore(data: any): DeltaWatchStore {
     mapStore?: (accessor: any, props: any) => { [key: string]: any }
   ) => {
     return (Target: any) => {
-      let c: any = class extends React.Component<any> {
-        private watchers: { [key: string]: any };
+      let c: any = class extends React.Component<any, WatchStoreHOCState> {
         private updateTimeout: number;
 
         constructor(props: any) {
           super(props);
-          this.makeWatchers(props);
+          let watchers = this.makeWatchers(props);
+          this.state = {
+            ...watchers
+          };
         }
 
-        makeWatchers(props: any) {
-          this.watchers = mapWatchers(watchable.Watcher, props);
-          for (let field of Object.keys(this.watchers)) {
-            DeltaWatch.Watch(this.watchers[field], this.update);
+        makeWatchers(props: any): { [key: string]: any } {
+          let watchers = mapWatchers(watchable.Watcher, props);
+          for (let field of Object.keys(watchers)) {
+            DeltaWatch.Watch(watchers[field], this.update);
           }
+          return watchers;
         }
 
-        componentWillReceiveProps(nextProps: any) {
-          this.makeWatchers(nextProps);
+        static getDerivedStateFromProps(nextProps: any) {
+          // this.makeWatchers(nextProps);
         }
 
         update = () => {
@@ -52,8 +59,8 @@ function MakeStore(data: any): DeltaWatchStore {
 
         render() {
           let watchProps: { [key: string]: any } = {};
-          for (let field of Object.keys(this.watchers)) {
-            watchProps[field] = this.watchers[field]._data;
+          for (let field of Object.keys(this.state)) {
+            watchProps[field] = this.state[field]._data;
           }
 
           let allProps = {
