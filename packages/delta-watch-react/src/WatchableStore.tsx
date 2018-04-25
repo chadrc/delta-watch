@@ -1,5 +1,8 @@
 import * as React from "react";
+import 'jest';
 import DeltaWatch from 'delta-watch';
+
+jest.useFakeTimers();
 
 export interface DeltaWatchStore {
   Watch: Function,
@@ -18,6 +21,8 @@ function MakeStore(data: any): DeltaWatchStore {
     return (Target: any) => {
       let c: any = class extends React.Component<any> {
         private watchers: { [key: string]: any };
+        private updateTimeout: number;
+
         constructor(props: any) {
           super(props);
           this.makeWatchers(props);
@@ -35,7 +40,13 @@ function MakeStore(data: any): DeltaWatchStore {
         }
 
         update = () => {
-          this.forceUpdate();
+          if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+          }
+
+          this.updateTimeout = setTimeout(() => {
+            this.forceUpdate();
+          });
         };
 
         render() {

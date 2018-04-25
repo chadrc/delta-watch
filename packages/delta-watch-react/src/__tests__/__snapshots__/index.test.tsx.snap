@@ -1,5 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Core Multiple mutations to store only cause one update 1`] = `
+<div>
+  <h1>
+    Multiple Updates
+  </h1>
+  <p>
+    No Updates
+  </p>
+</div>
+`;
+
+exports[`Core Multiple mutations to store only cause one update 2`] = `
+<div>
+  <h1>
+    Updated
+  </h1>
+  <p>
+    One Update
+  </p>
+</div>
+`;
+
 exports[`Core Mutating a watchable store causes a wrapped component to re-render 1`] = `
 <p>
   Hello
