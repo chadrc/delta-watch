@@ -6,6 +6,11 @@ import advanceTimersByTime = jest.advanceTimersByTime;
 
 jest.useFakeTimers();
 
+function flushTimers() {
+  // Flush current frame of timeouts, happens automatically in browser
+  advanceTimersByTime(0);
+}
+
 describe(`Core`, () => {
   it(`Module loads`, () => {
     expect(DeltaWatchReact).not.toBeTruthy();
@@ -42,6 +47,8 @@ describe(`Core`, () => {
     expect(tree).toMatchSnapshot();
 
     Store.Mutator.message = "Delta Watch Render";
+
+    flushTimers();
 
     tree = component.toJSON();
     expect(tree).toMatchSnapshot();
@@ -81,8 +88,7 @@ describe(`Core`, () => {
     Store.Mutator.headline = "Updated";
     Store.Mutator.message = "One Update";
 
-    // Flush current frame of timeouts, happens automatically in browser
-    advanceTimersByTime(0);
+    flushTimers();
 
     tree = component.toJSON();
     expect(tree).toMatchSnapshot();
@@ -91,5 +97,9 @@ describe(`Core`, () => {
     expect(setTimeout).toHaveBeenCalledTimes(2);
     // 1 for initial render, 1 for re-render
     expect(renderCount).toEqual(2);
+  });
+
+  it(`Providing a mapStore function transforms props`, () => {
+
   });
 });
