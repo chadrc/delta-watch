@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WatcherScope WatchStore receives scope watcher instead of root 1`] = `
+<span>
+  John Doe
+   - 
+  johndoe@example.com
+</span>
+`;
+
+exports[`WatcherScope WatchStore receives scope watcher instead of root 2`] = `
+<span>
+  Jane Smith
+   - 
+  janesmith@example.com
+</span>
+`;
