@@ -6,6 +6,7 @@ jest.useFakeTimers();
 
 export interface DeltaWatchStore {
   WatchStore: Function,
+  MakeWatcherScope: Function,
   Store: {
     Mutator: any,
     Accessor: any,
@@ -19,7 +20,7 @@ interface WatchStoreHOCState {
 
 function MakeStore(data: any): DeltaWatchStore {
   let watchable = DeltaWatch.Watchable(data);
-  let Watch = (
+  let WatchStore = (
     mapWatchers: (watcher: any, props: any) => { [key: string]: any },
     mapStore?: (accessor: any, props: any) => { [key: string]: any }
   ) => {
@@ -36,16 +37,21 @@ function MakeStore(data: any): DeltaWatchStore {
         }
 
         makeWatchers(props: any): { [key: string]: any } {
-          let watchers = mapWatchers(watchable.Watcher, props);
+          let watcher = watchable.Watcher;
+          if (this.props.watcherScope) {
+            watcher = this.props.watcherScope;
+          }
+
+          let watchers = mapWatchers(watcher, props);
           for (let field of Object.keys(watchers)) {
             DeltaWatch.Watch(watchers[field], this.update);
           }
           return watchers;
         }
 
-        static getDerivedStateFromProps(nextProps: any) {
-          // this.makeWatchers(nextProps);
-        }
+        // static getDerivedStateFromProps(nextProps: any) {
+        //   // this.makeWatchers(nextProps);
+        // }
 
         update = () => {
           if (this.updateTimeout) {
@@ -85,8 +91,41 @@ function MakeStore(data: any): DeltaWatchStore {
     }
   };
 
+  let MakeWatcherScope = (
+    getScope: (watcher: any) => any
+  ) => {
+    let scope = getScope(watchable.Watcher);
+    let Context: any = React.createContext<any>(scope);
+    let withScope = (Target: any) => {
+      let c: any = (props: any) => {
+        return (
+          <Context.Consumer>
+            {(watcherScope: any) => {
+              return <Target {...props} watcherScope={watcherScope}/>;
+            }}
+          </Context.Consumer>
+        )
+      };
+
+      c.displayName = `WatcherScope(${Target.displayName || Target.name})`;
+      return c;
+    };
+
+    let Scope = (props: any) => (
+      <Context.Provider value={scope}>
+        {props.children}
+      </Context.Provider>
+    );
+
+    return {
+      Scope,
+      withScope
+    };
+  };
+
   return {
-    WatchStore: Watch,
+    WatchStore,
+    MakeWatcherScope,
     Store: watchable
   }
 }
