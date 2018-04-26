@@ -23,9 +23,7 @@ describe(`WatcherScope`, () => {
       email: watcher.email
     }))(ChildComp);
 
-    const {Scope, withScope} = MakeWatcherScope((watcher: any) => {
-      return watcher.user;
-    });
+    const {Scope, withScope} = MakeWatcherScope((watcher: any) => watcher.user);
     const ScopedComp = withScope(WatchingComp);
 
     let Parent = () => (
