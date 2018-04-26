@@ -12,7 +12,7 @@ describe(`Core`, () => {
   it(`MakeStore and Watch create a renderable component`, () => {
     let watchableStore = DeltaWatchReact.MakeStore({});
     let comp = () => <div/>;
-    let Wrapped = watchableStore.Watch(() => ({}))(comp);
+    let Wrapped = watchableStore.WatchStore(() => ({}))(comp);
     renderer.create(<Wrapped/>);
   });
 });

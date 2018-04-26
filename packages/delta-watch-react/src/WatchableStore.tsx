@@ -5,7 +5,7 @@ import DeltaWatch from 'delta-watch';
 jest.useFakeTimers();
 
 export interface DeltaWatchStore {
-  Watch: Function,
+  WatchStore: Function,
   Store: {
     Mutator: any,
     Accessor: any,
@@ -86,7 +86,7 @@ function MakeStore(data: any): DeltaWatchStore {
   };
 
   return {
-    Watch,
+    WatchStore: Watch,
     Store: watchable
   }
 }

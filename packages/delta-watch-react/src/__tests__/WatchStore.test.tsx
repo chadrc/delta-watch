@@ -7,7 +7,7 @@ import {flushTimers} from "./utils";
 
 describe(`WatchStore`, () => {
   it(`Mutating a watchable store causes a wrapped component to re-render`, () => {
-    let {Watch, Store} = DeltaWatchReact.MakeStore({
+    let {WatchStore, Store} = DeltaWatchReact.MakeStore({
       message: "Hello"
     });
 
@@ -22,7 +22,7 @@ describe(`WatchStore`, () => {
       }
     }
 
-    let Wrapped = Watch((watcher: any) => ({
+    let Wrapped = WatchStore((watcher: any) => ({
       message: watcher.message
     }))(Text);
 
@@ -42,7 +42,7 @@ describe(`WatchStore`, () => {
   });
 
   it(`Multiple mutations to store only cause one update`, () => {
-    let {Watch, Store} = DeltaWatchReact.MakeStore({
+    let {WatchStore, Store} = DeltaWatchReact.MakeStore({
       headline: "Multiple Updates",
       message: "No Updates"
     });
@@ -61,7 +61,7 @@ describe(`WatchStore`, () => {
       }
     }
 
-    let Wrapped = Watch((watcher: any) => ({
+    let Wrapped = WatchStore((watcher: any) => ({
       headline: watcher.headline,
       message: watcher.message
     }))(Text);
@@ -83,7 +83,7 @@ describe(`WatchStore`, () => {
   });
 
   it(`Providing a mapStore function transforms props`, () => {
-    let {Watch, Store} = DeltaWatchReact.MakeStore({
+    let {WatchStore, Store} = DeltaWatchReact.MakeStore({
       items: [
         'item one',
         'item two'
@@ -101,7 +101,7 @@ describe(`WatchStore`, () => {
       }
     }
 
-    let Wrapped = Watch(
+    let Wrapped = WatchStore(
       (watcher: any) => ({
         selectedItem: watcher.selectedItem
       }),
