@@ -158,7 +158,7 @@ describe(`WatchStore`, () => {
     tree = component.toJSON();
     expect(tree).toMatchSnapshot();
 
-    // items[0] should also only have one watcher
+    // items[0] should also have no watchers
     expect(Store.Watcher.items[0]._watcherOptions.length).toEqual(0);
   });
 });
