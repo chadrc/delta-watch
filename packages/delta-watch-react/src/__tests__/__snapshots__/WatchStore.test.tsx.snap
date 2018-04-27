@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`WatchStore Getting new props maps to different watch 1`] = `
+<div>
+  <p>
+    item one
+  </p>
+</div>
+`;
+
+exports[`WatchStore Getting new props maps to different watch 2`] = `
+<div>
+  <p>
+    item two
+  </p>
+</div>
+`;
+
 exports[`WatchStore Multiple mutations to store only cause one update 1`] = `
 <div>
   <h1>

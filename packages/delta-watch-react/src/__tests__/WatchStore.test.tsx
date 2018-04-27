@@ -121,4 +121,44 @@ describe(`WatchStore`, () => {
     tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
+
+  it(`Getting new props maps to different watch`, () => {
+    let {WatchStore, Store} = DeltaWatchReact.MakeStore({
+      items: [
+        'item one',
+        'item two'
+      ],
+      selectedItem: 0
+    });
+
+    const Child = (props) => <p>{props.item}</p>;
+
+    const ChildWatcher = WatchStore((watcher: any, props: any) => ({
+      item: watcher.items[props.itemIndex]
+    }))(Child);
+
+    const Parent = (props) => (
+      <div>
+        <ChildWatcher itemIndex={props.selectedItem}/>
+      </div>
+    );
+
+    const ParentWatcher = WatchStore((watcher: any) => ({
+      selectedItem: watcher.selectedItem
+    }))(Parent);
+
+    let component = renderer.create(<ParentWatcher/>);
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+
+    Store.Mutator.selectedItem = 1;
+
+    flushTimers();
+
+    tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+
+    // items[0] should also only have one watcher
+    expect(Store.Watcher.items[0]._watcherOptions.length).toEqual(0);
+  });
 });

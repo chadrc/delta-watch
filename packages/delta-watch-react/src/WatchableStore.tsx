@@ -15,7 +15,8 @@ export interface DeltaWatchStore {
 }
 
 interface WatchStoreHOCState {
-  [key: string]: any
+  watchers: { [key: string]: any }
+  updater: Function
 }
 
 function MakeStore(data: any): DeltaWatchStore {
@@ -30,28 +31,71 @@ function MakeStore(data: any): DeltaWatchStore {
 
         constructor(props: any) {
           super(props);
-          let watchers = this.makeWatchers(props);
           this.state = {
-            ...watchers
+            watchers: {},
+            updater: this.update
           };
         }
 
-        makeWatchers(props: any): { [key: string]: any } {
+        static getDerivedStateFromProps(nextProps: any, prevState: WatchStoreHOCState) {
           let watcher = watchable.Watcher;
-          if (this.props.watcherScope) {
-            watcher = this.props.watcherScope;
+          if (nextProps.watcherScope) {
+            watcher = nextProps.watcherScope;
           }
 
-          let watchers = mapWatchers(watcher, props);
+          const updater = prevState.updater;
+          let watchers = mapWatchers(watcher, nextProps);
+          let state: WatchStoreHOCState = {
+            watchers,
+            updater: updater
+          };
+          let needsUpdate = false;
+
+          // Add new and changed watchers to state
           for (let field of Object.keys(watchers)) {
-            DeltaWatch.Watch(watchers[field], this.update);
-          }
-          return watchers;
-        }
+            if (field in prevState.watchers) {
+              if (watchers[field] !== prevState.watchers[field]) {
+                // Same field different watcher
 
-        // static getDerivedStateFromProps(nextProps: any) {
-        //   // this.makeWatchers(nextProps);
-        // }
+                // Remove old watcher
+                DeltaWatch.Unwatch(prevState.watchers[field], updater);
+
+                // Make new watcher
+                DeltaWatch.Watch(watchers[field], updater);
+
+                // Add to state
+                state.watchers[field] = watchers[field];
+
+                needsUpdate = true;
+              } else {
+                // Same watcher
+                state.watchers[field] = watchers[field];
+              }
+            } else {
+              // New watcher
+
+              // Make new watcher
+              DeltaWatch.Watch(watchers[field], updater);
+
+              // Add to state
+              state.watchers[field] = watchers[field];
+
+              needsUpdate = true;
+            }
+          }
+
+          // Remove any watcher not in state that's in prevState
+          for (let field of Object.keys(prevState)) {
+            if (!(field in state)) {
+              // Remove old watcher
+              DeltaWatch.Unwatch(prevState.watchers[field], updater);
+
+              needsUpdate = true;
+            }
+          }
+
+          return needsUpdate ? state : null;
+        }
 
         update = () => {
           if (this.updateTimeout) {
@@ -64,23 +108,17 @@ function MakeStore(data: any): DeltaWatchStore {
         };
 
         render() {
-          let watchProps: { [key: string]: any } = {};
-          for (let field of Object.keys(this.state)) {
-            watchProps[field] = this.state[field]._data;
+          let props: { [key: string]: any } = {...this.props};
+          for (let field of Object.keys(this.state.watchers)) {
+            props[field] = this.state.watchers[field]._data;
           }
 
-          let allProps = {
-            ...this.props,
-            ...watchProps
-          };
-
-          let storeProps = {};
           if (mapStore) {
-            storeProps = mapStore(watchable.Accessor, allProps);
+            props = Object.assign(props, mapStore(watchable.Accessor, props));
           }
 
           return (
-            <Target {...allProps} {...storeProps} />
+            <Target {...props} />
           )
         }
       };
