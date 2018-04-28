@@ -3,4 +3,7 @@ node_modules
 packages/delta-watch/**/*.js
 packages/delta-watch/**/*.js.map
 packages/delta-watch/**/*.d.ts
+packages/delta-watch-react/**/*.js
+packages/delta-watch-react/**/*.js.map
+packages/delta-watch-react/**/*.d.ts
 dist

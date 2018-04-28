@@ -1,10 +1,13 @@
 {
   "name": "delta-watch-react",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "React bindings for delta-watch library.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "clean": "echo `rm -r core index.js index.js.map index.d.ts &>/dev/null`",
+    "build": "tsc",
+    "build-publish": "npm run clean && npm run build && npm publish"
   },
   "repository": {
     "type": "git",
