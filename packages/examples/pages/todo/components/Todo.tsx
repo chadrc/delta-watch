@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const Todo = () => (
-  <section className='container'>
+  <section>
     <h1>Todo</h1>
   </section>
 );
