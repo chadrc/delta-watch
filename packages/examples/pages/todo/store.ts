@@ -1,6 +1,7 @@
+import DeltaWatch from 'delta-watch';
 import DeltaWatchReact from 'delta-watch-react';
 
-const {WatchStore: Watch, Store: {Mutator: StoreMutator}} = DeltaWatchReact.MakeStore({
+const {WatchStore: Watch, Store: {Mutator: StoreMutator, Watcher: StoreWatcher, Accessor: StoreAccessor}} = DeltaWatchReact.MakeStore({
   todoLists: [
     {
       name: "My Todos",
@@ -12,8 +13,12 @@ const {WatchStore: Watch, Store: {Mutator: StoreMutator}} = DeltaWatchReact.Make
       ]
     }
   ],
-  selectedTodo: -1
+  selectedList: -1
 });
+
+DeltaWatch.Watch(StoreWatcher.selectedList, (selected: number) => console.log('selected', selected));
 
 export const WatchStore = Watch;
 export const Mutator = StoreMutator;
+export const Accessor = StoreAccessor;
+export const Watcher = StoreWatcher;

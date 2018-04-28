@@ -3,7 +3,8 @@ import {WatchStore} from "../store";
 import TodoList from "./TodoList";
 
 const WatcherTodoList = WatchStore((watcher: any) => ({
-  items: watcher.todoLists
+  items: watcher.todoLists,
+  selectedList: watcher.selectedList
 }))(TodoList);
 
 const Todo = () => (
