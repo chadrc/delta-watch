@@ -12,7 +12,10 @@ const SelectedTodo = (props: SelectedTodoProps) => !props.selectedTodo ? null : 
     <ul>
       {props.selectedTodo.todos.map((todo) => (
         <li>
-          {todo.text}<input type='checkbox' checked={todo.completed} />
+          <label>
+            <input type='checkbox' checked={todo.completed} />
+            <span>{todo.text}</span>
+          </label>
         </li>
       ))}
     </ul>
