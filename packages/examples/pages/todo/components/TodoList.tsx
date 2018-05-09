@@ -14,7 +14,7 @@ const TodoList = (props: TodoListProps) => (
       <li className="collection-item valign-wrapper">
         <a href="#"
            onClick={() => selectTodoList(index)}
-           className={`orange-text text-accent-2${props.selectedList === index ? ' selected' : ''}`}>
+           className={`orange-text text-accent-2 valign-wrapper${props.selectedList === index ? ' selected' : ''}`}>
           {item.name}
           {props.selectedList === index ? (
             <i className={`material-icons`}>arrow_forward</i>
