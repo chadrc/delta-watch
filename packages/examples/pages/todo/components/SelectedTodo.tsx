@@ -9,13 +9,13 @@ interface SelectedTodoProps {
 const SelectedTodo = (props: SelectedTodoProps) => !props.selectedTodo ? null : (
   <section>
     <h4>{props.selectedTodo.name}</h4>
-    <ol>
+    <ul>
       {props.selectedTodo.todos.map((todo) => (
         <li>
           {todo.text}<input type='checkbox' checked={todo.completed} />
         </li>
       ))}
-    </ol>
+    </ul>
   </section>
 );
 
