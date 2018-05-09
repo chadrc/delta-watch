@@ -13,7 +13,7 @@ const WatcherSelectedTodo = WatchStore(
     selectedList: watcher.selectedList
   }),
   (accessor: any, props: any) => ({
-    selectedTodo: accessor.todoLists[accessor.selectedList]
+    selectedTodo: accessor.todoLists[props.selectedList]
   })
 )(SelectedTodo);
 
