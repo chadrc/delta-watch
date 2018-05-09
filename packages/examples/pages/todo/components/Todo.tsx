@@ -1,11 +1,21 @@
 import * as React from 'react';
 import {WatchStore} from "../store";
 import TodoList from "./TodoList";
+import SelectedTodo from "./SelectedTodo";
 
 const WatcherTodoList = WatchStore((watcher: any) => ({
   items: watcher.todoLists,
   selectedList: watcher.selectedList
 }))(TodoList);
+
+const WatcherSelectedTodo = WatchStore(
+  (watcher: any) => ({
+    selectedList: watcher.selectedList
+  }),
+  (accessor: any, props: any) => ({
+    selectedTodo: accessor.todoLists[accessor.selectedList]
+  })
+)(SelectedTodo);
 
 const Todo = () => (
   <section>
@@ -21,7 +31,7 @@ const Todo = () => (
         <WatcherTodoList/>
       </div>
       <div className="col s8">
-        <h4>Selected Todo</h4>
+        <WatcherSelectedTodo/>
       </div>
     </section>
   </section>

@@ -21,4 +21,3 @@ DeltaWatch.Watch(StoreWatcher.selectedList, (selected: number) => console.log('s
 export const WatchStore = Watch;
 export const Mutator = StoreMutator;
 export const Accessor = StoreAccessor;
-export const Watcher = StoreWatcher;
