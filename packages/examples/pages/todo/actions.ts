@@ -6,7 +6,6 @@ export const selectTodoList = (index: number) => {
 };
 
 export const toggleCompletedForTodo = (index: number) => {
-  console.log('toggling', index);
   let current = Accessor.todoLists[Accessor.selectedList].todos[index].completed;
   Mutator.todoLists[Accessor.selectedList].todos[index].completed = !current;
 };
