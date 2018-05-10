@@ -128,7 +128,10 @@ export class ObjectWatcher implements Watchable {
 
     // If their are children, it doesn't matter if our value has changed
     // If any child has changed this object will notify subscribers
-    if (hasChildren) {
+    // However, if the new value of this object shouldn't have children
+    // (e.g. its value was an object but its new value is a primitive)
+    let shouldHaveChildren = typeof (this._data) === 'object' && this._data !== null;
+    if (hasChildren && shouldHaveChildren) {
       changed = childrenChanged;
     }
 

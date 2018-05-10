@@ -127,6 +127,26 @@ describe(`Watchable`, () => {
     expect(count).to.equal(0);
   });
 
+  it(`Assigning to a value that was an object calls callback`, () => {
+    let watchable = new DeltaWatch({
+      item: {}
+    });
+
+    let watcherCalled = false;
+    DeltaWatch.watch(watchable.Watcher.item, (value: string) => {
+      expect(value).to.equal("Changed Value");
+      watcherCalled = true;
+    });
+
+    DeltaWatch.watch(watchable.Watcher.item.value, () => {});
+
+    watchable.Mutator.item = "Changed Value";
+
+    expect(watchable.Accessor.item).to.equal("Changed Value");
+
+    assertWatcherCalled(watcherCalled);
+  });
+
   it(`Calls callback on second tier property`, () => {
     let watchable = new DeltaWatch({
       obj: {
