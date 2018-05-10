@@ -12,7 +12,9 @@ const {WatchStore: Watch, Store: {Mutator: StoreMutator, Watcher: StoreWatcher, 
       ]
     }
   ],
-  selectedList: -1
+  selectedList: -1,
+  creatingTodoList: false,
+  newTodoListName: '',
 });
 
 export const WatchStore = Watch;

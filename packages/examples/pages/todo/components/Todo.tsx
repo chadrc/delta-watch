@@ -2,6 +2,7 @@ import * as React from 'react';
 import {WatchStore} from "../store";
 import TodoList from "./TodoList";
 import SelectedTodo from "./SelectedTodo";
+import {openNewTodoListModal} from "../actions";
 
 const WatcherTodoList = WatchStore((watcher: any) => ({
   items: watcher.todoLists,
@@ -29,7 +30,7 @@ const Todo = ({selectedList}: TodoProps) => (
       <div className="col s4">
         <h5>
           Lists
-          <a href="#" className="btn btn-small waves-effect right button-icon">
+          <a href="#" className="btn btn-small waves-effect right button-icon" onClick={() => openNewTodoListModal()}>
             <i className="material-icons">add</i>
           </a>
         </h5>
