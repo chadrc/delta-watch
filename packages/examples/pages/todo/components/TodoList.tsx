@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import {TodoList} from "../types";
 import {selectTodoList} from "../actions";
 
@@ -8,15 +7,15 @@ interface TodoListProps {
   selectedList: number
 }
 
-const TodoList = (props: TodoListProps) => (
+const TodoList = ({items = [], selectedList}: TodoListProps) => (
   <ul>
-    {props.items.map((item: TodoList, index: number) => (
+    {items.map((item: TodoList, index: number) => (
       <li className="collection-item valign-wrapper">
         <a href="#"
            onClick={() => selectTodoList(index)}
-           className={`orange-text text-accent-2 valign-wrapper${props.selectedList === index ? ' selected' : ''}`}>
+           className={`orange-text text-accent-2 valign-wrapper${selectedList === index ? ' selected' : ''}`}>
           {item.name}
-          {props.selectedList === index ? (
+          {selectedList === index ? (
             <i className={`material-icons`}>arrow_forward</i>
           ): ''}
         </a>
@@ -24,16 +23,5 @@ const TodoList = (props: TodoListProps) => (
     ))}
   </ul>
 );
-
-(TodoList as any).propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string
-  })),
-  selectedItem: PropTypes.number
-};
-
-(TodoList as any).defaultProps = {
-  items: []
-};
 
 export default TodoList;
