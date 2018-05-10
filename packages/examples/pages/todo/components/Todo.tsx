@@ -15,7 +15,8 @@ interface WatcherSelectedTodoProps {
 
 const WatcherSelectedTodo = WatchStore(
   (watcher: any, props: WatcherSelectedTodoProps) => ({
-    selectedTodo: watcher.todoLists[props.selectedList]
+    selectedTodo: watcher.todoLists[props.selectedList],
+    newTodoName: watcher.newTodoName
   })
 )(SelectedTodo);
 

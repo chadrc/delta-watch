@@ -1,11 +1,12 @@
 import {Accessor, Mutator} from "./store";
-import {TodoList} from "./types";
+import {Todo, TodoList} from "./types";
 
 export const selectTodoList = (index: number) => {
   Mutator.selectedList = index;
 };
 
 export const toggleCompletedForTodo = (index: number) => {
+  console.log('toggling', index);
   let current = Accessor.todoLists[Accessor.selectedList].todos[index].completed;
   Mutator.todoLists[Accessor.selectedList].todos[index].completed = !current;
 };
@@ -31,4 +32,18 @@ export const createNewTodoList = () => {
   Mutator.todoLists.push(newTodoList);
   Mutator.creatingTodoList = false;
   Mutator.newTodoListName = '';
+};
+
+export const updateNewTodoName = (name: string) => {
+  Mutator.newTodoName = name;
+};
+
+export const addNewTodo = () => {
+  let newTodo: Todo = {
+    text: Accessor.newTodoName,
+    completed: false
+  };
+
+  Mutator.todoLists[Accessor.selectedList].todos.push(newTodo);
+  Mutator.newTodoName = '';
 };
