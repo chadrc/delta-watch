@@ -383,6 +383,46 @@ describe(`Array Type`, () => {
     expect(watcherCallCount).to.equal(2);
   });
 
+  it(`Callback called on array after pushed element has been mutated`, () => {
+    let watchable = new DeltaWatch({
+      items: [
+        {
+          value: "Value 1"
+        }
+      ]
+    });
+
+    let watcherCallCount = 0;
+    DeltaWatch.watch(watchable.Watcher.items, (value: any[]) => {
+      if (watcherCallCount === 0) {
+        expect(value).to.deep.equal([
+          {
+            value: "Value 1"
+          },
+          {
+            value: "Value 2"
+          }
+        ])
+      } else if (watcherCallCount === 1) {
+        expect(value).to.deep.equal([
+          {
+            value: "Value 1"
+          },
+          {
+            value: "Set Value"
+          }
+        ])
+      }
+      watcherCallCount++;
+    });
+
+    watchable.Mutator.items.push({value: "Value 2"});
+
+    watchable.Mutator.items[1].value = "Set Value";
+
+    expect(watcherCallCount).to.equal(2);
+  });
+
   /**
    * Non Mutator method testing
    */

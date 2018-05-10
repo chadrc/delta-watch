@@ -38,7 +38,12 @@ export class ObjectWatcher implements Watchable {
   }
 
   static getFieldWatcher(watcher: ObjectWatcher, field: PropertyKey): ObjectWatcher {
-    return watcher._childProperties[field];
+    let w = watcher._childProperties[field];
+    if (typeof w === 'undefined' || w === null) {
+      watcher._makeProperty(field);
+      w = watcher._childProperties[field];
+    }
+    return w;
   }
 
   readonly _parent: DeltaWatch | ObjectWatcher;
