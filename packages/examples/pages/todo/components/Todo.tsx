@@ -8,16 +8,21 @@ const WatcherTodoList = WatchStore((watcher: any) => ({
   selectedList: watcher.selectedList
 }))(TodoList);
 
+interface WatcherSelectedTodoProps {
+  selectedList: number
+}
+
 const WatcherSelectedTodo = WatchStore(
-  (watcher: any) => ({
-    selectedList: watcher.selectedList
-  }),
-  (accessor: any, props: any) => ({
-    selectedTodo: accessor.todoLists[props.selectedList]
+  (watcher: any, props: WatcherSelectedTodoProps) => ({
+    selectedTodo: watcher.todoLists[props.selectedList]
   })
 )(SelectedTodo);
 
-const Todo = () => (
+interface TodoProps {
+  selectedList: number
+}
+
+const Todo = ({selectedList}: TodoProps) => (
   <section>
     <h1 className="center-align">Todo</h1>
     <section className="row">
@@ -31,10 +36,16 @@ const Todo = () => (
         <WatcherTodoList/>
       </div>
       <div className="col s8">
-        <WatcherSelectedTodo/>
+        <WatcherSelectedTodo selectedList={selectedList}/>
       </div>
     </section>
   </section>
 );
 
-export default Todo;
+const WatcherTodo = WatchStore(
+  (watcher: any) => ({
+    selectedList: watcher.selectedList
+  })
+)(Todo);
+
+export default WatcherTodo;
