@@ -4,6 +4,7 @@
   "description": "Utility for watching objects and separating mutations, watching, and accessing.",
   "main": "index.js",
   "scripts": {
+    "lerna": "lerna"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,6 @@
   },
   "homepage": "https://github.com/chadrc/delta-watch#readme",
   "devDependencies": {
-    "lerna": "^2.10.1"
+    "lerna": "^2.11.0"
   }
 }
