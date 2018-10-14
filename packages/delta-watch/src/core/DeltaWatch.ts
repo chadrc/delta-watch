@@ -24,12 +24,12 @@ export class WatcherOptions {
   }
 }
 
-export class DeltaWatch implements Watchable {
-  static watch(watchable: Watchable, cb: Function) {
+export class DeltaWatch<T> implements Watchable {
+  static watch(watchable: Watchable | any, cb: Function) {
     watchable._addWatcher(new WatcherOptions(cb));
   }
 
-  static unwatch(watchable: Watchable, cb: Function) {
+  static unwatch(watchable: Watchable | any, cb: Function) {
     watchable._removeWatcher(new WatcherOptions(cb));
   }
 
@@ -38,7 +38,7 @@ export class DeltaWatch implements Watchable {
   private _dataValue: { [key: string]: any };
   private readonly _rootTypeRegistry: TypeRegistry;
 
-  constructor(data: object) {
+  constructor(data: T) {
     if (data === null || typeof data === 'undefined') {
       throw new TypeError("data must be an object or array");
     }
@@ -49,19 +49,19 @@ export class DeltaWatch implements Watchable {
     this._mutator = makeObjectMutator(this._watcher);
   }
 
-  get Watcher(): ObjectWatcher & any {
-    return this._watcher;
+  get Watcher(): T {
+    return this._watcher as any;
   }
 
-  get Accessor(): any {
+  get Accessor(): T {
     return makeObjectAccessor(this._dataValue, this._typeRegistry);
   }
 
-  get Mutator(): any {
+  get Mutator(): T {
     return this._mutator;
   }
 
-  set Mutator(data: any) {
+  set Mutator(data: T) {
     this._dataValue = data;
     // No need to notify parent since it is the top
     this._watcher._notifySubscribers(false, true);

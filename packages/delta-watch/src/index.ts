@@ -1,13 +1,13 @@
 import {DeltaWatch, Watchable} from './core/DeltaWatch';
 
 export default {
-  Watchable: (data: object): DeltaWatch => {
-    return new DeltaWatch(data);
+  Watchable: <T> (data: T): DeltaWatch<T> => {
+    return new DeltaWatch<T>(data);
   },
-  Watch: (watchable: Watchable, cb: Function) => {
+  Watch: <T> (watchable: T, cb: (value: T) => void) => {
     return DeltaWatch.watch(watchable, cb);
   },
-  Unwatch: (watchable: Watchable, cb: Function) => {
+  Unwatch: <T> (watchable: T, cb: (value: T) => void) => {
     return DeltaWatch.unwatch(watchable, cb);
   }
 }

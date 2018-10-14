@@ -28,7 +28,7 @@ describe(`Date Type`, () => {
 
   it(`Setting a value on a Date object throws error`, () => {
     let now = new Date();
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       date: now
     });
 
