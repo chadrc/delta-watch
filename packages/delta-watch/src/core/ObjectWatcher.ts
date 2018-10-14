@@ -23,7 +23,7 @@ const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
   }
 };
 
-export function MakeObjectWatcher(parent: DeltaWatch | ObjectWatcher,
+export function MakeObjectWatcher(parent: DeltaWatch<any> | ObjectWatcher,
                                   parentKey?: PropKey,
                                   skipChildren: boolean = false): ObjectWatcher {
   return new Proxy<ObjectWatcher>(
@@ -46,14 +46,14 @@ export class ObjectWatcher implements Watchable {
     return w;
   }
 
-  readonly _parent: DeltaWatch | ObjectWatcher;
+  readonly _parent: DeltaWatch<any> | ObjectWatcher;
   readonly _parentKey: PropKey;
   private _watcherOptions: WatcherOptions[] = [];
   private _lastValue: any;
   private readonly _childProperties: { [key: string]: ObjectWatcher };
   private readonly _mutators: { [key: string]: any };
 
-  constructor(parent: DeltaWatch | ObjectWatcher,
+  constructor(parent: DeltaWatch<any> | ObjectWatcher,
               parentKey?: PropKey,
               skipChildren: boolean = false) {
     this._parent = parent;
