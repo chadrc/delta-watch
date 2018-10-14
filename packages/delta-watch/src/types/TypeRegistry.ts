@@ -29,7 +29,7 @@ export class TypeRegistry {
     return this._types.length;
   }
 
-  addClassType<T>(klass: { new(): T }) {
+  addClassType<T>(klass: { new(...args: any[]): T }) {
     this._types.push({
         makeAccessor: obj => null,
         makeMutator: watcher => null,
