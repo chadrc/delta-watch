@@ -3,6 +3,10 @@ import {expect} from 'chai';
 import 'jest';
 import {assertWatcherCalled, assertWatcherNotCalled} from "./utils";
 
+interface BasicInfo {
+    value: String
+}
+
 describe(`Watchable`, () => {
   it("Basic support", () => {
     expect(DeltaWatch).to.exist;
@@ -81,10 +85,12 @@ describe(`Watchable`, () => {
   });
 
   it(`Calls callback on first tier property`, () => {
-    let watchable = new DeltaWatch({value: "DeltaWatch"});
+    let watchable = new DeltaWatch<BasicInfo>({value: "DeltaWatch"});
+
+    let Watcher = <BasicInfo> watchable.Watcher;
 
     let watcherCalled = false;
-    DeltaWatch.watch(watchable.Watcher.value, (value: any) => {
+    DeltaWatch.watch(Watcher.value, (value: any) => {
       expect(value).to.deep.equal("Changed Value");
       watcherCalled = true;
     });
@@ -96,9 +102,10 @@ describe(`Watchable`, () => {
 
   it(`Does not call callback on first tier property if value is same`, () => {
     let watchable = new DeltaWatch({value: "DeltaWatch"});
+    let Watcher = <BasicInfo> watchable.Watcher;
 
     let watcherCalled = false;
-    DeltaWatch.watch(watchable.Watcher.value, () => {
+    DeltaWatch.watch(Watcher.value, () => {
       watcherCalled = true;
     });
 
@@ -115,13 +122,15 @@ describe(`Watchable`, () => {
     const cb = () => {
     };
 
-    DeltaWatch.watch(watchable.Watcher.value, cb);
+    let Watcher = <BasicInfo> watchable.Watcher;
 
-    let asAny = watchable.Watcher.value as any;
+    DeltaWatch.watch(Watcher.value, cb);
+
+    let asAny = Watcher.value as any;
     let count = asAny._subscribers.length;
     expect(count).to.equal(1);
 
-    DeltaWatch.unwatch(watchable.Watcher.value, cb);
+    DeltaWatch.unwatch(Watcher.value, cb);
 
     count = asAny._subscribers.length;
     expect(count).to.equal(0);
@@ -378,62 +387,74 @@ describe(`Watchable`, () => {
       startingProp: "Starting value"
     });
 
-    DeltaWatch.watch(watchable.Watcher.dynamicProp, () => {
+    // because of type checking in Typescript, this usage is only possible with any type or in plain javascript
+    let Watcher = <any> watchable.Watcher;
+
+    DeltaWatch.watch(Watcher.dynamicProp, () => {
     });
   });
 
   it(`dynamic property value is initialized to undefined`, () => {
     let watchable = new DeltaWatch({});
+    let Accessor = <any> watchable.Accessor;
 
-    expect(watchable.Accessor.dynamicProp).to.be.undefined;
+    expect(Accessor.dynamicProp).to.be.undefined;
   });
 
   it(`can watch dynamic second tier property`, () => {
     let watchable = new DeltaWatch({});
-    DeltaWatch.watch(watchable.Watcher.dynamicProp.child, () => {
+    let Watcher = <any> watchable.Watcher;
+    DeltaWatch.watch(Watcher.dynamicProp.child, () => {
     });
   });
 
   it(`can mutate dynamic first tier property`, () => {
     let watchable = new DeltaWatch({});
-    watchable.Mutator.value = "Dynamic Value";
+    let Mutator = <any> watchable.Mutator;
+    Mutator.value = "Dynamic Value";
   });
 
   it(`can mutate dynamic second tier property`, () => {
     let watchable = new DeltaWatch({});
-    watchable.Mutator.item.value = "Won't Set";
+    let Mutator = <any> watchable.Mutator;
+    Mutator.item.value = "Won't Set";
   });
 
   it(`can mutate dynamic second tier property after setting a dynamic first tier property to an object`, () => {
     let watchable = new DeltaWatch({});
-    watchable.Mutator.item = {};
-    watchable.Mutator.item.value = "Dynamic Value";
+    let Mutator = <any> watchable.Mutator;
+    Mutator.item = {};
+    Mutator.item.value = "Dynamic Value";
   });
 
   it(`mutating a first tier dynamic property calls callback`, () => {
     let watchable = new DeltaWatch({});
+    let Watcher = <any> watchable.Watcher;
+    let Mutator = <any> watchable.Mutator;
 
     let watcherCalled = false;
-    DeltaWatch.watch(watchable.Watcher.value, (value: string) => {
+    DeltaWatch.watch(Watcher.value, (value: string) => {
       expect(value).to.equal("New Value");
       watcherCalled = true;
     });
 
-    watchable.Mutator.value = "New Value";
+    Mutator.value = "New Value";
 
     assertWatcherCalled(watcherCalled);
   });
 
   it(`mutating a second tier dynamic property calls callback`, () => {
     let watchable = new DeltaWatch({});
+    let Watcher = <any> watchable.Watcher;
+    let Mutator = <any> watchable.Mutator;
 
     let watcherCalled = false;
-    DeltaWatch.watch(watchable.Watcher.item.value, (value: string) => {
+    DeltaWatch.watch(Watcher.item.value, (value: string) => {
       expect(value).to.equal("New Value");
       watcherCalled = true;
     });
 
-    watchable.Mutator.item.value = "New Value";
+    Mutator.item.value = "New Value";
 
     assertWatcherCalled(watcherCalled);
   });
