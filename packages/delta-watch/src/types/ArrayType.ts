@@ -1,5 +1,6 @@
 import {ObjectWatcher} from "../core/ObjectWatcher";
 import {makeAccessorHandler, makeMutationHandler} from "./utils";
+import {PropKey} from "./utils";
 
 export const arrayMutatorMethods = [
   'push',
