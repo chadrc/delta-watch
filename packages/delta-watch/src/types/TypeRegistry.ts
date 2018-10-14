@@ -25,6 +25,19 @@ export class TypeRegistry {
     this._types = types;
   }
 
+  get typeCount(): number {
+    return this._types.length;
+  }
+
+  addClassType<T>(klass: { new(): T }) {
+    this._types.push({
+        makeAccessor: obj => null,
+        makeMutator: watcher => null,
+        handlesValue: value => false,
+        type: klass.name
+    });
+  }
+
   getMakeAccessorForValue(value: any): (obj: any, typeRegister: TypeRegistry) => any {
     let accessor = null;
     for (let info of this._types) {

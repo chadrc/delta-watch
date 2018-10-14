@@ -38,12 +38,12 @@ export class DeltaWatch implements Watchable {
   private _dataValue: { [key: string]: any };
   private readonly _rootTypeRegistry: TypeRegistry;
 
-  constructor(data: object) {
+  constructor(data: object, typeRegistry?: TypeRegistry) {
     if (data === null || typeof data === 'undefined') {
       throw new TypeError("data must be an object or array");
     }
 
-    this._rootTypeRegistry = TypeRegistry.defaultTypeRegistry;
+    this._rootTypeRegistry = typeRegistry || TypeRegistry.defaultTypeRegistry;
     this._dataValue = data;
     this._watcher = MakeObjectWatcher(this);
     this._mutator = makeObjectMutator(this._watcher);
