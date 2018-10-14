@@ -3,6 +3,7 @@ import {makeObjectMutator} from "../core/ObjectMutator";
 import {makeObjectAccessor} from "../core/ObjectAccessor";
 import {ArrayTypeInfo} from "./ArrayType";
 import {DateTypeInfo} from "./DateType";
+import {makeMutationHandler} from "./utils";
 
 export interface TypeInfo {
   makeMutator: (watcher: ObjectWatcher) => any
@@ -32,8 +33,26 @@ export class TypeRegistry {
   addClassType<T>(klass: { new(...args: any[]): T }) {
     this._types.push({
         makeAccessor: obj => null,
-        makeMutator: watcher => null,
-        handlesValue: value => false,
+        makeMutator: (watcher: ObjectWatcher) => {
+            let internals = {
+                watcher: watcher,
+                type: klass.name
+            };
+
+            return new Proxy({}, makeMutationHandler(
+                internals,
+                [],
+                (prop: PropKey) => {
+                    let val = prop;
+                    if (typeof val !== 'string') {
+                      return true;
+                    }
+
+                    return val[0] !== "_";
+                })
+            );
+        },
+        handlesValue: value => value.constructor.name === klass.name,
         type: klass.name
     });
   }

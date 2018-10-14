@@ -76,4 +76,18 @@ describe(`Type Registration`, () => {
 
         assertWatcherCalled(watcherCalled);
     });
+
+    it(`Cannot mutate private field`, () => {
+        let {Watcher, Mutator} = makeNoteWatcher({
+            note: new Note("My Note", 1)
+        });
+
+        DeltaWatch.Watch(Watcher.note._completed, () => {});
+
+        let func = () => {
+            Mutator.note._completed = true;
+        };
+
+        expect(func).to.throw();
+    });
 });
