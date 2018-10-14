@@ -54,9 +54,6 @@ export function makeMutationHandler<T extends object>(internals: DeltaWatchInter
             }
           }
         } else {
-          // let fieldMutator = ObjectWatcher.getMutator(self._watcher, field);
-          // return fieldMutator == null ? self._watcher._properties[field]._data : fieldMutator;
-
           if (fieldMutator !== null && typeof fieldMutator !== 'undefined') {
             return fieldMutator;
           } else if (fieldWatcher !== null && typeof fieldWatcher !== 'undefined') {
