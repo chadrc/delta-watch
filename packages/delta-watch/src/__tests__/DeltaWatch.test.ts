@@ -399,10 +399,9 @@ describe(`Watchable`, () => {
     watchable.Mutator.value = "Dynamic Value";
   });
 
-  it(`cannot mutate dynamic second tier property`, () => {
+  it(`can mutate dynamic second tier property`, () => {
     let watchable = new DeltaWatch({});
-    let func = () => watchable.Mutator.item.value = "Won't Set";
-    expect(func).to.throw();
+    watchable.Mutator.item.value = "Won't Set";
   });
 
   it(`can mutate dynamic second tier property after setting a dynamic first tier property to an object`, () => {
