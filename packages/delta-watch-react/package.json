@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/chadrc/delta-watch#readme",
   "dependencies": {
-    "delta-watch": "0.1.1",
+    "delta-watch": "0.1.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2"
   },

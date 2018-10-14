@@ -13,7 +13,7 @@ export interface DeltaWatchStore {
 
 interface WatchStoreHOCState {
   watchers: { [key: string]: any }
-  updater: Function
+  updater: (value: any) => void
 }
 
 function MakeStore(data: any): DeltaWatchStore {
