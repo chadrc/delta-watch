@@ -35,7 +35,6 @@ export class DeltaWatch implements Watchable {
 
   private readonly _watcher: ObjectWatcher;
   private readonly _mutator: any;
-  private readonly _accessor: any;
   private _dataValue: { [key: string]: any };
   private readonly _rootTypeRegistry: TypeRegistry;
 
