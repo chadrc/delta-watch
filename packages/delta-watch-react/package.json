@@ -46,6 +46,7 @@
       "tsx",
       "js"
     ],
+    "testURL": "http://localhost",
     "transform": {
       "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
