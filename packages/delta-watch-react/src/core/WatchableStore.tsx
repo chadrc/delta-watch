@@ -19,119 +19,124 @@ interface WatchStoreHOCState {
   updater: (value: any) => void
 }
 
+function makeWatchStore<T, P>(watchable: any)
+    : (mapWatcher: MapWatcherFunction<T, P>, mapStore?: MapStoreFunction<T, P>) => any {
+  return (
+      mapWatchers: MapWatcherFunction<T, P>,
+      mapStore?: MapStoreFunction<T, P>
+  ) => {
+      return (Target: any) => {
+          let c: any = class extends React.Component<P, WatchStoreHOCState> {
+              private updateTimeout: number;
+
+              constructor(props: P) {
+                  super(props);
+                  this.state = {
+                      watchers: {},
+                      updater: this.update
+                  };
+              }
+
+              static getDerivedStateFromProps(nextProps: P, prevState: WatchStoreHOCState) {
+                  let watcher = watchable.Watcher;
+                  if ((nextProps as any).watcherScope) {
+                      watcher = (nextProps as any).watcherScope;
+                  }
+
+                  const updater = prevState.updater;
+                  let watchers = mapWatchers(watcher, nextProps);
+                  let state: WatchStoreHOCState = {
+                      watchers,
+                      updater: updater
+                  };
+                  let needsUpdate = false;
+
+                  // Add new and changed watchers to state
+                  for (let field of Object.keys(watchers)) {
+                      if (field in prevState.watchers) {
+                          if (watchers[field] !== prevState.watchers[field]) {
+                              // Same field different watcher
+
+                              // Remove old watcher
+                              DeltaWatch.Unwatch(prevState.watchers[field], updater);
+
+                              // Make new watcher
+                              DeltaWatch.Watch(watchers[field], updater);
+
+                              // Add to state
+                              state.watchers[field] = watchers[field];
+
+                              needsUpdate = true;
+                          } else {
+                              // Same watcher
+                              state.watchers[field] = watchers[field];
+                          }
+                      } else {
+                          // New watcher
+
+                          // Make new watcher
+                          DeltaWatch.Watch(watchers[field], updater);
+
+                          // Add to state
+                          state.watchers[field] = watchers[field];
+
+                          needsUpdate = true;
+                      }
+                  }
+
+                  // Remove any watcher not in state that's in prevState
+                  for (let field of Object.keys(prevState)) {
+                      if (!(field in state)) {
+                          // Remove old watcher
+                          DeltaWatch.Unwatch(prevState.watchers[field], updater);
+
+                          needsUpdate = true;
+                      }
+                  }
+
+                  return needsUpdate ? state : null;
+              }
+
+              update = () => {
+                  if (this.updateTimeout) {
+                      clearTimeout(this.updateTimeout);
+                  }
+
+                  this.updateTimeout = setTimeout(() => {
+                      this.forceUpdate();
+                  });
+              };
+
+              render() {
+                  let props: P = {...(this.props as any)};
+                  for (let field of Object.keys(this.state.watchers)) {
+                      (props as any)[field] = this.state.watchers[field]._data;
+                  }
+
+                  if (mapStore) {
+                      props = Object.assign(props, mapStore(watchable.Accessor, props));
+                  }
+
+                  return (
+                      <Target {...props} />
+                  )
+              }
+          };
+
+          c.displayName = `Watcher(${Target.displayName || Target.name})`;
+
+          return c;
+      }
+  };
+}
+
 function MakeStore<T, P>(data: T): DeltaWatchStore<T, P> {
   let watchable = DeltaWatch.Watchable(data);
-  let WatchStore = (
-    mapWatchers: MapWatcherFunction<T, P>,
-    mapStore?: MapStoreFunction<T, P>
-  ) => {
-    return (Target: any) => {
-      let c: any = class extends React.Component<P, WatchStoreHOCState> {
-        private updateTimeout: number;
+  let WatchStore = makeWatchStore<T, P>(watchable);
 
-        constructor(props: P) {
-          super(props);
-          this.state = {
-            watchers: {},
-            updater: this.update
-          };
-        }
-
-        static getDerivedStateFromProps(nextProps: P, prevState: WatchStoreHOCState) {
-          let watcher = watchable.Watcher;
-          if ((nextProps as any).watcherScope) {
-            watcher = (nextProps as any).watcherScope;
-          }
-
-          const updater = prevState.updater;
-          let watchers = mapWatchers(watcher, nextProps);
-          let state: WatchStoreHOCState = {
-            watchers,
-            updater: updater
-          };
-          let needsUpdate = false;
-
-          // Add new and changed watchers to state
-          for (let field of Object.keys(watchers)) {
-            if (field in prevState.watchers) {
-              if (watchers[field] !== prevState.watchers[field]) {
-                // Same field different watcher
-
-                // Remove old watcher
-                DeltaWatch.Unwatch(prevState.watchers[field], updater);
-
-                // Make new watcher
-                DeltaWatch.Watch(watchers[field], updater);
-
-                // Add to state
-                state.watchers[field] = watchers[field];
-
-                needsUpdate = true;
-              } else {
-                // Same watcher
-                state.watchers[field] = watchers[field];
-              }
-            } else {
-              // New watcher
-
-              // Make new watcher
-              DeltaWatch.Watch(watchers[field], updater);
-
-              // Add to state
-              state.watchers[field] = watchers[field];
-
-              needsUpdate = true;
-            }
-          }
-
-          // Remove any watcher not in state that's in prevState
-          for (let field of Object.keys(prevState)) {
-            if (!(field in state)) {
-              // Remove old watcher
-              DeltaWatch.Unwatch(prevState.watchers[field], updater);
-
-              needsUpdate = true;
-            }
-          }
-
-          return needsUpdate ? state : null;
-        }
-
-        update = () => {
-          if (this.updateTimeout) {
-            clearTimeout(this.updateTimeout);
-          }
-
-          this.updateTimeout = setTimeout(() => {
-            this.forceUpdate();
-          });
-        };
-
-        render() {
-          let props: P = {...(this.props as any)};
-          for (let field of Object.keys(this.state.watchers)) {
-              (props as any)[field] = this.state.watchers[field]._data;
-          }
-
-          if (mapStore) {
-            props = Object.assign(props, mapStore(watchable.Accessor, props));
-          }
-
-          return (
-            <Target {...props} />
-          )
-        }
-      };
-
-      c.displayName = `Watcher(${Target.displayName || Target.name})`;
-
-      return c;
-    }
-  };
-
-  let MakeWatcherScope = (
-    getScope: (watcher: T) => any
-  ) => {
+  let MakeWatcherScope = function makeWatcherScope<N, NP> (
+    getScope: (watcher: T) => N
+  ) {
     let scope = getScope(watchable.Watcher);
     let Context: any = React.createContext<any>(scope);
     let withScope = (Target: any) => {
@@ -155,9 +160,12 @@ function MakeStore<T, P>(data: T): DeltaWatchStore<T, P> {
       </Context.Provider>
     );
 
+    let WatchScope = makeWatchStore<N, NP>(watchable);
+
     return {
       Scope,
-      withScope
+      withScope,
+      WatchScope
     };
   };
 

@@ -12,7 +12,7 @@ interface User {
 
 describe(`WatcherScope`, () => {
   it(`WatchStore receives scope watcher instead of root`, () => {
-    const {WatchStore, MakeWatcherScope, Store} = DeltaWatchReact.MakeStore({
+    const {MakeWatcherScope, Store} = DeltaWatchReact.MakeStore({
       user: {
         name: "John Doe",
         email: "johndoe@example.com"
@@ -20,7 +20,7 @@ describe(`WatcherScope`, () => {
     });
 
     // Make a scope to the user object
-    let {Scope, withScope} = MakeWatcherScope((watcher: any) => watcher.user);
+    let {Scope, withScope, WatchScope} = MakeWatcherScope((watcher: any) => watcher.user);
 
     // Component that will be rendered
     const ChildComp = (props) => (
@@ -28,7 +28,7 @@ describe(`WatcherScope`, () => {
     );
 
     // Watch store, watcher will be the user watcher not the root store watcher
-    const WatchingComp = WatchStore((watcher: User) => ({
+    const WatchingComp = WatchScope((watcher: User) => ({
       name: watcher.name,
       email: watcher.email
     }))(ChildComp);
