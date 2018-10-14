@@ -1,5 +1,6 @@
 import {ObjectWatcher} from "../core/ObjectWatcher";
-import {makeObjectAccessor, makeObjectMutator} from "../core/ObjectMutator";
+import {makeObjectMutator} from "../core/ObjectMutator";
+import {makeObjectAccessor} from "../core/ObjectAccessor";
 import {ArrayTypeInfo} from "./ArrayType";
 import {DateTypeInfo} from "./DateType";
 

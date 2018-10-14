@@ -26,7 +26,7 @@ export function makeArrayMutator(watcher: ObjectWatcher): any {
   return new Proxy({}, makeMutationHandler(
     internals,
     arrayMutatorMethods,
-    (prop: PropertyKey) => {
+    (prop: PropKey) => {
       let val = prop;
       if (typeof prop === 'string') {
         try {

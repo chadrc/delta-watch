@@ -5,9 +5,13 @@ export interface DeltaWatchInternals {
   type: string
 }
 
+declare global {
+    type PropKey = string | number;
+}
+
 export function makeAccessorHandler(mutatorMethods: string[]) {
   return {
-    get: function (obj: Date, prop: PropertyKey) {
+    get: function (obj: Date, prop: PropKey) {
       if (prop in obj) {
         let field = (obj as any)[prop];
         if (typeof field === 'function') {
@@ -25,13 +29,13 @@ export function makeAccessorHandler(mutatorMethods: string[]) {
   };
 }
 
-export type CanSetPropFunc = (prop: PropertyKey) => boolean;
+export type CanSetPropFunc = (prop: PropKey) => boolean;
 
 export function makeMutationHandler<T extends object>(internals: DeltaWatchInternals,
                                                       mutatorMethods: string[],
                                                       canSetProp: boolean | CanSetPropFunc = false ): ProxyHandler<T> {
   return {
-    get: function (_: T, prop: PropertyKey) {
+    get: function (_: T, prop: PropKey) {
       if (prop === "__DeltaWatchInternals") {
         return internals;
       }
@@ -68,7 +72,7 @@ export function makeMutationHandler<T extends object>(internals: DeltaWatchInter
         return ObjectWatcher.getMutator(internals.watcher, prop);
       }
     },
-    set: function (_: T, prop: PropertyKey, value: any): boolean {
+    set: function (_: T, prop: PropKey, value: any): boolean {
       if (prop === "__DeltaWatchInternals") {
         throw Error("Cannot set value of __DeltaWatchInternals");
       }

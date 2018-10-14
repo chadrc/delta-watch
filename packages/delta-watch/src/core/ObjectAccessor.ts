@@ -2,7 +2,7 @@ import {TypeRegistry} from "../types/TypeRegistry";
 
 function makeObjectAccessorHandler(typeRegistry: TypeRegistry) {
     return {
-        get: function (obj: any, prop: PropertyKey) {
+        get: function (obj: any, prop: PropKey) {
             if (prop in obj) {
                 let val = (obj as any)[prop];
                 let makeAccessor = typeRegistry.getMakeAccessorForValue(val);

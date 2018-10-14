@@ -2,7 +2,7 @@ import {DeltaWatch, Watchable, WatcherOptions} from "./DeltaWatch";
 import {TypeRegistry} from "../types/TypeRegistry";
 
 const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
-  get: function (obj: ObjectWatcher, prop: PropertyKey) {
+  get: function (obj: ObjectWatcher, prop: PropKey) {
     // Intercept any get to an undefined property as creating a new watchable property on the object
     if (!(prop in obj)) {
 
@@ -24,7 +24,7 @@ const ObjectWatcherHandler: ProxyHandler<ObjectWatcher> = {
 };
 
 export function MakeObjectWatcher(parent: DeltaWatch | ObjectWatcher,
-                                  parentKey?: PropertyKey,
+                                  parentKey?: PropKey,
                                   skipChildren: boolean = false): ObjectWatcher {
   return new Proxy<ObjectWatcher>(
     new ObjectWatcher(parent, parentKey, skipChildren),
@@ -33,11 +33,11 @@ export function MakeObjectWatcher(parent: DeltaWatch | ObjectWatcher,
 }
 
 export class ObjectWatcher implements Watchable {
-  static getMutator(watcher: ObjectWatcher, field: PropertyKey): any {
+  static getMutator(watcher: ObjectWatcher, field: PropKey): any {
     return watcher._mutators[field] || null;
   }
 
-  static getFieldWatcher(watcher: ObjectWatcher, field: PropertyKey): ObjectWatcher {
+  static getFieldWatcher(watcher: ObjectWatcher, field: PropKey): ObjectWatcher {
     let w = watcher._childProperties[field];
     if (typeof w === 'undefined' || w === null) {
       watcher._makeProperty(field);
@@ -47,14 +47,14 @@ export class ObjectWatcher implements Watchable {
   }
 
   readonly _parent: DeltaWatch | ObjectWatcher;
-  readonly _parentKey: PropertyKey;
+  readonly _parentKey: PropKey;
   private _watcherOptions: WatcherOptions[] = [];
   private _lastValue: any;
   private readonly _childProperties: { [key: string]: ObjectWatcher };
   private readonly _mutators: { [key: string]: any };
 
   constructor(parent: DeltaWatch | ObjectWatcher,
-              parentKey?: PropertyKey,
+              parentKey?: PropKey,
               skipChildren: boolean = false) {
     this._parent = parent;
     this._parentKey = parentKey;
@@ -82,7 +82,7 @@ export class ObjectWatcher implements Watchable {
     }
   }
 
-  _makeMutator(field: PropertyKey) {
+  _makeMutator(field: PropKey) {
     let watcher = this._properties[field];
     let makeMutator = this._typeRegistry.getMakeMutatorForValue(this._data[field]);
     if (makeMutator) {
@@ -90,7 +90,7 @@ export class ObjectWatcher implements Watchable {
     }
   }
 
-  _makeProperty(field: PropertyKey) {
+  _makeProperty(field: PropKey) {
     let self = this;
     let fieldData = this._fieldData(field);
     let dataType = typeof fieldData;
@@ -164,7 +164,7 @@ export class ObjectWatcher implements Watchable {
     return changed;
   }
 
-  _fieldData(field: PropertyKey): any {
+  _fieldData(field: PropKey): any {
     return this._data ? this._data[field] : undefined;
   }
 
