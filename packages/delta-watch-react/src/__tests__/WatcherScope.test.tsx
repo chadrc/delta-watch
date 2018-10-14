@@ -14,18 +14,24 @@ describe(`WatcherScope`, () => {
       }
     });
 
+    // Make a scope to the user object
+    let {Scope, withScope} = MakeWatcherScope((watcher: any) => watcher.user);
+
+    // Component that will be rendered
     const ChildComp = (props) => (
       <span>{props.name} - {props.email}</span>
     );
 
+    // Watch store, watcher will be the user watcher not the root store watcher
     const WatchingComp = WatchStore((watcher: any) => ({
       name: watcher.name,
       email: watcher.email
     }))(ChildComp);
 
-    const {Scope, withScope} = MakeWatcherScope((watcher: any) => watcher.user);
+    // Wrapper component to render with Scope context
     const ScopedComp = withScope(WatchingComp);
 
+    // Make and test final rendering
     let Parent = () => (
       <Scope>
         <ScopedComp/>
