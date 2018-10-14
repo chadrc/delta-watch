@@ -49,8 +49,8 @@ export class DeltaWatch<T> implements Watchable {
     this._mutator = makeObjectMutator(this._watcher);
   }
 
-  get Watcher(): ObjectWatcher | T {
-    return this._watcher;
+  get Watcher(): T {
+    return this._watcher as any;
   }
 
   get Accessor(): T {
