@@ -1,4 +1,5 @@
 import {TypeRegistry} from "../types/TypeRegistry";
+import {PropKey} from "../types/utils";
 
 function makeObjectAccessorHandler(typeRegistry: TypeRegistry) {
     return {

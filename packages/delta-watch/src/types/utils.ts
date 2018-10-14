@@ -5,9 +5,7 @@ export interface DeltaWatchInternals {
   type: string
 }
 
-declare global {
-    type PropKey = string | number;
-}
+export type PropKey = string | number;
 
 export function makeAccessorHandler(mutatorMethods: string[]) {
   return {
