@@ -1,6 +1,6 @@
 {
   "name": "delta-watch-react",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "React bindings for delta-watch library.",
   "main": "index.js",
   "scripts": {
