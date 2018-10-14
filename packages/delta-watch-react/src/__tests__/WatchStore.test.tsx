@@ -159,6 +159,6 @@ describe(`WatchStore`, () => {
     expect(tree).toMatchSnapshot();
 
     // items[0] should also have no watchers
-    expect(Store.Watcher.items[0]._watcherOptions.length).toEqual(0);
+    expect((Store.Watcher as any).items[0]._watcherOptions.length).toEqual(0);
   });
 });

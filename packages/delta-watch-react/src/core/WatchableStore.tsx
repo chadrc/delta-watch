@@ -1,13 +1,13 @@
 import * as React from "react";
 import DeltaWatch from 'delta-watch';
 
-export interface DeltaWatchStore {
+export interface DeltaWatchStore<T> {
   WatchStore: Function,
   MakeWatcherScope: Function,
   Store: {
-    Mutator: any,
-    Accessor: any,
-    Watcher: any
+    Mutator: T,
+    Accessor: T,
+    Watcher: T
   }
 }
 
@@ -16,11 +16,11 @@ interface WatchStoreHOCState {
   updater: (value: any) => void
 }
 
-function MakeStore(data: any): DeltaWatchStore {
+function MakeStore<T>(data: T): DeltaWatchStore<T> {
   let watchable = DeltaWatch.Watchable(data);
   let WatchStore = (
-    mapWatchers: (watcher: any, props: any) => { [key: string]: any },
-    mapStore?: (accessor: any, props: any) => { [key: string]: any }
+    mapWatchers: (watcher: T, props: any) => { [key: string]: any },
+    mapStore?: (accessor: T, props: any) => { [key: string]: any }
   ) => {
     return (Target: any) => {
       let c: any = class extends React.Component<any, WatchStoreHOCState> {
