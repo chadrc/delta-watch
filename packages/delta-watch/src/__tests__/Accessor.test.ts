@@ -56,7 +56,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling unshift on array Accessor throws error`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -92,7 +92,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling fill on array Accessor throws error`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -110,7 +110,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling copyWithin on array Accessor throws error`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -151,7 +151,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling entries works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -186,7 +186,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling find works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -197,7 +197,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling findIndex works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -220,7 +220,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling includes works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -253,7 +253,7 @@ describe(`Accessors`, () => {
   });
 
   it(`Calling keys works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 

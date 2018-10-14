@@ -208,7 +208,7 @@ describe(`Array Type`, () => {
   });
 
   it('calls array callback when fill is called', () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       items: [
         "one",
         "two",
@@ -257,7 +257,7 @@ describe(`Array Type`, () => {
 
   it(`calls array callback when copyWithin is called`, () => {
 
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       items: [
         "one",
         "two",
@@ -343,7 +343,7 @@ describe(`Array Type`, () => {
   });
 
   it(`can perform push on a dynamic array`, () => {
-    let watchable = new DeltaWatch({});
+    let watchable = new DeltaWatch<any>({});
 
     let changeWatcherCalled = false;
     DeltaWatch.watch(watchable.Watcher.items, (value: any) => {
@@ -439,7 +439,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling entries works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -463,7 +463,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling filter works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -474,7 +474,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling find works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -485,7 +485,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling findIndex works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -508,7 +508,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling includes works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
@@ -541,7 +541,7 @@ describe(`Array Type`, () => {
   });
 
   it(`Calling keys works normally leaves array value unmodified`, () => {
-    let watchable = new DeltaWatch({
+    let watchable = new DeltaWatch<any>({
       list: ['one', 'two', 'three']
     });
 
