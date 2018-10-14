@@ -1,6 +1,6 @@
 import DeltaWatchReact from 'delta-watch-react';
 
-const {WatchStore: Watch, Store: {Mutator: StoreMutator, Watcher: StoreWatcher, Accessor: StoreAccessor}} = DeltaWatchReact.MakeStore({
+const {WatchStore: Watch, Store: {Mutator: StoreMutator, Accessor: StoreAccessor}} = DeltaWatchReact.MakeStore({
   todoLists: [
     {
       name: "My Todos",
