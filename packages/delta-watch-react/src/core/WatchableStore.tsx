@@ -1,8 +1,11 @@
 import * as React from "react";
 import DeltaWatch from 'delta-watch';
 
-export interface DeltaWatchStore<T> {
-  WatchStore: Function,
+export type MapWatcherFunction<T, P> = (watcher: T, props: P) => { [key: string]: any };
+export type MapStoreFunction<T, P> = (accessor: T, props: P) => { [key: string]: any };
+
+export interface DeltaWatchStore<T, P> {
+  WatchStore: (mapWatcher: MapWatcherFunction<T, P>, mapStore?: MapStoreFunction<T, P>) => any,
   MakeWatcherScope: Function,
   Store: {
     Mutator: T,
@@ -16,17 +19,17 @@ interface WatchStoreHOCState {
   updater: (value: any) => void
 }
 
-function MakeStore<T>(data: T): DeltaWatchStore<T> {
+function MakeStore<T, P>(data: T): DeltaWatchStore<T, P> {
   let watchable = DeltaWatch.Watchable(data);
   let WatchStore = (
-    mapWatchers: (watcher: T, props: any) => { [key: string]: any },
-    mapStore?: (accessor: T, props: any) => { [key: string]: any }
+    mapWatchers: MapWatcherFunction<T, P>,
+    mapStore?: MapStoreFunction<T, P>
   ) => {
     return (Target: any) => {
-      let c: any = class extends React.Component<any, WatchStoreHOCState> {
+      let c: any = class extends React.Component<P, WatchStoreHOCState> {
         private updateTimeout: number;
 
-        constructor(props: any) {
+        constructor(props: P) {
           super(props);
           this.state = {
             watchers: {},
@@ -34,10 +37,10 @@ function MakeStore<T>(data: T): DeltaWatchStore<T> {
           };
         }
 
-        static getDerivedStateFromProps(nextProps: any, prevState: WatchStoreHOCState) {
+        static getDerivedStateFromProps(nextProps: P, prevState: WatchStoreHOCState) {
           let watcher = watchable.Watcher;
-          if (nextProps.watcherScope) {
-            watcher = nextProps.watcherScope;
+          if ((nextProps as any).watcherScope) {
+            watcher = (nextProps as any).watcherScope;
           }
 
           const updater = prevState.updater;
@@ -105,9 +108,9 @@ function MakeStore<T>(data: T): DeltaWatchStore<T> {
         };
 
         render() {
-          let props: { [key: string]: any } = {...this.props};
+          let props: P = {...(this.props as any)};
           for (let field of Object.keys(this.state.watchers)) {
-            props[field] = this.state.watchers[field]._data;
+              (props as any)[field] = this.state.watchers[field]._data;
           }
 
           if (mapStore) {
@@ -127,7 +130,7 @@ function MakeStore<T>(data: T): DeltaWatchStore<T> {
   };
 
   let MakeWatcherScope = (
-    getScope: (watcher: any) => any
+    getScope: (watcher: T) => any
   ) => {
     let scope = getScope(watchable.Watcher);
     let Context: any = React.createContext<any>(scope);

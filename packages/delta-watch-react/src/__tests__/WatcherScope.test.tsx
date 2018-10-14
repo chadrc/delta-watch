@@ -5,6 +5,11 @@ import * as renderer from 'react-test-renderer';
 import './setup'
 import {flushTimers} from "./utils";
 
+interface User {
+  name: string;
+  email: string;
+}
+
 describe(`WatcherScope`, () => {
   it(`WatchStore receives scope watcher instead of root`, () => {
     const {WatchStore, MakeWatcherScope, Store} = DeltaWatchReact.MakeStore({
@@ -23,7 +28,7 @@ describe(`WatcherScope`, () => {
     );
 
     // Watch store, watcher will be the user watcher not the root store watcher
-    const WatchingComp = WatchStore((watcher: any) => ({
+    const WatchingComp = WatchStore((watcher: User) => ({
       name: watcher.name,
       email: watcher.email
     }))(ChildComp);

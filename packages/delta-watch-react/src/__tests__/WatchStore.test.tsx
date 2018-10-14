@@ -22,7 +22,7 @@ describe(`WatchStore`, () => {
       }
     }
 
-    let Wrapped = WatchStore((watcher: any) => ({
+    let Wrapped = WatchStore((watcher) => ({
       message: watcher.message
     }))(Text);
 
