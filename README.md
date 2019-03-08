@@ -20,3 +20,13 @@ watchable.Mutator.value = "Changed"; // cb gets call with "Changed"
 console.log(watchable.Accessor);
 // logs "Changed"
 ```
+
+Starting the example app
+```bash
+cd packages/examples
+npm install
+
+npm run build
+npm start
+
+```
